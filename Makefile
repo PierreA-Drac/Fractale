@@ -23,13 +23,16 @@ OBJ             = $(SRC:$(SRC_PATH)%.$(SRC_EXT)=$(OBJ_PATH)%.o)
 
 ## Compilation ................................................................:
 
-INC_FLAGS       = -I$(INC_PATH)
+QT_INC = /usr/include/qt4
+QT_LD = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui
+
+INC_FLAGS       = -I$(INC_PATH) -I$(QT_INC)
 DEP_FLAGS       = -MMD -MP
 DEBUG_FLAGS     = -g3 -Wall
 
 CC              = g++
 CFLAGS          = $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
-LDFLAGS         =
+LDFLAGS         = $(QT_LD)
 
 # Cibles =======================================================================
 
