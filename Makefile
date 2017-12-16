@@ -43,20 +43,20 @@ LDFLAGS     = $(QT_LD) $(GL_LD)
 
 # Cibles =======================================================================
 
-.PHONY : clean mrproper indent tags doc
+.PHONY : clean mrproper indent tags doc report
 
 ## Lancement ..................................................................:
 
 run : compil
 	@echo "--> Lancement de '$(EXEC)' :"
-	$(EXEC) $(ARGS)
+	$(EXEC) $(ARGS) 2>/dev/null
 
 ## Compilation ................................................................:
 
 compil : $(EXEC)
 
 $(EXEC) : $(OBJ) $(MOC_OBJ)
-	@mkdir -p $(EXE_PATH) 2>/dev/null
+	@mkdir -p $(EXE_PATH)
 	@echo "--> Édition des liens dans '$(EXEC)' :"
 	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
