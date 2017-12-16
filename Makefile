@@ -21,18 +21,23 @@ export SRC      = $(shell find $(SRC_PATH)*.$(SRC_EXT))
 export INC      = $(shell find $(INC_PATH)*.$(INC_EXT))
 OBJ             = $(SRC:$(SRC_PATH)%.$(SRC_EXT)=$(OBJ_PATH)%.o)
 
+# Qt Meta Object Compiler
+MOC_EXT         = moc_
+MOC_SRC         = $(SRC:$(SRC_PATH)%=$(SRC_PATH)$(MOC_EXT)%)
+MOC_OBJ         = $(OBJ:$(OBJ_PATH)%=$(OBJ_PATH)$(MOC_EXT)%)
+
 ## Compilation ................................................................:
 
-QT_INC = /usr/include/qt4
-QT_LD = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui
+QT_INC      = /usr/include/qt4
+QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui
 
-INC_FLAGS       = -I$(INC_PATH) -I$(QT_INC)
-DEP_FLAGS       = -MMD -MP
-DEBUG_FLAGS     = -g3 -Wall
+INC_FLAGS   = -I$(INC_PATH) -I$(QT_INC) -I$(GL_INC)
+DEP_FLAGS   = -MMD -MP
+DEBUG_FLAGS = -g3 -Wall
 
-CC              = g++
-CFLAGS          = $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
-LDFLAGS         = $(QT_LD)
+CC          = g++
+CFLAGS      = $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
+LDFLAGS     = $(QT_LD) $(GL_LD)
 
 # Cibles =======================================================================
 
@@ -48,7 +53,7 @@ run : compil
 
 compil : $(EXEC)
 
-$(EXEC) : $(OBJ)
+$(EXEC) : $(OBJ) $(MOC_OBJ)
 	@mkdir -p $(EXE_PATH) 2>/dev/null
 	@echo "--> Édition des liens dans '$(EXEC)' :"
 	$(CC) $^ -o $(EXEC) $(LDFLAGS)
@@ -58,9 +63,18 @@ $(OBJ_PATH)%.o : $(SRC_PATH)%.$(SRC_EXT)
 	@echo "--> Compilation de '$<' :"
 	$(CC) -c $< -o $@ $(CFLAGS)
 
+$(OBJ_PATH)$(MOC_EXT)%.o : $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT)
+	@mkdir -p $(OBJ_PATH)
+	@echo "--> Compilation de '$<' :"
+	$(CC) -c $< -o $@ $(CFLAGS)
+
 ## Dépendances ................................................................:
 
 -include $(OBJ:%.o=%.d)
+
+$(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT) : $(INC_PATH)%.$(INC_EXT)
+	@echo "--> Génération du code Qt de '$<' :"
+	moc $< -o $@
 
 ## Nettoyage ..................................................................:
 
