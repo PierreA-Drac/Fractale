@@ -1,0 +1,17 @@
+# Configuration files
+tags
+.gdbinit
+
+# Binary files
+fractale
+*.o
+
+# Temporary files
+*.swp
+*.d
+*.log
+*.aux
+
+# Documentation files
+html/
+latex/
