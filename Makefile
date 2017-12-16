@@ -29,7 +29,9 @@ MOC_OBJ         = $(OBJ:$(OBJ_PATH)%=$(OBJ_PATH)$(MOC_EXT)%)
 ## Compilation ................................................................:
 
 QT_INC      = /usr/include/qt4
-QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui
+QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui -lQtOpenGL
+GL_INC      = /usr/include/GL
+GL_LD       = -lGL -lGLU
 
 INC_FLAGS   = -I$(INC_PATH) -I$(QT_INC) -I$(GL_INC)
 DEP_FLAGS   = -MMD -MP
