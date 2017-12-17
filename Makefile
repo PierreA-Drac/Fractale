@@ -22,6 +22,7 @@ export INC      = $(shell find $(INC_PATH)*.$(INC_EXT))
 OBJ             = $(SRC:$(SRC_PATH)%.$(SRC_EXT)=$(OBJ_PATH)%.o)
 
 # Qt Meta Object Compiler
+MOC_CMD 	= moc-qt4
 MOC_EXT         = moc_
 MOC_SRC         = $(SRC:$(SRC_PATH)%=$(SRC_PATH)$(MOC_EXT)%)
 MOC_OBJ         = $(OBJ:$(OBJ_PATH)%=$(OBJ_PATH)$(MOC_EXT)%)
@@ -76,7 +77,7 @@ $(OBJ_PATH)$(MOC_EXT)%.o : $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT)
 
 $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT) : $(INC_PATH)%.$(INC_EXT)
 	@echo "--> Génération du code Qt de '$<' :"
-	moc $< -o $@
+	$(MOC_CMD) $< -o $@
 
 ## Nettoyage ..................................................................:
 
