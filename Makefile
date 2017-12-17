@@ -44,7 +44,7 @@ LDFLAGS     = $(QT_LD) $(GL_LD)
 
 # Cibles =======================================================================
 
-.PHONY : clean mrproper indent tags doc report
+.PHONY : clean mrproper indent doc report gdb valgrind-lite valgrind-full
 
 ## Lancement ..................................................................:
 
@@ -54,7 +54,7 @@ run : compil
 
 ## Compilation ................................................................:
 
-compil : $(EXEC)
+compil : $(EXEC) tags
 
 $(EXEC) : $(OBJ) $(MOC_OBJ)
 	@mkdir -p $(EXE_PATH)
@@ -62,11 +62,6 @@ $(EXEC) : $(OBJ) $(MOC_OBJ)
 	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.$(SRC_EXT)
-	@mkdir -p $(OBJ_PATH)
-	@echo "--> Compilation de '$<' :"
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-$(OBJ_PATH)$(MOC_EXT)%.o : $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT)
 	@mkdir -p $(OBJ_PATH)
 	@echo "--> Compilation de '$<' :"
 	$(CC) -c $< -o $@ $(CFLAGS)
@@ -120,9 +115,9 @@ indent :
 
 ## Développement ..............................................................:
 
-tags :
+tags : $(SRC) $(INC) Makefile
 	@echo "--> Génération des tags des sources du projet : "
-	ctags $(SRC) $(INC)
+	ctags $^ 2>/dev/null
 
 ## Documentation ..............................................................:
 
