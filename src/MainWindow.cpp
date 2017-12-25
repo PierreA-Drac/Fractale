@@ -1,3 +1,9 @@
+/**
+ * @file MainWindow.cpp
+ * @brief Fenêtre principale.
+ *
+ * Implémentation de la classe de la fenêtre principale.
+ */
 #include <QtGui/QtGui>
 
 #include "FractaleWindow.hpp"

@@ -1,4 +1,4 @@
-#include <QtGui/QtGui>
+#include <QtGui/QApplication>
 
 #include "MainWindow.hpp"
 
