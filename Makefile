@@ -27,6 +27,10 @@ MOC_EXT         = moc_
 MOC_SRC         = $(SRC:$(SRC_PATH)%=$(SRC_PATH)$(MOC_EXT)%)
 MOC_OBJ         = $(OBJ:$(OBJ_PATH)%=$(OBJ_PATH)$(MOC_EXT)%)
 
+# Valgrind parameters
+VAL_SUPP 	= .valgrind.supp
+VAL_OUT 	= .valgrind.out
+
 ## Compilation ................................................................:
 
 QT_INC      = /usr/include/qt4
@@ -42,9 +46,13 @@ CC          = g++
 CFLAGS      = $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
 LDFLAGS     = $(QT_LD) $(GL_LD)
 
+# Commandes ...................................................................:
+
+LESS = less -RmN
+
 # Cibles =======================================================================
 
-.PHONY : clean mrproper indent doc report gdb valgrind-lite valgrind-full
+.PHONY : clean mrproper indent doc report
 
 ## Lancement ..................................................................:
 
@@ -78,7 +86,7 @@ $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT) : $(INC_PATH)%.$(INC_EXT)
 
 clean :
 	@echo "--> Suppression des fichier temporaires de $(PROJECT) :"
-	rm -rf $(OBJ_PATH) $(SRC_PATH)*~ $(INC_PATH)*~
+	rm -rf $(OBJ_PATH) $(SRC_PATH)*~ $(INC_PATH)*~ $(VAL_OUT)
 	@make clean --directory="$(REPORT_PATH)" --no-print-directory
 
 mrproper : clean
@@ -91,20 +99,23 @@ mrproper : clean
 
 ## Debugger ...................................................................:
 
-gdb :
+gdb : compil
 	@echo "--> Debbugage avec $@ :"
 	$@ -q --args $(EXEC)
 
-valgrind-lite :
+valgrind-lite : compil
 	@echo "--> Debbugage avec $@ (profile 1) :"
 	valgrind --tool=memcheck --leak-resolution=high \
-	    --show-possibly-lost=yes --show-reachable=yes $(EXEC)
+	    --show-possibly-lost=yes --show-reachable=yes \
+	    --suppressions=$(VAL_SUPP) --log-file=$(VAL_OUT) $(EXEC) && \
+	    cat $(VAL_OUT) | $(LESS)
 
-valgrind-full :
+valgrind-full : compil
 	@echo "--> Debbugage avec $@ (profile 2) :"
 	valgrind --tool=memcheck --leak-resolution=high --leak-check=full \
 	    --show-possibly-lost=yes --show-reachable=yes --track-origins=yes \
-	    $(EXEC)
+	    --suppressions=$(VAL_SUPP) --log-file=$(VAL_OUT) $(EXEC) && \
+	    cat $(VAL_OUT) | $(LESS)
 
 ## Présentation ...............................................................:
 

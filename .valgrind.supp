@@ -1,0 +1,127 @@
+{
+	libX11_leak
+		Memcheck:Leak
+		...
+		obj:*libX11*
+		...
+}
+
+{
+	libfontconfig_leak
+		Memcheck:Leak
+		...
+		obj:*libfontconfig*
+		...
+}
+
+{
+	libicuuc_leak
+		Memcheck:Leak
+		...
+		obj:*libicuuc*
+		...
+}
+
+{
+	libfreetype_leak
+		Memcheck:Leak
+		...
+		obj:*libfreetype*
+		...
+}
+
+{
+	libpango_leak
+		Memcheck:Leak
+		...
+		obj:*libpango*
+		...
+}
+
+{
+	libdbus_leak
+		Memcheck:Leak
+		...
+		obj:*libdbus*
+		...
+}
+
+{
+	libqt_leak
+		Memcheck:Leak
+		...
+		obj:*libQt*
+		...
+}
+
+{
+	libqt_cond
+		Memcheck:Cond
+		...
+		obj:*libQt*
+		...
+}
+
+{
+	libcairo_leak
+		Memcheck:Leak
+		...
+		obj:*libcairo*
+		...
+}
+
+{
+	libgdk_leak
+		Memcheck:Leak
+		...
+		obj:*libgdk*
+		...
+}
+
+{
+	libgtk_leak
+		Memcheck:Leak
+		...
+		obj:*libgtk-x11*
+		...
+}
+
+{
+	libglib_leak
+		Memcheck:Leak
+		...
+		obj:*libglib*
+		...
+}
+
+{
+	libgobject_leak
+		Memcheck:Leak
+		...
+		obj:*libgobject*
+		...
+}
+
+{
+	_dl__leak
+		Memcheck:Leak
+		...
+		fun:*_dl_*
+		...
+}
+
+{
+	dri_read4
+		Memcheck:Addr4
+		...
+		obj:*/dri/i965_dri*
+		...
+}
+
+{
+	dri_read8
+		Memcheck:Addr8
+		...
+		obj:*/dri/i965_dri*
+		...
+}

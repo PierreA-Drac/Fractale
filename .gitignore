@@ -11,6 +11,7 @@ fractale
 *.d
 *.log
 *.aux
+.valgrind.out
 
 # Documentation files
 html/
