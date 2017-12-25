@@ -26,7 +26,7 @@ MainWindow::MainWindow(const char *title) : QWidget()
 
     /* Conteneur des onglets secondaires. */
     /* Mandelbrot. */
-    tabsMan = new QTabWidget();
+    tabsMan    = new QTabWidget();
     tabsMan->addTab(wgtPrmMan, QString::fromUtf8("Paramètres"));
     tabsMan->setTabsClosable(true);
     layTabsMan = new QVBoxLayout();
@@ -34,7 +34,7 @@ MainWindow::MainWindow(const char *title) : QWidget()
     wgtTabsMan = new QWidget();
     wgtTabsMan->setLayout(layTabsMan);
     /* Julia et Fatou. */
-    tabsJul = new QTabWidget();
+    tabsJul    = new QTabWidget();
     tabsJul->addTab(wgtPrmJul, QString::fromUtf8("Paramètres"));
     tabsJul->setTabsClosable(true);
     layTabsJul = new QVBoxLayout();

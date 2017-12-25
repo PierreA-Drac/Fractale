@@ -6,9 +6,8 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    MainWindow *wgtMainWin = new MainWindow("Fractale "
-            "(Claire BASKEVITCH & Pierre AYOUB)");
-    wgtMainWin->show();
+    MainWindow wgtMainWin("Fractale (Claire BASKEVITCH & Pierre AYOUB)");
+    wgtMainWin.show();
 
     return app.exec();
 }

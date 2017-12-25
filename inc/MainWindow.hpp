@@ -24,25 +24,27 @@ class MainWindow : public QWidget
         void closeJulTab(int index);
 
     private:
-        /* Mandelbrot. */
+        /* Mandelbrot (paramètres). */
         QPushButton *butManOGL;
         QPushButton *butManCAI;
         QGridLayout *layPrmMan;
         QWidget *wgtPrmMan;
-        QVBoxLayout *layTabsMan;
-        QWidget *wgtTabsMan;
 
-        /* Julia et Fatou. */
+        /* Julia et Fatou (paramètres). */
         QPushButton *butJulOGL;
         QPushButton *butJulCAI;
         QGridLayout *layPrmJul;
         QWidget *wgtPrmJul;
-        QVBoxLayout *layTabsJul;
-        QWidget *wgtTabsJul;
 
         /* Conteneur des onglets secondaires. */
+        /* Mandelbrot. */
         QTabWidget *tabsMan;
+        QVBoxLayout *layTabsMan;
+        QWidget *wgtTabsMan;
+        /* Julia et Fatou. */
         QTabWidget *tabsJul;
+        QVBoxLayout *layTabsJul;
+        QWidget *wgtTabsJul;
 
         /* Conteneur des onglets principaux. */
         QTabWidget *tabsMainWin;
