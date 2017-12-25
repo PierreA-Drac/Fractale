@@ -86,7 +86,7 @@ $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT) : $(INC_PATH)%.$(INC_EXT)
 
 clean :
 	@echo "--> Suppression des fichier temporaires de $(PROJECT) :"
-	rm -rf $(OBJ_PATH) $(SRC_PATH)*~ $(INC_PATH)*~ $(VAL_OUT)
+	rm -rf $(OBJ_PATH) $(SRC_PATH)*~ $(INC_PATH)*~ $(VAL_OUT) .gdb_history
 	@make clean --directory="$(REPORT_PATH)" --no-print-directory
 
 mrproper : clean
