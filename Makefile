@@ -46,9 +46,10 @@ INC_FLAGS     = -I$(INC_PATH) -I$(QT_INC) -I$(GL_INC)
 DEP_FLAGS     = -MMD -MP
 DEBUG_FLAGS   = -g3 -Wall
 POS_IND_FLAGS = -fPIC
+STD_FLAGS     = -std=c++0x
 
 CC            = g++
-CFLAGS        = $(POS_IND_FLAGS) $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
+CFLAGS        = $(STD_FLAGS) $(POS_IND_FLAGS) $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
 LDFLAGS       = $(QT_LD) $(GL_LD)
 
 # Commandes ...................................................................:
