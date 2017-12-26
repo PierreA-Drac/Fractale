@@ -19,8 +19,8 @@
  * @brief Fenêtre principale.
  *
  * La fenêtre principale contient l'ensemble du programme. Elle gère
- * l'interaction avec l'utilisateur par les boutons, la souris et le clavier. De
- * plus, elle gère l'affichage pendant tout le long du programme.
+ * l'interaction avec l'utilisateur par les boutons, la souris et le clavier.
+ * De plus, elle gère l'affichage pendant tout le long du programme.
  */
 class MainWindow : public QWidget
 {
@@ -36,6 +36,52 @@ class MainWindow : public QWidget
          * reste qu'à l'afficher avec "show()".
          */
         MainWindow(const char *title = "Fenêtre");
+
+        /**
+         * @brief Gestion du clavier
+         * @param keyEvent Pointeur vers un évènement Qt correspondant à une
+         * touche du clavier.
+         * 
+         * Gère les évènements relatifs au clavier de la fenêtre principale et
+         * des fenêtres sous-jacentes. Cette fonction est appelée à chaque
+         * fois qu'une touche du clavier est enfoncée, et surcharge la fonction
+         * définie dans "QWidget". Si une fonction similaire est définie dans un
+         * widget visible, alors ce sera la fonction dans le widget visible qui
+         * sera appellée en première.
+         * ESC : Ferme la fenêtre.
+         * F1  : Bascule entre le mode plein écran et fenêtré pour la fenêtre
+         *       principale.
+         * F2  : Passe la fractale en plein écran.
+         * F3  : Détache la fenêtre de la fractale de la fenêtre principale.
+         */
+        void keyPressEvent(QKeyEvent *keyEvent);
+
+        /**
+         * @brief Bascule le mode plein écran.
+         * 
+         * Alterne entre le mode plein écran et le mode fenêtré pour la fenêtre
+         * principale.
+         */
+        void toggleFullWindow();
+
+        /**
+         * @brief Bascule le mode plein écran d'une fractale.
+         *
+         * Si une fenêtre affichant une fractale est active (un onglet est
+         * sélectionné), alors son mode plein écran est alterné en appelant la
+         * fonction éponyme de la classe de la fractale.
+         */
+        void toggleFullWindowFrac();
+
+        /**
+         * @brief Détache une fenêtre de fractale.
+         *
+         * Si une fenêtre affichant une fractale est active (un onglet est
+         * sélectionné), alors la fenêtre contenu dans cet onglet est détachée
+         * de la fenêtre principale. Une fois une fenêtre détachée, on ne peut
+         * plus la ré-attacher.
+         */
+        void detachWindowFrac();
 
     public slots:
         /**
@@ -162,6 +208,16 @@ class MainWindow : public QWidget
         QVBoxLayout *layMainWin;
         /** Bouton pour quitter l'application dans la fenêtre principale. */
         QPushButton *butQuit;
+
+        /**
+         * @brief Obtenir la fractale active.
+         * @return Pointeur sur la fractale active, "nullptr" si aucune n'est
+         * visible.
+         *
+         * Si un onglet contenant une fractale est affiché dans la fenêtre
+         * principale, alors le pointeur vers cette fractale est renvoyé.
+         */
+        FractaleWindow* getFracActive();
 };
 
 #endif /* ifndef MAINWINDOW_H */

@@ -1,4 +1,5 @@
-#include <QtGui/QApplication>
+#include <QtGui/QApplication>        // For Qt4
+// #include <QtWidgets/QApplication> // For Qt5
 
 #include "MainWindow.hpp"
 
