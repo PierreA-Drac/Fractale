@@ -1,7 +1,9 @@
+#include "MainWindow.hpp"
+
 #include "FractaleGLWidget.hpp"
 
-FractaleGLWidget::FractaleGLWidget(int framesPerSecond, QWidget *parent, char
-        *name) : QGLWidget(parent)
+FractaleGLWidget::FractaleGLWidget(int framesPerSecond, QWidget *parent, const
+        char *name) : QGLWidget(parent)
 {
     /* Titre de la fenêtre. */
     setWindowTitle(QString::fromUtf8(name));
@@ -18,35 +20,37 @@ FractaleGLWidget::FractaleGLWidget(int framesPerSecond, QWidget *parent, char
         connect(t_Timer, SIGNAL(timeout()), this, SLOT(timeOutSlot()));
         t_Timer->start(timerInterval);
     }
-
-    /* Initialiation en mode fenêtré. */
-    b_Fullscreen = false;
 }
 
 void FractaleGLWidget::keyPressEvent(QKeyEvent *keyEvent)
 {
-    switch(keyEvent->key())
-    {
+    switch(keyEvent->key()) {
         case Qt::Key_Escape:
             close();
             break;
-        case Qt::Key_F1:
+        case Qt::Key_F2:
             toggleFullWindow();
             break;
+        default:
+            {
+                if (MainWindow *ptr = (MainWindow *)parentWidget())
+                    ptr->keyPressEvent(keyEvent);
+                break;
+            }
     }
 }
 
 void FractaleGLWidget::toggleFullWindow()
 {
-    if(b_Fullscreen)
-    {
+    if (isFullScreen()) {
+        if (parentWidget())
+            setWindowFlags(windowFlags() & ~Qt::Window);
         showNormal();
-        b_Fullscreen = false;
     }
-    else
-    {
+    else {
+        if (parentWidget())
+            setWindowFlags(windowFlags() | Qt::Window);
         showFullScreen();
-        b_Fullscreen = true;
     }
 }
 

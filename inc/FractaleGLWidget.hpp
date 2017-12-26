@@ -10,7 +10,7 @@ class FractaleGLWidget : public QGLWidget
 
     public:
         explicit FractaleGLWidget(int framesPerSecond = 0, QWidget *parent = 0,
-                char *name = 0);
+                const char *name = 0);
         virtual void initializeGL() = 0;
         virtual void resizeGL(int width, int height) = 0;
         virtual void paintGL() = 0;
@@ -22,7 +22,6 @@ class FractaleGLWidget : public QGLWidget
 
     private:
         QTimer *t_Timer;
-        bool b_Fullscreen;
 };
 
 #endif /* ifndef FRACTALEGLWIDGET_H */
