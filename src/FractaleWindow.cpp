@@ -167,6 +167,12 @@ void FractaleWindow::keyPressEvent(QKeyEvent *keyEvent)
 {
     bool update = false;
     switch(keyEvent->key()) {
+        case Qt::Key_Escape:
+            close();
+            break;
+        case Qt::Key_F2:
+            toggleFullWindow();
+            break;
         case Qt::Key_Plus:
             _scale *= 0.9f;
             update  = true;
@@ -176,19 +182,19 @@ void FractaleWindow::keyPressEvent(QKeyEvent *keyEvent)
             update = true;    
             break;
         case Qt::Key_Up:
-            _centre = QPointF(_centre.x(), _centre.y() + _scale);
+            _centre = QPointF(_centre.x(), _centre.y() + _scale / 2);
             update = true;
             break;
         case Qt::Key_Down:
-            _centre = QPointF(_centre.x(), _centre.y() -_scale);
+            _centre = QPointF(_centre.x(), _centre.y() -_scale / 2);
             update = true;
             break;
         case Qt::Key_Right:
-            _centre = QPointF(_centre.x() + _scale, _centre.y());
+            _centre = QPointF(_centre.x() + _scale / 2, _centre.y());
             update = true;
             break;
         case Qt::Key_Left:
-            _centre = QPointF(_centre.x() - _scale, _centre.y());
+            _centre = QPointF(_centre.x() - _scale / 2, _centre.y());
             update = true;
             break;
         default:
