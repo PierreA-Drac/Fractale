@@ -23,6 +23,7 @@ OBJ             = $(SRC:$(SRC_PATH)%.$(SRC_EXT)=$(OBJ_PATH)%.o)
 
 # Qt Meta Object Compiler
 MOC_CMD 	= moc-qt4
+# MOC_CMD 	= moc
 MOC_EXT         = moc_
 MOC_SRC         = $(SRC:$(SRC_PATH)%=$(SRC_PATH)$(MOC_EXT)%)
 MOC_OBJ         = $(OBJ:$(OBJ_PATH)%=$(OBJ_PATH)$(MOC_EXT)%)
@@ -33,20 +34,23 @@ VAL_OUT 	= .valgrind.out
 
 ## Compilation ................................................................:
 
-QT_INC      = /usr/include/qt4
-QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui -lQtOpenGL
-#QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQt5Core -lQt5Gui -lQt5OpenGL \
-		 #-lQt5Widgets
-GL_INC      = /usr/include/GL
-GL_LD       = -lGL -lGLU
+QT_INC        = /usr/include/qt4
+# QT_INC      = /usr/include/x86_64-linux-gnu/qt5
+QT_LD         = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui -lQtOpenGL
+# QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQt5Core -lQt5Gui -lQt5OpenGL \
+		# -lQt5Widgets
+GL_INC        = /usr/include/GL
+GL_LD         = -lGL -lGLU
 
-INC_FLAGS   = -I$(INC_PATH) -I$(QT_INC) -I$(GL_INC)
-DEP_FLAGS   = -MMD -MP
-DEBUG_FLAGS = -g3 -Wall
+INC_FLAGS     = -I$(INC_PATH) -I$(QT_INC) -I$(GL_INC)
+DEP_FLAGS     = -MMD -MP
+DEBUG_FLAGS   = -g3 -Wall
+POS_IND_FLAGS = -fPIC
+STD_FLAGS     = -std=c++0x
 
-CC          = g++ -std=c++0x
-CFLAGS      = $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
-LDFLAGS     = $(QT_LD) $(GL_LD)
+CC            = g++
+CFLAGS        = $(STD_FLAGS) $(POS_IND_FLAGS) $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
+LDFLAGS       = $(QT_LD) $(GL_LD)
 
 # Commandes ...................................................................:
 
@@ -88,7 +92,7 @@ $(SRC_PATH)$(MOC_EXT)%.$(SRC_EXT) : $(INC_PATH)%.$(INC_EXT)
 
 clean :
 	@echo "--> Suppression des fichier temporaires de $(PROJECT) :"
-	rm -rf $(OBJ_PATH) $(SRC_PATH)*~ $(INC_PATH)*~ $(VAL_OUT)
+	rm -rf $(OBJ_PATH) $(SRC_PATH)*~ $(INC_PATH)*~ $(VAL_OUT) .gdb_history
 	@make clean --directory="$(REPORT_PATH)" --no-print-directory
 
 mrproper : clean

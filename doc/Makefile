@@ -13,6 +13,10 @@ endif
 PDF_VIEWER = evince
 INTERNET_BROWSER = firefox
 
+# Commandes ...................................................................:
+
+LESS = less -RmN
+
 # Cibles =======================================================================
 
 .PHONY : mrproper
@@ -30,7 +34,7 @@ compil : html/index.html latex/refman.pdf
 
 html/index.html : $(DEPS)
 	@echo "--> Création de la documentation de $(PROJECT) :"
-	doxygen Doxyfile
+	doxygen Doxyfile | grep "warning" | $(LESS)
 	
 latex/refman.pdf : $(DEPS)
 	@echo "--> Compilation de la documentation en PDF de $(PROJECT)" \
@@ -41,4 +45,4 @@ latex/refman.pdf : $(DEPS)
 
 mrproper:
 	@echo "--> Suppression de la documentation de $(PROJECT) :"
-	rm -f -r html/ latex/
+	rm -f -r html/ latex/ doxygen_*.tmp

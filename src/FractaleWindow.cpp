@@ -3,7 +3,7 @@
 #include "FractaleWindow.hpp"
 
 FractaleWindow::FractaleWindow(QWidget *parent) 
-    : FractaleGLWidget(60, parent, "Fractale avec OpenGL et Qt")
+    : FractaleGLWidget(60, parent, "Fractale de ? avec ?")
 {
 }
 

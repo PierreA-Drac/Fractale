@@ -1,6 +1,9 @@
 #include "testglwidget.hpp"
 #include <QtGui/QtGui>
 #include <QtOpenGL/QGLFormat>
+#include <QtGui/QApplication>        // For Qt4
+// #include <QtWidgets/QApplication> // For Qt5
+
 #include "MainWindow.hpp"
 
 int main(int argc, char *argv[])
