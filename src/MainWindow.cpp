@@ -129,7 +129,6 @@ void MainWindow::detachWindowFrac() {
 void MainWindow::displayMandelOpenGL()
 {
     FractaleWindow *wgtWinFrac = new FractaleWindow();
-    //RenderWidget *wgtWinFrac = new RenderWidget();
     tabsMan->addTab(wgtWinFrac, "OpenGL");
     /* Pour que Qt supprime le widget si on le ferme
      * alors qu'il était détaché. */

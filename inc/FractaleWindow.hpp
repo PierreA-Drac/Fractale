@@ -21,11 +21,12 @@ class FractaleWindow : public FractaleGLWidget
         float _scale;
 
     public:
-        explicit FractaleWindow(QWidget *parent = 0);
+        FractaleWindow(QWidget *parent = 0);
         void initializeGL();
         void resizeGL(int width, int height);
         void paintGL();
-        void loadMandelbrotFractal();
+        void MandelbrotFractal();
+        void JuliaFractal();
         void keyPressEvent(QKeyEvent *keyEvent);
 };
 
