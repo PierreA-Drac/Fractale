@@ -1,111 +1,182 @@
 #include "testglwidget.hpp"
 
-GLWidget::GLWidget( const QGLFormat& format, QWidget* parent )
- : QGLWidget( format, parent ),
- m_vertexBuffer( QGLBuffer::VertexBuffer )
+
+#include <QtCore/QDebug>
+#include <QtGui/QKeyEvent>
+//#include <QtGui/QMouseEvent>
+
+RenderWidget::RenderWidget(QWidget* parent)
+  : QGLWidget(parent)
+  , _iterations(512)
+  , _centre(0.f, 0.f)
+  , _scale(1.f)
+{
+  this->setFocusPolicy(Qt::StrongFocus);
+}
+
+RenderWidget::~RenderWidget()
 {
 }
 
-void GLWidget::initializeGL()
+void RenderWidget::loadJuliaFractal()
 {
- //~ QGLFormat glFormat = QGLWidget::format();
- //~ if ( !glFormat.sampleBuffers() )
- //~ qWarning() << "Could not enable sample buffers";
+  _shaderProgram.removeAllShaders();
+  _shaderProgram.addShader(_vertexShader);
+  _shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
+                                             ":/Julia.glsl");
 
-// Set the clear color to black
- glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-
-// Prepare a complete shader program…
- if ( !prepareShaderProgram( ":/vertex.vsh", ":/fragment.fsh" ) )
- return;
-
-// We need us some vertex data. Start simple with a triangle ;-)
- float points[] = {  60.0f,  10.0f,  0.0f,
-     110.0f, 110.0f, 0.0f,
-     10.0f,  110.0f, 0.0f };
- m_vertexBuffer.create();
- m_vertexBuffer.setUsagePattern( QGLBuffer::StaticDraw );
- if ( !m_vertexBuffer.bind() )
- {
- qWarning() << "Could not bind vertex buffer to the context";
- return;
- }
- m_vertexBuffer.allocate( points, 3 * 4 * sizeof( float ) );
-
- // Bind the shader program so that we can associate variables from
- // our application to the shaders
- if ( !m_shader.bind() )
- {
- qWarning() << "Could not bind shader program to context";
- return;
- }
-
- // Enable the "vertex" attribute to bind it to our currently bound
- // vertex buffer.
- m_shader.setAttributeBuffer( "vertex", GL_FLOAT, 0, 4 );
- m_shader.enableAttributeArray( "vertex" );
+  _shaderProgram.link();
+  _shaderProgram.bind();
 }
 
-bool GLWidget::prepareShaderProgram( const QString& vertexShaderPath,
- const QString& fragmentShaderPath )
+void RenderWidget::loadMandelbrotFractal()
 {
- // First we load and compile the vertex shader…
- //bool result = m_shader.addShaderFromSourceFile( QGLShader::Vertex, vertexShaderPath );
- bool result = m_shader.addShaderFromSourceCode( QGLShader::Vertex, 
-		"#version 330\n"
-		"in vec4 vertex;\n"
-		"in mat4 matrix;\n"
-		"void main( void )\n"
-		"{\n"
-		"gl_Position = vertex*matrix;\n"
-		"}");
- if ( !result )
- qWarning() << m_shader.log();
+  char* code = "uniform int iterations;"
 
-// …now the fragment shader…
- //result = m_shader.addShaderFromSourceFile( QGLShader::Fragment, fragmentShaderPath );
- result = m_shader.addShaderFromSourceCode( QGLShader::Fragment, 
-		"#version 330\n"
-		"layout(location = 0, index = 0) out vec4 fragColor;\n"
-		"void main( void )\n"
-		"{\n"
-		"fragColor = vec4( 1.0, 0.0, 0.0, 1.0 );\n"
-		"}");
- if ( !result )
- qWarning() << m_shader.log();
+			"uniform highp vec2 centre;\n"
+			"uniform highp float scale;\n"
 
-// …and finally we link them to resolve any references.
- result = m_shader.link();
- if ( !result )
- qWarning() << "Could not link shader program:" << m_shader.log();
+			"varying highp vec2 texture_out;\n"
 
-return result;
+			"void main()\n"
+			"{\n"
+			  "vec2 z;\n"
+			  "vec2 c;\n"
+			  "c.x = scale * ( 3.0 * texture_out.x - 2.0 ) + centre.x;\n"
+			  "c.y = scale * ( 2.0 * texture_out.y - 1.0 ) + centre.y;\n"
+
+			  "z = c;\n"
+
+			 " int i = 0;\n"
+			"  for(; i < iterations; ++i)\n"
+			"  {\n"
+				"float x = z.x*z.x - z.y*z.y + c.x;\n"
+				"float y = z.x*z.y + z.y*z.x + c.y;\n"
+
+				"if( x*x + y*y > 4.0 )\n"
+				"  break;\n"
+
+				"z.x = x;\n"
+				"z.y = y;\n"
+			  "}\n"
+
+			  "vec4 color = vec4(0.0);\n"
+
+			  "if(i < iterations - 1)\n"
+			 " {\n"
+				"color.x = sin(float(i) / 5.0);\n"
+				"color.y = sin(float(i) / 6.0);\n"
+				"color.z = cos(float(i) / 12.0 + 3.141 / 4.0);\n"
+			  "}\n"
+
+			  "gl_FragColor = color;\n"
+			"}";
+  _shaderProgram.removeAllShaders();
+  _shaderProgram.addShader(_vertexShader);
+  //_shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
+                //                             ":/Mandelbrot.glsl");
+  _shaderProgram.addShaderFromSourceCode(QGLShader::Fragment,
+                                             code);
+
+  _shaderProgram.link();
+  _shaderProgram.bind();
 }
 
-void GLWidget::resizeGL( int w, int h )
+void RenderWidget::initializeGL()
 {
- // Set the viewport to window dimensions
- glViewport( 0, 0, w, qMax( h, 1 ) );
+  //this->initializeOpenGLFunctions();
+  this->qglClearColor(Qt::black);
+
+  glEnable(GL_DEPTH_TEST);
+
+  _vertexShader = new QGLShader(QGLShader::Vertex, this);
+
+  _vertexShader->compileSourceCode(
+     "attribute highp vec4 vertex;\n"
+     "attribute highp vec2 texture_in;\n"
+     "varying   highp vec2 texture_out;\n"
+     "void main()\n"
+     "{\n"
+     "  gl_Position = vertex;\n"
+     "  texture_out = texture_in;\n"
+     "}\n");
+
+  this->loadMandelbrotFractal();
 }
 
-void GLWidget::paintGL()
+void RenderWidget::resizeGL(int w, int h)
 {
- // Clear the buffer with the current clearing color
- glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-// Draw stuff
- glDrawArrays( GL_TRIANGLES, 0, 3 );
+  glViewport(0, 0, w, h);
 }
 
-void GLWidget::keyPressEvent( QKeyEvent* e )
+void RenderWidget::paintGL()
 {
- switch ( e->key() )
- {
- case Qt::Key_Escape:
- QCoreApplication::instance()->quit();
- break;
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
- default:
- QGLWidget::keyPressEvent( e );
- }
+  _shaderProgram.setUniformValue("scale", _scale);
+  _shaderProgram.setUniformValue("centre", _centre);
+  _shaderProgram.setUniformValue("iterations", _iterations);
+  _shaderProgram.setUniformValue("c", QPointF(-1.0,0.1));
+
+  const GLfloat quadVertices[] =
+  {
+    -1.f, -1.f,
+    1.f, -1.f,
+    1.f, 1.f,
+    -1.f, 1.f
+  };
+
+  const GLfloat textureCoordinates[] =
+  {
+    0.f, 0.f,
+    1.f, 0.f,
+    1.f, 1.f,
+    0.f, 1.f
+  };
+
+  int vertexLocation  = _shaderProgram.attributeLocation("vertex");
+  int textureLocation = _shaderProgram.attributeLocation("texture_in");
+
+  _shaderProgram.enableAttributeArray(vertexLocation);
+  _shaderProgram.setAttributeArray(vertexLocation, quadVertices, 2);
+  _shaderProgram.enableAttributeArray(textureLocation);
+  _shaderProgram.setAttributeArray(textureLocation, textureCoordinates, 2);
+
+  glDrawArrays(GL_QUADS, 0, 4);
+}
+
+void RenderWidget::mousePressEvent(QMouseEvent* event)
+{
+  /*double xrange[] = { ( -2.0 * _scale + _centre.x() ), ( 1.0 * _scale + _centre.x() ) };
+  double yrange[] = { ( -1.0 * _scale + _centre.y() ), ( 1.0 * _scale +  _centre.y() ) };
+
+  QPointF windowPosition   = event->windowPos();
+  QPointF absolutePosition = QPointF(  ( xrange[1] - xrange[0] ) / this->width() * windowPosition.x()  + xrange[0],
+                                      -( yrange[1] - yrange[0] ) / static_cast<float>(this->height()) * windowPosition.y() + yrange[1] );
+
+  _centre = absolutePosition;
+
+  this->update();*/
+}
+
+void RenderWidget::keyPressEvent(QKeyEvent* event)
+{
+  bool update = false;
+
+  if(event->type() == QEvent::KeyPress)
+  {
+    if(event->key() == Qt::Key_Plus)
+    {
+      _scale *= 0.9f;
+      update  = true;
+    }
+    else if(event->key() == Qt::Key_Minus)
+    {
+      _scale *= 1.1f;
+      update = true;
+    }
+  }
+
+  if(update)
+    this->update();
 }

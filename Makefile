@@ -35,6 +35,8 @@ VAL_OUT 	= .valgrind.out
 
 QT_INC      = /usr/include/qt4
 QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQtCore -lQtGui -lQtOpenGL
+#QT_LD       = -L/usr/lib/x86_64-linux-gnu -lQt5Core -lQt5Gui -lQt5OpenGL \
+		 #-lQt5Widgets
 GL_INC      = /usr/include/GL
 GL_LD       = -lGL -lGLU
 
@@ -42,7 +44,7 @@ INC_FLAGS   = -I$(INC_PATH) -I$(QT_INC) -I$(GL_INC)
 DEP_FLAGS   = -MMD -MP
 DEBUG_FLAGS = -g3 -Wall
 
-CC          = g++
+CC          = g++ -std=c++0x
 CFLAGS      = $(INC_FLAGS) $(DEP_FLAGS) $(DEBUG_FLAGS)
 LDFLAGS     = $(QT_LD) $(GL_LD)
 

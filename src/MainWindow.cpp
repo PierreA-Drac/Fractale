@@ -1,7 +1,7 @@
 #include <QtGui/QtGui>
 
-#include "FractaleWindow.hpp"
-
+//#include "FractaleWindow.hpp"
+#include "testglwidget.hpp"
 #include "MainWindow.hpp"
 
 MainWindow::MainWindow(const char *title) : QWidget()
@@ -75,7 +75,8 @@ MainWindow::MainWindow(const char *title) : QWidget()
 
 void MainWindow::displayMandelOpenGL()
 {
-    FractaleWindow *wgtWinFrac = new FractaleWindow();
+    //FractaleWindow *wgtWinFrac = new FractaleWindow();
+    RenderWidget *wgtWinFrac = new RenderWidget();
     tabsMan->addTab(wgtWinFrac, "OpenGL");
 }
 

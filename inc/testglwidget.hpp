@@ -3,28 +3,38 @@
 #include <QtOpenGL/QGLWidget>
 #include <QtOpenGL/QtOpenGL>
 #include <QtOpenGL/QGLFormat>
-#include <QtOpenGL/QGLBuffer>
+#include <QtOpenGL/QGLShader>
 #include <QtOpenGL/QGLShaderProgram>
+//#include <qt5/QtGui/QOpenGLFunctions>
 
-class GLWidget : public QGLWidget
+
+class RenderWidget : public QGLWidget//, protected QOpenGLFunctions
 {
- Q_OBJECT
+  Q_OBJECT
+
 public:
- GLWidget( const QGLFormat& format, QWidget* parent = 0 );
+    RenderWidget(QWidget* widget = nullptr);
+    ~RenderWidget();
 
-protected:
- virtual void initializeGL();
- virtual void resizeGL( int w, int h );
- virtual void paintGL();
-
-virtual void keyPressEvent( QKeyEvent* e );
+public slots:
+    void loadJuliaFractal();
+    void loadMandelbrotFractal();
 
 private:
- bool prepareShaderProgram( const QString& vertexShaderPath,
- const QString& fragmentShaderPath );
+    void initializeGL();
+    void resizeGL(int w, int h);
+    void paintGL();
 
-QGLShaderProgram m_shader;
- QGLBuffer m_vertexBuffer;
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event);
+
+    QGLShader* _vertexShader;
+    QGLShaderProgram _shaderProgram;
+
+    int _iterations;
+
+    QPointF _centre;
+    float _scale;
 };
 
 #endif // GLWIDGET_H
