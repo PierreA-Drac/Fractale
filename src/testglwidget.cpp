@@ -32,7 +32,6 @@ void RenderWidget::loadJuliaFractal()
 void RenderWidget::loadMandelbrotFractal()
 {
   char* code = "uniform int iterations;"
-
 			"uniform highp vec2 centre;\n"
 			"uniform highp float scale;\n"
 
@@ -63,20 +62,22 @@ void RenderWidget::loadMandelbrotFractal()
 			  "vec4 color = vec4(0.0);\n"
 
 			  "if(i < iterations - 1)\n"
-			 " {\n"
-				"color.x = sin(float(i) / 5.0);\n"
-				"color.y = sin(float(i) / 6.0);\n"
-				"color.z = cos(float(i) / 12.0 + 3.141 / 4.0);\n"
-			  "}\n"
+	//en noir et blanc
+			  "color = vec4(1.0);\n"
+	//en couleur
+			 /*" {\n"
+				"color.x = sin(float(i) / 100.0);\n"
+				"color.y = sin(float(i) / 100.0);\n"
+				"color.z = cos(float(i) / 100.0 + 3.141 / 4.0);\n"
+			  "}\n"*/
 
 			  "gl_FragColor = color;\n"
 			"}";
   _shaderProgram.removeAllShaders();
   _shaderProgram.addShader(_vertexShader);
   //_shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
-                //                             ":/Mandelbrot.glsl");
-  _shaderProgram.addShaderFromSourceCode(QGLShader::Fragment,
-                                             code);
+    //              "/home/user/Bureau/Info.L3/Fractale/Mandelbrot.glsl");
+  _shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, code);
 
   _shaderProgram.link();
   _shaderProgram.bind();
