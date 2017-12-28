@@ -3,8 +3,7 @@
 #include "FractalWindowOGL.hpp"
 
 FractalWindowOGL::FractalWindowOGL(QWidget *parent) 
-    : QWidget(parent), QGLWidget(parent),
-        FractalWindow(parent, "Fractale de ? avec ?", 60)
+    : FractalWindow(parent, "Fractale de ? avec ?", 60)
 {
 }
 

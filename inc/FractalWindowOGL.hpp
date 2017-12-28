@@ -7,7 +7,7 @@
 
 #include "FractalWindow.hpp"
 
-class FractalWindowOGL : public FractalWindow, public virtual QGLWidget
+class FractalWindowOGL : public FractalWindow
 {
     Q_OBJECT
 

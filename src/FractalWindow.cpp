@@ -3,7 +3,7 @@
 #include "FractalWindow.hpp"
 
 FractalWindow::FractalWindow(QWidget *parent, const char *name,
-        int framesPerSecond) : QWidget(parent)
+        int framesPerSecond) : QGLWidget(parent)
 {
     /* Titre de la fenêtre. */
     setWindowTitle(QString::fromUtf8(name));
