@@ -10,6 +10,10 @@
 #define COLOR 1
 #define MANDELBROT 0
 #define JULIA 1
+#define xmin -2.0
+#define xmax 1.0
+#define ymin -1.5
+#define ymax 1.5
 
 class FractaleWindow : public FractaleGLWidget
 {
@@ -23,9 +27,9 @@ class FractaleWindow : public FractaleGLWidget
 
         QPointF _centre;
         float _scale;
-        bool _coul;
         bool _fracType;
-
+        bool _coul;
+        
     public:
         FractaleWindow(bool fracType, bool coul, QWidget *parent = 0);
         void initializeGL();
