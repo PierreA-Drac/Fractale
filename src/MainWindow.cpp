@@ -7,7 +7,8 @@
 
 #include <QtGui/QtGui>
 
-#include "FractaleWindow.hpp"
+#include "FractalWindow.hpp"
+#include "FractalWindowOGL.hpp"
 
 #include "MainWindow.hpp"
 
@@ -110,12 +111,12 @@ void MainWindow::toggleFullWindow() {
 void MainWindow::toggleFullWindowFrac() {
     /* Si on ne défini pas cette fonction ici, alors on ne va pas dans la
      * fonction "toggleFullWindow" de la fractale car elle n'a pas le focus. */
-    if (FractaleWindow* ptr = getFracActive())
+    if (FractalWindow* ptr = getFracActive())
         ptr->toggleFullWindow();
 }
 
 void MainWindow::detachWindowFrac() {
-    if (FractaleWindow* ptr = getFracActive()) {
+    if (FractalWindow* ptr = getFracActive()) {
         /* Détache la fenêtre en supprimant son lien avec son parent.
          * Déplacement minime requis pour ne pas apparaître sous la barre des
          * tâches. Affiche en mode normal (pas minimisé, pas maximisé, pas
@@ -128,7 +129,7 @@ void MainWindow::detachWindowFrac() {
 
 void MainWindow::displayMandelOpenGL()
 {
-    FractaleWindow *wgtWinFrac = new FractaleWindow();
+    FractalWindow *wgtWinFrac = new FractalWindowOGL();
     tabsMan->addTab(wgtWinFrac, "OpenGL");
     /* Pour que Qt supprime le widget si on le ferme
      * alors qu'il était détaché. */
@@ -167,16 +168,16 @@ void MainWindow::closeJulTab(int index)
         tabsJul->removeTab(index);
 }
 
-FractaleWindow* MainWindow::getFracActive()
+FractalWindow* MainWindow::getFracActive()
 {
     /* "Dynamic_cast" renvoie "null" si le pointeur n'est pas un
      * "FractaleWindow". "isVisible" renvoie "false" si le widget n'est pas
      * visible sur l'écran (même s'il à le focus ou qu'il est actif en arrière
      * plan.) */
-    FractaleWindow *ptr = nullptr;
-    if (!(ptr = dynamic_cast<FractaleWindow *>(tabsMan->currentWidget()))
+    FractalWindow *ptr = nullptr;
+    if (!(ptr = dynamic_cast<FractalWindow *>(tabsMan->currentWidget()))
             || !(ptr->isVisible())) {
-        if (!(ptr = dynamic_cast<FractaleWindow *>(tabsJul->currentWidget()))
+        if (!(ptr = dynamic_cast<FractalWindow *>(tabsJul->currentWidget()))
                 || !(ptr->isVisible())) {
             return nullptr;
         }

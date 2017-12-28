@@ -10,10 +10,7 @@
 
 #include <QtGui/QtGui>
 
-#include "FractaleWindow.hpp"
-
-/** Nombre maximum d'onglets ouverts pour un type de fractale. */
-#define TAB_MAX 5
+#include "FractalWindow.hpp"
 
 /**
  * @brief Fenêtre principale.
@@ -217,7 +214,7 @@ class MainWindow : public QWidget
          * Si un onglet contenant une fractale est affiché dans la fenêtre
          * principale, alors le pointeur vers cette fractale est renvoyé.
          */
-        FractaleWindow* getFracActive();
+        FractalWindow* getFracActive();
 };
 
 #endif /* ifndef MAINWINDOW_H */
