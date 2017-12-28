@@ -1,18 +1,21 @@
 #include "MainWindow.hpp"
 #include <QtCore/QDebug>
 #include "FractaleWindow.hpp"
+#include "QtCore/QString"
 
-FractaleWindow::FractaleWindow(QWidget *parent) 
+FractaleWindow::FractaleWindow(bool fracType, bool coul, QWidget *parent) 
     : FractaleGLWidget(60, parent, "Fractale de ? avec ?")
     , _iterations(512)
   , _centre(0.f, 0.f)
   , _scale(1.f)
+  , _fracType(fracType)
+  , _coul(coul)
 {  
 }
 
 void FractaleWindow::JuliaFractal()
 {
-  char* code = "uniform int iterations;"
+  QString code = "uniform int iterations;"
             "uniform highp vec2 c;\n"
 			"uniform highp vec2 centre;\n"
 			"uniform highp float scale;\n"
@@ -40,17 +43,19 @@ void FractaleWindow::JuliaFractal()
 
 			"vec4 color = vec4(0.0);\n"
 
-			"if(i < iterations - 1)\n"
+			"if(i < iterations - 1)\n";
     //en noir et blanc
-			  //~ "color = vec4(1.0);\n"
+    if(_coul == BLACK_WHITE)
+        code += "color = vec4(1.0);\n";
 	//en couleur
-			 " {\n"
+    else
+		code += " {\n"
 				"color.x = sin(float(i) / 100.0);\n"
 				"color.y = sin(float(i) / 70.0);\n"
 				"color.z = cos(float(i) / 20.0 + 3.141 / 4.0);\n"
-			  "}\n"
+			  "}\n";
 
-			  "gl_FragColor = color;\n"
+		code += "gl_FragColor = color;\n"
 			"}";
   _shaderProgram.removeAllShaders();
   _shaderProgram.addShader(_vertexShader);
@@ -63,7 +68,7 @@ void FractaleWindow::JuliaFractal()
 
 void FractaleWindow::MandelbrotFractal()
 {
-  char* code = "uniform int iterations;"
+  QString code = "uniform int iterations;"
 			"uniform highp vec2 centre;\n"
 			"uniform highp float scale;\n"
 
@@ -93,17 +98,19 @@ void FractaleWindow::MandelbrotFractal()
 
 			  "vec4 color = vec4(0.0);\n"
 
-			  "if(i < iterations - 1)\n"
+			  "if(i < iterations - 1)\n";
 	//en noir et blanc
-			  //~ "color = vec4(1.0);\n"
+    if(_coul == BLACK_WHITE)
+        code += "color = vec4(1.0);\n";
 	//en couleur
-			 " {\n"
+    else
+		code += " {\n"
 				"color.x = sin(float(i) / 100.0);\n"
 				"color.y = sin(float(i) / 70.0);\n"
 				"color.z = cos(float(i) / 20.0 + 3.141 / 4.0);\n"
-			  "}\n"
+			  "}\n";
 
-			  "gl_FragColor = color;\n"
+		code += "gl_FragColor = color;\n"
 			"}";
   _shaderProgram.removeAllShaders();
   _shaderProgram.addShader(_vertexShader);
@@ -131,9 +138,11 @@ void FractaleWindow::initializeGL()
      "  gl_Position = vertex;\n"
      "  texture_out = texture_in;\n"
      "}\n");
-
-  this->MandelbrotFractal();
-  //this->JuliaFractal();
+  
+  if(_fracType == MANDELBROT)
+    this->MandelbrotFractal();
+  else
+    this->JuliaFractal();
 }
 
 void FractaleWindow::resizeGL(int width, int height)
@@ -148,8 +157,9 @@ void FractaleWindow::paintGL()
   _shaderProgram.setUniformValue("scale", _scale);
   _shaderProgram.setUniformValue("centre", _centre);
   _shaderProgram.setUniformValue("iterations", _iterations);
-  _shaderProgram.setUniformValue("c", QPointF(1.0, 1.0));
-  //~ _shaderProgram.setUniformValue("c", QPointF(-0.577,0.478)); //Pour Julia
+  //~ _shaderProgram.setUniformValue("c", QPointF(1.0, 1.0));
+  _shaderProgram.setUniformValue("c", QPointF(-0.577,0.478)); //Pour Julia
+  //_shaderProgram.setUniformValue("c", QPointF(-0.0519,0.688)); //Pour Julia
 
   const GLfloat quadVertices[] =
   {

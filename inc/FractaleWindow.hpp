@@ -6,6 +6,10 @@
 #include <QtOpenGL/QtOpenGL>
 #include <QtOpenGL/QGLShader>
 #include <QtOpenGL/QGLShaderProgram>
+#define BLACK_WHITE 0
+#define COLOR 1
+#define MANDELBROT 0
+#define JULIA 1
 
 class FractaleWindow : public FractaleGLWidget
 {
@@ -19,9 +23,11 @@ class FractaleWindow : public FractaleGLWidget
 
         QPointF _centre;
         float _scale;
+        bool _coul;
+        bool _fracType;
 
     public:
-        FractaleWindow(QWidget *parent = 0);
+        FractaleWindow(bool fracType, bool coul, QWidget *parent = 0);
         void initializeGL();
         void resizeGL(int width, int height);
         void paintGL();

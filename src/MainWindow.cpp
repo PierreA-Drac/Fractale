@@ -16,18 +16,26 @@ MainWindow::MainWindow(const char *title) : QWidget()
     /* Mandelbrot (paramètres). */
     butManOGL  = new QPushButton("Afficher avec OpenGL");
     butManCAI  = new QPushButton("Afficher avec Cairo");
+    coulBWMan = new QRadioButton("Afficher en noir et blanc");
+    coulAllMan = new QRadioButton("Afficher en couleur");
     layPrmMan  = new QGridLayout();
-    layPrmMan->addWidget(butManCAI, 0, 0);
-    layPrmMan->addWidget(butManOGL, 0, 1);
+    layPrmMan->addWidget(coulAllMan, 0, 0);
+    layPrmMan->addWidget(coulBWMan, 0, 1);
+    layPrmMan->addWidget(butManCAI, 1, 0);
+    layPrmMan->addWidget(butManOGL, 1, 1);
     wgtPrmMan  = new QWidget();
     wgtPrmMan->setLayout(layPrmMan);
 
     /* Julia et Fatou (paramètres). */
     butJulOGL  = new QPushButton("Afficher avec OpenGL");
     butJulCAI  = new QPushButton("Afficher avec Cairo");
+    coulBWJul = new QRadioButton("Afficher en noir et blanc");
+    coulAllJul = new QRadioButton("Afficher en couleur");
     layPrmJul  = new QGridLayout();
-    layPrmJul->addWidget(butJulCAI, 0, 0);
-    layPrmJul->addWidget(butJulOGL, 0, 1);
+    layPrmJul->addWidget(coulAllJul, 0, 0);
+    layPrmJul->addWidget(coulBWJul, 0, 1);
+    layPrmJul->addWidget(butJulCAI, 1, 0);
+    layPrmJul->addWidget(butJulOGL, 1, 1);
     wgtPrmJul  = new QWidget();
     wgtPrmJul->setLayout(layPrmJul);
 
@@ -128,11 +136,24 @@ void MainWindow::detachWindowFrac() {
 
 void MainWindow::displayMandelOpenGL()
 {
-    FractaleWindow *wgtWinFrac = new FractaleWindow();
-    tabsMan->addTab(wgtWinFrac, "OpenGL");
-    /* Pour que Qt supprime le widget si on le ferme
-     * alors qu'il était détaché. */
-    wgtWinFrac->setAttribute(Qt::WA_DeleteOnClose);
+    if(coulAllMan->isChecked()){
+        FractaleWindow *WinFracManCol = new FractaleWindow(MANDELBROT, COLOR);
+        tabsMan->addTab(WinFracManCol, "OpenGL");
+        /* Pour que Qt supprime le widget si on le ferme
+         * alors qu'il était détaché. */
+        WinFracManCol->setAttribute(Qt::WA_DeleteOnClose);
+    }
+    else if(coulBWMan->isChecked()){
+        FractaleWindow *WinFracManBW = new FractaleWindow(MANDELBROT, BLACK_WHITE);
+        tabsMan->addTab(WinFracManBW, "OpenGL");
+        /* Pour que Qt supprime le widget si on le ferme
+         * alors qu'il était détaché. */
+        WinFracManBW->setAttribute(Qt::WA_DeleteOnClose);
+    }
+    else
+        QMessageBox::information(this, "Information",
+            QString::fromUtf8("Choisissez les paramètres."));
+    
 }
 
 void MainWindow::displayMandelCairo()
@@ -143,8 +164,23 @@ void MainWindow::displayMandelCairo()
 
 void MainWindow::displayJulOpenGL()
 {
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
+    if(coulAllJul->isChecked()){
+        FractaleWindow *WinFracJulCol = new FractaleWindow(JULIA, COLOR);
+        tabsJul->addTab(WinFracJulCol, "OpenGL");
+        /* Pour que Qt supprime le widget si on le ferme
+         * alors qu'il était détaché. */
+        WinFracJulCol->setAttribute(Qt::WA_DeleteOnClose);
+    }
+    else if(coulBWJul->isChecked()){
+        FractaleWindow *WinFracJulBW = new FractaleWindow(JULIA, BLACK_WHITE);
+        tabsJul->addTab(WinFracJulBW, "OpenGL");
+        /* Pour que Qt supprime le widget si on le ferme
+         * alors qu'il était détaché. */
+        WinFracJulBW->setAttribute(Qt::WA_DeleteOnClose);
+    }
+    else
+        QMessageBox::information(this, "Information",
+            QString::fromUtf8("Choisissez les paramètres."));
 }
 
 void MainWindow::displayJulCairo()

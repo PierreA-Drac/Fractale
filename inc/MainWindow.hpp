@@ -208,6 +208,19 @@ class MainWindow : public QWidget
         QVBoxLayout *layMainWin;
         /** Bouton pour quitter l'application dans la fenêtre principale. */
         QPushButton *butQuit;
+        
+        /** Bouton radio pour indiquer que la fractale de Mandelbrot 
+         * devra être affichée en noir et blanc. */
+        QRadioButton *coulBWMan;
+        /** Bouton radio pour indiquer que la fractale de Mandelbrot 
+         * devra être affichée en couleur. */
+        QRadioButton *coulAllMan;
+        /** Bouton radio pour indiquer que la fractale de Julia et Fatou
+         * devra être affichée en noir et blanc. */
+        QRadioButton *coulBWJul;
+        /** Bouton radio pour indiquer que la fractale de Julia et Fatou 
+         * devra être affichée en couleur. */
+        QRadioButton *coulAllJul;
 
         /**
          * @brief Obtenir la fractale active.
