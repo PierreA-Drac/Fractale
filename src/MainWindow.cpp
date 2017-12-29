@@ -5,6 +5,7 @@
  * Implémentation de la classe de la fenêtre principale.
  */
 
+#include <QtCore/QSignalMapper>
 #include <QtGui/QtGui>
 
 #include "FractalWindow.hpp"
@@ -49,6 +50,8 @@ MainWindow::MainWindow(const char *title) : QWidget()
     layTabsJul->addWidget(tabsJul);
     wgtTabsJul = new QWidget();
     wgtTabsJul->setLayout(layTabsJul);
+    tabsFrac[FractalWindow::MANDELBROT] = tabsMan;
+    tabsFrac[FractalWindow::JULIA] = tabsJul;
 
     /* Conteneur des onglets principaux. */
     tabsMainWin = new QTabWidget();
@@ -65,20 +68,21 @@ MainWindow::MainWindow(const char *title) : QWidget()
     this->setMinimumSize(this->sizeHint());
 
     /* Signaux. */
-    QObject::connect(butQuit,   SIGNAL(clicked()), qApp,
-            SLOT(quit()));
-    QObject::connect(butManOGL, SIGNAL(clicked()), this,
-            SLOT(displayMandelOpenGL()));
-    QObject::connect(butJulOGL, SIGNAL(clicked()), this,
-            SLOT(displayJulOpenGL()));
-    QObject::connect(butManCAI, SIGNAL(clicked()), this,
-            SLOT(displayMandelCairo()));
-    QObject::connect(butJulCAI, SIGNAL(clicked()), this,
-            SLOT(displayJulCairo()));
-    QObject::connect(tabsMan, SIGNAL(tabCloseRequested(int)), this,
-            SLOT(closeManTab(int)));
-    QObject::connect(tabsJul, SIGNAL(tabCloseRequested(int)), this,
-            SLOT(closeJulTab(int)));
+    connect(butQuit, SIGNAL(clicked()), qApp, SLOT(quit()));
+    connect(tabsMan, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    connect(tabsJul, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    sigOGL = new QSignalMapper(this);
+    sigCAI = new QSignalMapper(this);
+    connect(butManOGL, SIGNAL(clicked()), sigOGL, SLOT(map()));
+    connect(butJulOGL, SIGNAL(clicked()), sigOGL, SLOT(map()));
+    connect(butManCAI, SIGNAL(clicked()), sigCAI, SLOT(map()));
+    connect(butJulCAI, SIGNAL(clicked()), sigCAI, SLOT(map()));
+    sigOGL->setMapping(butManOGL, FractalWindow::MANDELBROT);
+    sigOGL->setMapping(butJulOGL, FractalWindow::JULIA);
+    sigCAI->setMapping(butManCAI, FractalWindow::MANDELBROT);
+    sigCAI->setMapping(butJulCAI, FractalWindow::JULIA);
+    connect(sigOGL, SIGNAL(mapped(int)), this, SLOT(displayFrac(int)));
+    connect(sigCAI, SIGNAL(mapped(int)), this, SLOT(displayFrac(int)));
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
@@ -100,7 +104,8 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void MainWindow::toggleFullWindow() {
+void MainWindow::toggleFullWindow()
+{
     if (isFullScreen()) {
         showNormal();
     } else {
@@ -108,14 +113,16 @@ void MainWindow::toggleFullWindow() {
     }
 }
 
-void MainWindow::toggleFullWindowFrac() {
+void MainWindow::toggleFullWindowFrac()
+{
     /* Si on ne défini pas cette fonction ici, alors on ne va pas dans la
      * fonction "toggleFullWindow" de la fractale car elle n'a pas le focus. */
     if (FractalWindow* ptr = getFracActive())
         ptr->toggleFullWindow();
 }
 
-void MainWindow::detachWindowFrac() {
+void MainWindow::detachWindowFrac()
+{
     if (FractalWindow* ptr = getFracActive()) {
         /* Détache la fenêtre en supprimant son lien avec son parent.
          * Déplacement minime requis pour ne pas apparaître sous la barre des
@@ -127,45 +134,27 @@ void MainWindow::detachWindowFrac() {
     }
 }
 
-void MainWindow::displayMandelOpenGL()
+void MainWindow::displayFrac(int fType)
 {
-    FractalWindow *wgtWinFrac = new FractalWindowOGL();
-    tabsMan->addTab(wgtWinFrac, "OpenGL");
+    FractalWindow *wgtWinFrac = nullptr;
+    if (sender() == sigOGL)
+        wgtWinFrac = new FractalWindowOGL((FractalWindow::type) fType);
+    else if (sender() == sigCAI) {
+        QMessageBox::information(this, "Information",
+                QString::fromUtf8("Bibliothèque Cairo bientôt disponible."));
+        return;
+    }
+    tabsFrac[fType]->addTab(wgtWinFrac, wgtWinFrac->getRenderStr());
     /* Pour que Qt supprime le widget si on le ferme
      * alors qu'il était détaché. */
     wgtWinFrac->setAttribute(Qt::WA_DeleteOnClose);
 }
 
-void MainWindow::displayMandelCairo()
+void MainWindow::closeTab(int index)
 {
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
-}
-
-void MainWindow::displayJulOpenGL()
-{
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
-}
-
-void MainWindow::displayJulCairo()
-{
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
-}
-
-void MainWindow::closeManTab(int index)
-{
-    /* Index == 0 -> Onglet paramètre. */
+    /* Index == 0 => Onglet paramètre. */
     if (index != 0)
-        tabsMan->removeTab(index);
-}
-
-void MainWindow::closeJulTab(int index)
-{
-    /* Index == 0 -> Onglet paramètre. */
-    if (index != 0)
-        tabsJul->removeTab(index);
+        ((QTabWidget *)sender())->removeTab(index);
 }
 
 FractalWindow* MainWindow::getFracActive()

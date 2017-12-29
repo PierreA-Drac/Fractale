@@ -12,7 +12,7 @@ class FractalWindowOGL : public FractalWindow
     Q_OBJECT
 
     public:
-        FractalWindowOGL(QWidget *parent = 0);
+        FractalWindowOGL(type fracType, QWidget *parent = 0);
         virtual void initializeGL();
         virtual void resizeGL(int width, int height);
         virtual void paintGL();

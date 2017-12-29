@@ -1,25 +1,38 @@
+#include <cstdio>
+
 #include "MainWindow.hpp"
 
 #include "FractalWindow.hpp"
 
-FractalWindow::FractalWindow(QWidget *parent, const char *name,
-        int framesPerSecond) : QGLWidget(parent)
+#define TITLE_LENGHT 60
+
+FractalWindow::FractalWindow(type t_fracType, render t_fracRender, QWidget
+        *parent, int framesPerSecond) :
+    QGLWidget(parent), fracType(t_fracType), fracRender(t_fracRender)
 {
     /* Titre de la fenêtre. */
-    setWindowTitle(QString::fromUtf8(name));
+    char title[TITLE_LENGHT] = {0};
+    snprintf(title, TITLE_LENGHT, "Fractale de %s rendu avec %s",
+            typeStr[fracType], renderStr[fracRender]);
+    setWindowTitle(QString::fromUtf8(title));
 
     /* Gestion du nombre d'image par seconde. */
     if (framesPerSecond == 0)
-        t_Timer = NULL;
+        timer = NULL;
     else {
         int seconde = 1000; /* 1000 ms. */
         int timerInterval = seconde / framesPerSecond;
         /* Création du timer, connexion entre le signal "timeout()" et le slot
          * "updateWin()", démarrage du timer. */
-        t_Timer = new QTimer(this);
-        connect(t_Timer, SIGNAL(timeout()), this, SLOT(updateWin()));
-        t_Timer->start(timerInterval);
+        timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(updateWin()));
+        timer->start(timerInterval);
     }
+}
+
+FractalWindow::~FractalWindow()
+{
+    delete timer;
 }
 
 void FractalWindow::keyPressEvent(QKeyEvent *keyEvent)
@@ -52,4 +65,9 @@ void FractalWindow::toggleFullWindow()
             setWindowFlags(windowFlags() | Qt::Window);
         showFullScreen();
     }
+}
+
+const char* FractalWindow::getRenderStr() const
+{
+    return renderStr[fracRender];
 }

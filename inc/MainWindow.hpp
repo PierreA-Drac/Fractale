@@ -82,49 +82,21 @@ class MainWindow : public QWidget
 
     public slots:
         /**
-         * @brief Affiche Mandelbrot avec OpenGL
+         * @brief Affiche la fractale dans un nouvel onglet
          *
-         * Affiche la fractale de Mandelbrot en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu OpenGL.
+         * Affiche la fractale dans un nouvel onglet de type "fType"
+         * ("FractaleWindow::type"), avec la bibliothèque voulu selon le bouton
+         * cliqué.
          */
-        void displayMandelOpenGL();
-        /**
-         * @brief Affiche Mandelbrot avec Cairo
-         *
-         * Affiche la fractale de Mandelbrot en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu Cairo.
-         */
-        void displayMandelCairo();
-        /**
-         * @brief Affiche Julia et Fatou avec OpenGL
-         *
-         * Affiche la fractale de Julia et Fatou en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu OpenGL.
-         */
-        void displayJulOpenGL();
-        /**
-         * @brief Affiche Julia et Fatou avec Cairo
-         *
-         * Affiche la fractale de Julia et Fatou en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu Cairo.
-         */
-        void displayJulCairo();
+        void displayFrac(int fType);
         /**
          * @brief Supprime un onglet
          * @param index Numéro de l'onglet à fermer.
          *
-         * Ferme et supprimme un onglet contenu dans le conteneur d'onglet
-         * "tabsMan" de Mandelbrot.
+         * Ferme et supprimme un onglet contenu dans le conteneur d'onglet qui
+         * envoie le signal.
          */
-        void closeManTab(int index);
-        /**
-         * @brief Supprime un onglet
-         * @param index Numéro de l'onglet à fermer.
-         *
-         * Ferme et supprimme un onglet contenu dans le conteneur d'onglet
-         * "tabsJul" de Julia et Fatou.
-         */
-        void closeJulTab(int index);
+        void closeTab(int index);
 
     private:
         /**
@@ -205,6 +177,11 @@ class MainWindow : public QWidget
         QVBoxLayout *layMainWin;
         /** Bouton pour quitter l'application dans la fenêtre principale. */
         QPushButton *butQuit;
+
+        QTabWidget *tabsFrac[FractalWindow::FRAC_TYPE_NBR_ELMT];
+
+        QSignalMapper *sigOGL;
+        QSignalMapper *sigCAI;
 
         /**
          * @brief Obtenir la fractale active.
