@@ -24,6 +24,14 @@ class FractalWindow : public QGLWidget
         virtual void updateWin() = 0;
 
     protected:
+        int c;
+        int zMax;
+        static const int z0;
+        static const int nMax;
+        static const float xMin;
+        static const float xMax;
+        static const float yMin;
+        static const float yMax;
         type   fracType;
         render fracRender;
         const char* typeStr[FRAC_TYPE_NBR_ELMT] = {

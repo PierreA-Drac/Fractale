@@ -6,6 +6,13 @@
 
 #define TITLE_LENGHT 60
 
+const int FractalWindow::z0 = 0;
+const int FractalWindow::nMax = 100;
+const float FractalWindow::xMin = -2.0;
+const float FractalWindow::xMax = 1.0;
+const float FractalWindow::yMin = -1.0;
+const float FractalWindow::yMax = 1.0;
+
 FractalWindow::FractalWindow(type t_fracType, render t_fracRender, QWidget
         *parent, int framesPerSecond) :
     QGLWidget(parent), fracType(t_fracType), fracRender(t_fracRender)
