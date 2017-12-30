@@ -17,6 +17,15 @@ INTERNET_BROWSER = firefox
 
 LESS = less -RmN
 
+# Comportement ................................................................:
+
+# Si on appelle ce Makefile depuis le Makefile maître :
+ifdef MASTER
+    WARNINGS = 
+else
+    WARNINGS = | grep "warning" | $(LESS)
+endif
+
 # Cibles =======================================================================
 
 .PHONY : mrproper
@@ -34,7 +43,7 @@ compil : html/index.html latex/refman.pdf
 
 html/index.html : $(DEPS)
 	@echo "--> Création de la documentation de $(PROJECT) :"
-	doxygen Doxyfile | grep "warning" | $(LESS)
+	doxygen Doxyfile $(WARNINGS)
 	
 latex/refman.pdf : $(DEPS)
 	@echo "--> Compilation de la documentation en PDF de $(PROJECT)" \
