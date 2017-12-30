@@ -39,17 +39,20 @@ class MainWindow : public QWidget
          * @param keyEvent Pointeur vers un évènement Qt correspondant à une
          * touche du clavier.
          * 
-         * Gère les évènements relatifs au clavier de la fenêtre principale et
-         * des fenêtres sous-jacentes. Cette fonction est appelée à chaque
-         * fois qu'une touche du clavier est enfoncée, et surcharge la fonction
-         * définie dans "QWidget". Si une fonction similaire est définie dans un
-         * widget visible, alors ce sera la fonction dans le widget visible qui
-         * sera appellée en première.
+         * Gère les évènements relatifs au clavier de la fenêtre
+         * principale et de certaines fonctions des fenêtres sous-jacentes.
+         * Cette fonction est appelée à chaque fois qu'une touche du
+         * clavier est enfoncée, et surcharge la fonction définie dans
+         * "QWidget". Si une fonction similaire est définie dans un
+         * widget visible, alors ce sera la fonction dans le widget
+         * visible qui sera appellée en première.
          * ESC : Ferme la fenêtre.
          * F1  : Bascule entre le mode plein écran et fenêtré pour la fenêtre
          *       principale.
-         * F2  : Passe la fractale en plein écran.
-         * F3  : Détache la fenêtre de la fractale de la fenêtre principale.
+         * F2  : Bascule entre le mode plein écran et fenêtré pour la fenêtre
+         *       de la fractale active.
+         * F3  : Détache la fenêtre de la fractale active de la fenêtre
+         *       principale.
          */
         void keyPressEvent(QKeyEvent *keyEvent);
 
@@ -83,10 +86,12 @@ class MainWindow : public QWidget
     public slots:
         /**
          * @brief Affiche la fractale dans un nouvel onglet
+         * @param fType Type de la fractale à afficher (de type
+         * "FractalWindow::type", mais "int" du aux limitations de Qt).
          *
-         * Affiche la fractale dans un nouvel onglet de type "fType"
-         * ("FractaleWindow::type"), avec la bibliothèque voulu selon le bouton
-         * cliqué.
+         * Affiche la fractale de type "fType" ("FractaleWindow::type")
+         * dans un nouvel onglet, avec la bibliothèque voulu selon le
+         * bouton cliqué.
          */
         void displayFrac(int fType);
         /**
@@ -178,9 +183,16 @@ class MainWindow : public QWidget
         /** Bouton pour quitter l'application dans la fenêtre principale. */
         QPushButton *butQuit;
 
+        /**
+         * Tableau contenant les pointeurs vers les conteneurs des
+         * onglets des fractales. Utile pour factoriser le code dans
+         * certaines fonctions.
+         */
         QTabWidget *tabsFrac[FractalWindow::FRAC_TYPE_NBR_ELMT];
 
+        /** Mappeur des signaux concernant OpenGL. */
         QSignalMapper *sigOGL;
+        /** Mappeur des signaux concernant Cairo. */
         QSignalMapper *sigCAI;
 
         /**

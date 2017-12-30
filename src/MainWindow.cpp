@@ -71,6 +71,8 @@ MainWindow::MainWindow(const char *title) : QWidget()
     connect(butQuit, SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(tabsMan, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
     connect(tabsJul, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    /* Utilisation de "QSignalMapper" pour pouvoir envoyer un argument
+     * avec le signal "clicked()". */
     sigOGL = new QSignalMapper(this);
     sigCAI = new QSignalMapper(this);
     connect(butManOGL, SIGNAL(clicked()), sigOGL, SLOT(map()));
@@ -137,8 +139,11 @@ void MainWindow::detachWindowFrac()
 void MainWindow::displayFrac(int fType)
 {
     FractalWindow *wgtWinFrac = nullptr;
+    /* Si l'émetteur du signal est un bouton concernant OpenGL. */
     if (sender() == sigOGL)
-        wgtWinFrac = new FractalWindowOGL((FractalWindow::type) fType);
+        wgtWinFrac = new FractalWindowOGL(
+                static_cast<FractalWindow::type>(fType));
+    /* Si l'émetteur du signal est un bouton concernant Cairo. */
     else if (sender() == sigCAI) {
         QMessageBox::information(this, "Information",
                 QString::fromUtf8("Bibliothèque Cairo bientôt disponible."));
