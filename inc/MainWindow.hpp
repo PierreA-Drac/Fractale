@@ -10,10 +10,7 @@
 
 #include <QtGui/QtGui>
 
-#include "FractaleWindow.hpp"
-
-/** Nombre maximum d'onglets ouverts pour un type de fractale. */
-#define TAB_MAX 5
+#include "FractalWindow.hpp"
 
 /**
  * @brief Fenêtre principale.
@@ -42,17 +39,20 @@ class MainWindow : public QWidget
          * @param keyEvent Pointeur vers un évènement Qt correspondant à une
          * touche du clavier.
          * 
-         * Gère les évènements relatifs au clavier de la fenêtre principale et
-         * des fenêtres sous-jacentes. Cette fonction est appelée à chaque
-         * fois qu'une touche du clavier est enfoncée, et surcharge la fonction
-         * définie dans "QWidget". Si une fonction similaire est définie dans un
-         * widget visible, alors ce sera la fonction dans le widget visible qui
-         * sera appellée en première.
+         * Gère les évènements relatifs au clavier de la fenêtre
+         * principale et de certaines fonctions des fenêtres sous-jacentes.
+         * Cette fonction est appelée à chaque fois qu'une touche du
+         * clavier est enfoncée, et surcharge la fonction définie dans
+         * "QWidget". Si une fonction similaire est définie dans un
+         * widget visible, alors ce sera la fonction dans le widget
+         * visible qui sera appellée en première.
          * ESC : Ferme la fenêtre.
          * F1  : Bascule entre le mode plein écran et fenêtré pour la fenêtre
          *       principale.
-         * F2  : Passe la fractale en plein écran.
-         * F3  : Détache la fenêtre de la fractale de la fenêtre principale.
+         * F2  : Bascule entre le mode plein écran et fenêtré pour la fenêtre
+         *       de la fractale active.
+         * F3  : Détache la fenêtre de la fractale active de la fenêtre
+         *       principale.
          */
         void keyPressEvent(QKeyEvent *keyEvent);
 
@@ -85,49 +85,23 @@ class MainWindow : public QWidget
 
     public slots:
         /**
-         * @brief Affiche Mandelbrot avec OpenGL
+         * @brief Affiche la fractale dans un nouvel onglet
+         * @param fType Type de la fractale à afficher (de type
+         * "FractalWindow::type", mais "int" du aux limitations de Qt).
          *
-         * Affiche la fractale de Mandelbrot en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu OpenGL.
+         * Affiche la fractale de type "fType" ("FractaleWindow::type")
+         * dans un nouvel onglet, avec la bibliothèque voulu selon le
+         * bouton cliqué.
          */
-        void displayMandelOpenGL();
-        /**
-         * @brief Affiche Mandelbrot avec Cairo
-         *
-         * Affiche la fractale de Mandelbrot en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu Cairo.
-         */
-        void displayMandelCairo();
-        /**
-         * @brief Affiche Julia et Fatou avec OpenGL
-         *
-         * Affiche la fractale de Julia et Fatou en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu OpenGL.
-         */
-        void displayJulOpenGL();
-        /**
-         * @brief Affiche Julia et Fatou avec Cairo
-         *
-         * Affiche la fractale de Julia et Fatou en ouvrant un nouvel onglet,
-         * en utilisant la bibliothèque de rendu Cairo.
-         */
-        void displayJulCairo();
+        void displayFrac(int fType);
         /**
          * @brief Supprime un onglet
          * @param index Numéro de l'onglet à fermer.
          *
-         * Ferme et supprimme un onglet contenu dans le conteneur d'onglet
-         * "tabsMan" de Mandelbrot.
+         * Ferme et supprimme un onglet contenu dans le conteneur d'onglet qui
+         * envoie le signal.
          */
-        void closeManTab(int index);
-        /**
-         * @brief Supprime un onglet
-         * @param index Numéro de l'onglet à fermer.
-         *
-         * Ferme et supprimme un onglet contenu dans le conteneur d'onglet
-         * "tabsJul" de Julia et Fatou.
-         */
-        void closeJulTab(int index);
+        void closeTab(int index);
 
     private:
         /**
@@ -210,6 +184,18 @@ class MainWindow : public QWidget
         QPushButton *butQuit;
 
         /**
+         * Tableau contenant les pointeurs vers les conteneurs des
+         * onglets des fractales. Utile pour factoriser le code dans
+         * certaines fonctions.
+         */
+        QTabWidget *tabsFrac[FractalWindow::FRAC_TYPE_NBR_ELMT];
+
+        /** Mappeur des signaux concernant OpenGL. */
+        QSignalMapper *sigOGL;
+        /** Mappeur des signaux concernant Cairo. */
+        QSignalMapper *sigCAI;
+
+        /**
          * @brief Obtenir la fractale active.
          * @return Pointeur sur la fractale active, "nullptr" si aucune n'est
          * visible.
@@ -217,7 +203,7 @@ class MainWindow : public QWidget
          * Si un onglet contenant une fractale est affiché dans la fenêtre
          * principale, alors le pointeur vers cette fractale est renvoyé.
          */
-        FractaleWindow* getFracActive();
+        FractalWindow* getFracActive();
 };
 
 #endif /* ifndef MAINWINDOW_H */

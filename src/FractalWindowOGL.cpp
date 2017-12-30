@@ -1,13 +1,20 @@
+/**
+ * @file FractalWindowOGL.hpp
+ * @brief Fenêtre d'une fractale rendu avec OpenGL.
+ *
+ * Implémentation de la classe de la fenêtre d'une fractale rendu avec OpenGL.
+ */
+
 #include <glu.h>
 
-#include "FractaleWindow.hpp"
+#include "FractalWindowOGL.hpp"
 
-FractaleWindow::FractaleWindow(QWidget *parent) 
-    : FractaleGLWidget(60, parent, "Fractale de ? avec ?")
+FractalWindowOGL::FractalWindowOGL(type fracType, QWidget *parent)
+    : FractalWindow(fracType, FractalWindow::OPENGL, parent, 60)
 {
 }
 
-void FractaleWindow::initializeGL()
+void FractalWindowOGL::initializeGL()
 {
     glShadeModel(GL_SMOOTH);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -17,7 +24,7 @@ void FractaleWindow::initializeGL()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void FractaleWindow::resizeGL(int width, int height)
+void FractalWindowOGL::resizeGL(int width, int height)
 {
     if(height == 0)
         height = 1;
@@ -29,7 +36,7 @@ void FractaleWindow::resizeGL(int width, int height)
     glLoadIdentity();
 }
 
-void FractaleWindow::paintGL()
+void FractalWindowOGL::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -51,4 +58,9 @@ void FractaleWindow::paintGL()
     glVertex3f(1.0f, -1.0f, 0.0f);
     glVertex3d(1.0f, 1.0f, 0.0f);
     glEnd();
+}
+
+void FractalWindowOGL::updateWin()
+{
+    updateGL();
 }

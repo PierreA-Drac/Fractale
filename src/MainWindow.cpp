@@ -5,9 +5,11 @@
  * Implémentation de la classe de la fenêtre principale.
  */
 
+#include <QtCore/QSignalMapper>
 #include <QtGui/QtGui>
 
-#include "FractaleWindow.hpp"
+#include "FractalWindow.hpp"
+#include "FractalWindowOGL.hpp"
 
 #include "MainWindow.hpp"
 
@@ -48,6 +50,8 @@ MainWindow::MainWindow(const char *title) : QWidget()
     layTabsJul->addWidget(tabsJul);
     wgtTabsJul = new QWidget();
     wgtTabsJul->setLayout(layTabsJul);
+    tabsFrac[FractalWindow::MANDELBROT] = tabsMan;
+    tabsFrac[FractalWindow::JULIA] = tabsJul;
 
     /* Conteneur des onglets principaux. */
     tabsMainWin = new QTabWidget();
@@ -64,20 +68,23 @@ MainWindow::MainWindow(const char *title) : QWidget()
     this->setMinimumSize(this->sizeHint());
 
     /* Signaux. */
-    QObject::connect(butQuit,   SIGNAL(clicked()), qApp,
-            SLOT(quit()));
-    QObject::connect(butManOGL, SIGNAL(clicked()), this,
-            SLOT(displayMandelOpenGL()));
-    QObject::connect(butJulOGL, SIGNAL(clicked()), this,
-            SLOT(displayJulOpenGL()));
-    QObject::connect(butManCAI, SIGNAL(clicked()), this,
-            SLOT(displayMandelCairo()));
-    QObject::connect(butJulCAI, SIGNAL(clicked()), this,
-            SLOT(displayJulCairo()));
-    QObject::connect(tabsMan, SIGNAL(tabCloseRequested(int)), this,
-            SLOT(closeManTab(int)));
-    QObject::connect(tabsJul, SIGNAL(tabCloseRequested(int)), this,
-            SLOT(closeJulTab(int)));
+    connect(butQuit, SIGNAL(clicked()), qApp, SLOT(quit()));
+    connect(tabsMan, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    connect(tabsJul, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    /* Utilisation de "QSignalMapper" pour pouvoir envoyer un argument
+     * avec le signal "clicked()". */
+    sigOGL = new QSignalMapper(this);
+    sigCAI = new QSignalMapper(this);
+    connect(butManOGL, SIGNAL(clicked()), sigOGL, SLOT(map()));
+    connect(butJulOGL, SIGNAL(clicked()), sigOGL, SLOT(map()));
+    connect(butManCAI, SIGNAL(clicked()), sigCAI, SLOT(map()));
+    connect(butJulCAI, SIGNAL(clicked()), sigCAI, SLOT(map()));
+    sigOGL->setMapping(butManOGL, FractalWindow::MANDELBROT);
+    sigOGL->setMapping(butJulOGL, FractalWindow::JULIA);
+    sigCAI->setMapping(butManCAI, FractalWindow::MANDELBROT);
+    sigCAI->setMapping(butJulCAI, FractalWindow::JULIA);
+    connect(sigOGL, SIGNAL(mapped(int)), this, SLOT(displayFrac(int)));
+    connect(sigCAI, SIGNAL(mapped(int)), this, SLOT(displayFrac(int)));
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
@@ -99,7 +106,8 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void MainWindow::toggleFullWindow() {
+void MainWindow::toggleFullWindow()
+{
     if (isFullScreen()) {
         showNormal();
     } else {
@@ -107,15 +115,17 @@ void MainWindow::toggleFullWindow() {
     }
 }
 
-void MainWindow::toggleFullWindowFrac() {
+void MainWindow::toggleFullWindowFrac()
+{
     /* Si on ne défini pas cette fonction ici, alors on ne va pas dans la
      * fonction "toggleFullWindow" de la fractale car elle n'a pas le focus. */
-    if (FractaleWindow* ptr = getFracActive())
+    if (FractalWindow* ptr = getFracActive())
         ptr->toggleFullWindow();
 }
 
-void MainWindow::detachWindowFrac() {
-    if (FractaleWindow* ptr = getFracActive()) {
+void MainWindow::detachWindowFrac()
+{
+    if (FractalWindow* ptr = getFracActive()) {
         /* Détache la fenêtre en supprimant son lien avec son parent.
          * Déplacement minime requis pour ne pas apparaître sous la barre des
          * tâches. Affiche en mode normal (pas minimisé, pas maximisé, pas
@@ -126,57 +136,42 @@ void MainWindow::detachWindowFrac() {
     }
 }
 
-void MainWindow::displayMandelOpenGL()
+void MainWindow::displayFrac(int fType)
 {
-    FractaleWindow *wgtWinFrac = new FractaleWindow();
-    tabsMan->addTab(wgtWinFrac, "OpenGL");
+    FractalWindow *wgtWinFrac = nullptr;
+    /* Si l'émetteur du signal est un bouton concernant OpenGL. */
+    if (sender() == sigOGL)
+        wgtWinFrac = new FractalWindowOGL(
+                static_cast<FractalWindow::type>(fType));
+    /* Si l'émetteur du signal est un bouton concernant Cairo. */
+    else if (sender() == sigCAI) {
+        QMessageBox::information(this, "Information",
+                QString::fromUtf8("Bibliothèque Cairo bientôt disponible."));
+        return;
+    }
+    tabsFrac[fType]->addTab(wgtWinFrac, wgtWinFrac->getRenderStr());
     /* Pour que Qt supprime le widget si on le ferme
      * alors qu'il était détaché. */
     wgtWinFrac->setAttribute(Qt::WA_DeleteOnClose);
 }
 
-void MainWindow::displayMandelCairo()
+void MainWindow::closeTab(int index)
 {
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
-}
-
-void MainWindow::displayJulOpenGL()
-{
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
-}
-
-void MainWindow::displayJulCairo()
-{
-    QMessageBox::information(this, "Information",
-            QString::fromUtf8("Fonctionnalité non-implémentée."));
-}
-
-void MainWindow::closeManTab(int index)
-{
-    /* Index == 0 -> Onglet paramètre. */
+    /* Index == 0 => Onglet paramètre. */
     if (index != 0)
-        tabsMan->removeTab(index);
+        ((QTabWidget *)sender())->removeTab(index);
 }
 
-void MainWindow::closeJulTab(int index)
-{
-    /* Index == 0 -> Onglet paramètre. */
-    if (index != 0)
-        tabsJul->removeTab(index);
-}
-
-FractaleWindow* MainWindow::getFracActive()
+FractalWindow* MainWindow::getFracActive()
 {
     /* "Dynamic_cast" renvoie "null" si le pointeur n'est pas un
      * "FractaleWindow". "isVisible" renvoie "false" si le widget n'est pas
      * visible sur l'écran (même s'il à le focus ou qu'il est actif en arrière
      * plan.) */
-    FractaleWindow *ptr = nullptr;
-    if (!(ptr = dynamic_cast<FractaleWindow *>(tabsMan->currentWidget()))
+    FractalWindow *ptr = nullptr;
+    if (!(ptr = dynamic_cast<FractalWindow *>(tabsMan->currentWidget()))
             || !(ptr->isVisible())) {
-        if (!(ptr = dynamic_cast<FractaleWindow *>(tabsJul->currentWidget()))
+        if (!(ptr = dynamic_cast<FractalWindow *>(tabsJul->currentWidget()))
                 || !(ptr->isVisible())) {
             return nullptr;
         }
