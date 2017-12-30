@@ -1,3 +1,10 @@
+/**
+ * @file FractalWindowOGL.hpp
+ * @brief Fenêtre d'une fractale rendu avec OpenGL.
+ *
+ * Implémentation de la classe de la fenêtre d'une fractale rendu avec OpenGL.
+ */
+
 #include <glu.h>
 
 #include "FractalWindowOGL.hpp"
