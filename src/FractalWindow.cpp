@@ -1,9 +1,17 @@
+/**
+ * @file FractalWindow.cpp
+ * @brief Fenêtre d'une fractale.
+ *
+ * Implémentation de la classe de la fenêtre d'une fractale.
+ */
+
 #include <cstdio>
 
 #include "MainWindow.hpp"
 
 #include "FractalWindow.hpp"
 
+/** Taille maximum de titre de la fenêtre. */
 #define TITLE_LENGHT 60
 
 const int FractalWindow::z0 = 0;
@@ -51,6 +59,7 @@ void FractalWindow::keyPressEvent(QKeyEvent *keyEvent)
         case Qt::Key_F2:
             toggleFullWindow();
             break;
+        /* Passe le relais au parent pour gérer le clavier. */
         default:
             {
                 if (MainWindow *ptr = (MainWindow *)parentWidget())
@@ -62,6 +71,9 @@ void FractalWindow::keyPressEvent(QKeyEvent *keyEvent)
 
 void FractalWindow::toggleFullWindow()
 {
+    /* Si le widget possède un parent, il faut changer les flags de du widget
+     * pour pouvoir le passer temporairement en tant que fenêtre et l'afficher
+     * en plein écran. */
     if (isFullScreen()) {
         if (parentWidget())
             setWindowFlags(windowFlags() & ~Qt::Window);
