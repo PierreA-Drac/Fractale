@@ -13,6 +13,11 @@
 #include <QtOpenGL/QtOpenGL>
 #include <QtOpenGL/QGLWidget>
 
+#define xmin -2.0
+#define xmax 1.0
+#define ymin -1.5
+#define ymax 1.5
+
 /**
  * @brief Fenêtre d'une fractale
  *

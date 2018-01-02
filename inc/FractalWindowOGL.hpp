@@ -14,12 +14,25 @@
 
 #include "FractalWindow.hpp"
 
+#define BLACK_WHITE 0
+#define COLOR 1
+
 /**
  * @brief Fenêtre d'une fractale avec OpenGL
  */
 class FractalWindowOGL : public FractalWindow
 {
     Q_OBJECT
+    
+    private:
+        QGLShader* _vertexShader;
+        QGLShaderProgram *_shaderProgram;
+
+        int _iterations;
+
+        QPointF _centre;
+        float _scale;
+        bool _coul;
 
     public:
         /**
@@ -27,7 +40,7 @@ class FractalWindowOGL : public FractalWindow
          * @param fracType Type de la fractale à afficher.
          * @param parent Pointeur vers le widget parent.
          */
-        FractalWindowOGL(type fracType, QWidget *parent = 0);
+        FractalWindowOGL(type fracType, bool coul, QWidget *parent = 0);
 
         /**
          * @brief Initialise la fenêtre
@@ -56,6 +69,12 @@ class FractalWindowOGL : public FractalWindow
          * d'afficher/de dessiner la fenêtre.
          */
         virtual void paintGL();
+        
+        void JuliaFractal();
+        
+        void MandelbrotFractal();
+        
+        void keyPressEvent(QKeyEvent *keyEvent);
 
     public slots:
         /**

@@ -1,3 +1,5 @@
+#include <QtGui/QtGui>
+#include <QtOpenGL/QGLFormat>
 #include <QtGui/QApplication>        // For Qt4
 // #include <QtWidgets/QApplication> // For Qt5
 
@@ -9,6 +11,6 @@ int main(int argc, char *argv[])
 
     MainWindow wgtMainWin("Fractale (Claire BASKEVITCH & Pierre AYOUB)");
     wgtMainWin.show();
-
+    
     return app.exec();
 }
