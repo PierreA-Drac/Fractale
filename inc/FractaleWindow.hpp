@@ -21,7 +21,7 @@ class FractaleWindow : public FractaleGLWidget
     
     private:
         QGLShader* _vertexShader;
-        QGLShaderProgram _shaderProgram;
+        QGLShaderProgram *_shaderProgram;
 
         int _iterations;
 
@@ -38,7 +38,6 @@ class FractaleWindow : public FractaleGLWidget
         void MandelbrotFractal();
         void JuliaFractal();
         void keyPressEvent(QKeyEvent *keyEvent);
-        void releaseShaderProg();
 };
 
 #endif /* ifndef FRACTALEWINDOW_H */
