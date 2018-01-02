@@ -57,13 +57,14 @@ void FractaleWindow::JuliaFractal()
 
 		code += "gl_FragColor = color;\n"
 			"}";
-  _shaderProgram.removeAllShaders();
-  _shaderProgram.addShader(_vertexShader);
-  //~ _shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
+    _shaderProgram = new QGLShaderProgram(context(), this);
+  _shaderProgram->removeAllShaders();
+  _shaderProgram->addShader(_vertexShader);
+  //~ _shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
                                              //~ ":/Julia.glsl");
-  _shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, code);
-  _shaderProgram.link();
-  _shaderProgram.bind();
+  _shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code);
+  _shaderProgram->link();
+  _shaderProgram->bind();
 }
 
 void FractaleWindow::MandelbrotFractal()
@@ -112,14 +113,15 @@ void FractaleWindow::MandelbrotFractal()
 
 		code += "gl_FragColor = color;\n"
 			"}";
-  _shaderProgram.removeAllShaders();
-  _shaderProgram.addShader(_vertexShader);
-  //_shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
+    _shaderProgram = new QGLShaderProgram(context(), this);
+  _shaderProgram->removeAllShaders();
+  _shaderProgram->addShader(_vertexShader);
+  //_shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
     //              "/home/user/Bureau/Info.L3/Fractale/Mandelbrot.glsl");
-  _shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, code);
+  _shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code);
 
-  _shaderProgram.link();
-  _shaderProgram.bind();
+  _shaderProgram->link();
+  _shaderProgram->bind();
 }
 void FractaleWindow::initializeGL()
 {
@@ -154,12 +156,12 @@ void FractaleWindow::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  _shaderProgram.setUniformValue("scale", _scale);
-  _shaderProgram.setUniformValue("centre", _centre);
-  _shaderProgram.setUniformValue("iterations", _iterations);
-  //~ _shaderProgram.setUniformValue("c", QPointF(1.0, 1.0));
-  _shaderProgram.setUniformValue("c", QPointF(-0.577,0.478)); //Pour Julia
-  //_shaderProgram.setUniformValue("c", QPointF(-0.0519,0.688)); //Pour Julia
+  _shaderProgram->setUniformValue("scale", _scale);
+  _shaderProgram->setUniformValue("centre", _centre);
+  _shaderProgram->setUniformValue("iterations", _iterations);
+  //~ _shaderProgram->setUniformValue("c", QPointF(1.0, 1.0));
+  _shaderProgram->setUniformValue("c", QPointF(-0.577,0.478)); //Pour Julia
+  //_shaderProgram->setUniformValue("c", QPointF(-0.0519,0.688)); //Pour Julia
 
   const GLfloat quadVertices[] =
   {
@@ -177,13 +179,13 @@ void FractaleWindow::paintGL()
     0.f, 1.f
   };
 
-  int vertexLocation  = _shaderProgram.attributeLocation("vertex");
-  int textureLocation = _shaderProgram.attributeLocation("texture_in");
+  int vertexLocation  = _shaderProgram->attributeLocation("vertex");
+  int textureLocation = _shaderProgram->attributeLocation("texture_in");
 
-  _shaderProgram.enableAttributeArray(vertexLocation);
-  _shaderProgram.setAttributeArray(vertexLocation, quadVertices, 2);
-  _shaderProgram.enableAttributeArray(textureLocation);
-  _shaderProgram.setAttributeArray(textureLocation, textureCoordinates, 2);
+  _shaderProgram->enableAttributeArray(vertexLocation);
+  _shaderProgram->setAttributeArray(vertexLocation, quadVertices, 2);
+  _shaderProgram->enableAttributeArray(textureLocation);
+  _shaderProgram->setAttributeArray(textureLocation, textureCoordinates, 2);
 
   glDrawArrays(GL_QUADS, 0, 4);
 }

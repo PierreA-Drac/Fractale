@@ -21,7 +21,7 @@ class FractaleWindow : public FractaleGLWidget
     
     private:
         QGLShader* _vertexShader;
-        QGLShaderProgram _shaderProgram;
+        QGLShaderProgram *_shaderProgram;
 
         int _iterations;
 
