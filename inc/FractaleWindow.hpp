@@ -38,6 +38,7 @@ class FractaleWindow : public FractaleGLWidget
         void MandelbrotFractal();
         void JuliaFractal();
         void keyPressEvent(QKeyEvent *keyEvent);
+        void releaseShaderProg();
 };
 
 #endif /* ifndef FRACTALEWINDOW_H */

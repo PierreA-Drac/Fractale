@@ -55,7 +55,7 @@ void FractaleWindow::JuliaFractal()
 				"color.z = cos(float(i) / 20.0 + 3.141 / 4.0);\n"
 			  "}\n";
 
-		code += "gl_FragColor = color;\n"
+    code += "gl_FragColor = color;\n"
 			"}";
   _shaderProgram.removeAllShaders();
   _shaderProgram.addShader(_vertexShader);
@@ -114,8 +114,8 @@ void FractaleWindow::MandelbrotFractal()
 			"}";
   _shaderProgram.removeAllShaders();
   _shaderProgram.addShader(_vertexShader);
-  //_shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
-    //              "/home/user/Bureau/Info.L3/Fractale/Mandelbrot.glsl");
+  //~ _shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,
+                  //~ "/home/user/Bureau/Info.L3/Fractale/Mandelbrot.glsl");
   _shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, code);
 
   _shaderProgram.link();
@@ -194,6 +194,7 @@ void FractaleWindow::keyPressEvent(QKeyEvent *keyEvent)
     bool update = false;
     switch(keyEvent->key()) {
         case Qt::Key_Escape:
+            releaseShaderProg();
             close();
             break;
         case Qt::Key_F2:
@@ -232,4 +233,9 @@ void FractaleWindow::keyPressEvent(QKeyEvent *keyEvent)
     }
     if(update)
         this->updateGL();
+}
+
+void FractaleWindow::releaseShaderProg()
+{
+    _shaderProgram.release();
 }
