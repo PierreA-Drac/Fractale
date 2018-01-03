@@ -59,6 +59,24 @@ void FractalWindow::keyPressEvent(QKeyEvent *keyEvent)
         case Qt::Key_F2:
             toggleFullWindow();
             break;
+        case Qt::Key_Plus:
+            zoomUp();
+            break;
+        case Qt::Key_Minus:
+            zoomDown();
+            break;
+        case Qt::Key_Up:
+            moveUp();
+            break;
+        case Qt::Key_Down:
+            moveDown();
+            break;
+        case Qt::Key_Right:
+            moveRight();
+            break;
+        case Qt::Key_Left:
+            moveLeft();
+            break;
         /* Passe le relais au parent pour gérer le clavier. */
         default:
             {

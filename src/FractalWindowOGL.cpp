@@ -12,8 +12,6 @@
 #include <QtCore/QDebug>
 #include "QtCore/QString"
 
-#include "MainWindow.hpp"
-
 FractalWindowOGL::FractalWindowOGL(type fracType, bool coul, QWidget *parent) 
     : FractalWindow(fracType, FractalWindow::OPENGL, parent, 60)
     , iterations(512) , centre(0.f, 0.f) , scale(1.f) , coul(coul)
@@ -229,40 +227,4 @@ void FractalWindowOGL::moveRight()
 void FractalWindowOGL::moveLeft()
 {
     centre = QPointF(centre.x() - scale / 2, centre.y());
-}
-
-void FractalWindowOGL::keyPressEvent(QKeyEvent *keyEvent)
-{
-    switch(keyEvent->key()) {
-        case Qt::Key_Escape:
-            close();
-            break;
-        case Qt::Key_F2:
-            toggleFullWindow();
-            break;
-        case Qt::Key_Plus:
-            zoomUp();
-            break;
-        case Qt::Key_Minus:
-            zoomDown();
-            break;
-        case Qt::Key_Up:
-            moveUp();
-            break;
-        case Qt::Key_Down:
-            moveDown();
-            break;
-        case Qt::Key_Right:
-            moveRight();
-            break;
-        case Qt::Key_Left:
-            moveLeft();
-            break;
-        default:
-            {
-                if (MainWindow *ptr = (MainWindow *)parentWidget())
-                    ptr->keyPressEvent(keyEvent);
-                break;
-            }
-    }
 }

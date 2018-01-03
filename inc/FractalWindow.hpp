@@ -72,15 +72,15 @@ class FractalWindow : public QGLWidget
          * @param keyEvent Pointeur vers un évènement Qt correspondant à une
          * touche du clavier.
          * 
-         * Gère les évènements relatifs au clavier de la fenêtre
-         * d'une fractale.
-         * Cette fonction est appelée à chaque fois qu'une touche du
-         * clavier est enfoncée, et surcharge la fonction définie dans
-         * "QWidget".
-         * ESC   : Ferme la fenêtre.
-         * F2    : Bascule entre le mode plein écran et fenêtré.
-         * Autre : Appel la fonction "keyPressEvent" du parent ("MainWindow")
-         * de la fenêtre de la fractale.
+         * Gère les évènements relatifs au clavier de la fenêtre d'une fractale.
+         * Cette fonction est appelée à chaque fois qu'une touche du clavier est
+         * enfoncée, et surcharge la fonction définie dans "QWidget".
+         * ESC     : Ferme la fenêtre.
+         * F2      : Bascule entre le mode plein écran et fenêtré.
+         * +/-     : Zoom avant/arrière sur la fractale.
+         * Flèches : Déplacement dans la fenêtre.
+         * Autre   : Appel la fonction "keyPressEvent" du parent ("MainWindow")
+         *           de la fenêtre de la fractale.
          */
         void keyPressEvent(QKeyEvent *keyEvent);
 
