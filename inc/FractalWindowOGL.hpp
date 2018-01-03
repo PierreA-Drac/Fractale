@@ -103,11 +103,35 @@ class FractalWindowOGL : public FractalWindow
          * slot par le timer.
          */
         virtual void updateWin();
+
+        /**
+         * @brief Zoom dans la fenêtre
+         */
         virtual void zoomUp();
+
+        /**
+         * @brief Dézoom dans la fenêtre
+         */
         virtual void zoomDown();
+
+        /**
+         * @brief Déplace la caméra vers le bas.
+         */
         virtual void moveDown();
+
+        /**
+         * @brief Déplace la caméra vers le hautj.
+         */
         virtual void moveUp();
+
+        /**
+         * @brief Déplace la caméra vers la droite.
+         */
         virtual void moveRight();
+
+        /**
+         * @brief Déplace la caméra vers la gauche.
+         */
         virtual void moveLeft();
 
     private:

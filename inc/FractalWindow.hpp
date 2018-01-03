@@ -102,17 +102,41 @@ class FractalWindow : public QGLWidget
 
     public slots:
         /**
-         * @brief Met à jour la fenêtre.
+         * @brief Met à jour la fenêtre
          * 
          * Slot abstrait, appelé par le timer pour mettre à jour la fenêtre. Le
          * slot doit être redéfinit en fonction de la bibliothèque de rendu.
          */
         virtual void updateWin() = 0;
+
+        /**
+         * @brief Zoom dans la fenêtre
+         */
         virtual void zoomUp() = 0;
+
+        /**
+         * @brief Dézoom dans la fenêtre
+         */
         virtual void zoomDown() = 0;
+
+        /**
+         * @brief Déplace la caméra vers le bas.
+         */
         virtual void moveDown() = 0;
+
+        /**
+         * @brief Déplace la caméra vers le haut.
+         */
         virtual void moveUp() = 0;
+
+        /**
+         * @brief Déplace la caméra vers la droite.
+         */
         virtual void moveRight() = 0;
+
+        /**
+         * @brief Déplace la caméra vers la gauche.
+         */
         virtual void moveLeft() = 0;
 
     protected:
