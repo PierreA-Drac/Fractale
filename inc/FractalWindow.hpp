@@ -108,6 +108,12 @@ class FractalWindow : public QGLWidget
          * slot doit être redéfinit en fonction de la bibliothèque de rendu.
          */
         virtual void updateWin() = 0;
+        virtual void zoomUp() = 0;
+        virtual void zoomDown() = 0;
+        virtual void moveDown() = 0;
+        virtual void moveUp() = 0;
+        virtual void moveRight() = 0;
+        virtual void moveLeft() = 0;
 
     protected:
         /**

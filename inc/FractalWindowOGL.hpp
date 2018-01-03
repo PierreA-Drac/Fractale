@@ -103,6 +103,12 @@ class FractalWindowOGL : public FractalWindow
          * slot par le timer.
          */
         virtual void updateWin();
+        virtual void zoomUp();
+        virtual void zoomDown();
+        virtual void moveDown();
+        virtual void moveUp();
+        virtual void moveRight();
+        virtual void moveLeft();
 
     private:
         /** Poineur vers un shader de pixels. */

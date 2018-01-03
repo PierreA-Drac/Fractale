@@ -194,6 +194,36 @@ void FractalWindowOGL::updateWin()
     updateGL();
 }
 
+void FractalWindowOGL::zoomUp()
+{
+    scale *= 0.9f;
+}
+
+void FractalWindowOGL::zoomDown()
+{
+    scale *= 1.1f;
+}
+
+void FractalWindowOGL::moveDown()
+{
+    centre = QPointF(centre.x(), centre.y() -scale / 2);
+}
+
+void FractalWindowOGL::moveUp()
+{
+    centre = QPointF(centre.x(), centre.y() + scale / 2);
+}
+
+void FractalWindowOGL::moveRight()
+{
+    centre = QPointF(centre.x() + scale / 2, centre.y());
+}
+
+void FractalWindowOGL::moveLeft()
+{
+    centre = QPointF(centre.x() - scale / 2, centre.y());
+}
+
 void FractalWindowOGL::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key()) {
@@ -204,22 +234,22 @@ void FractalWindowOGL::keyPressEvent(QKeyEvent *keyEvent)
             toggleFullWindow();
             break;
         case Qt::Key_Plus:
-            scale *= 0.9f;
+            zoomUp();
             break;
         case Qt::Key_Minus:
-            scale *= 1.1f;
+            zoomDown();
             break;
         case Qt::Key_Up:
-            centre = QPointF(centre.x(), centre.y() + scale / 2);
+            moveUp();
             break;
         case Qt::Key_Down:
-            centre = QPointF(centre.x(), centre.y() -scale / 2);
+            moveDown();
             break;
         case Qt::Key_Right:
-            centre = QPointF(centre.x() + scale / 2, centre.y());
+            moveRight();
             break;
         case Qt::Key_Left:
-            centre = QPointF(centre.x() - scale / 2, centre.y());
+            moveLeft();
             break;
         default:
             {
