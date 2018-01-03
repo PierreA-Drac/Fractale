@@ -7,6 +7,8 @@
 
 #include "FractalWindowOGL.hpp"
 
+#include <stdexcept>
+
 #include <QtCore/QDebug>
 #include "QtCore/QString"
 
@@ -63,12 +65,14 @@ void FractalWindowOGL::JuliaFractal()
     code += "gl_FragColor = color;\n"
         "}";
     shaderProgram = new QGLShaderProgram(context(), this);
-    shaderProgram->addShader(vertexShader);
+    if (!shaderProgram->addShader(vertexShader)
+            || !shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code)
+            || !shaderProgram->link()
+            || !shaderProgram->bind()) {
+        throw std::runtime_error("Shader initialization failed");
+    }
     //~ shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
     //~ ":/Julia.glsl");
-    shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code);
-    shaderProgram->link();
-    shaderProgram->bind();
 }
 
 void FractalWindowOGL::MandelbrotFractal()
@@ -118,12 +122,14 @@ void FractalWindowOGL::MandelbrotFractal()
     code += "gl_FragColor = color;\n"
         "}";
     shaderProgram = new QGLShaderProgram(context(), this);
-    shaderProgram->addShader(vertexShader);
+    if (!shaderProgram->addShader(vertexShader)
+            || !shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code)
+            || !shaderProgram->link()
+            || !shaderProgram->bind()) {
+        throw std::runtime_error("Shader initialization failed");
+    }
     //shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
     //              "/home/user/Bureau/Info.L3/Fractale/Mandelbrot.glsl");
-    shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code);
-    shaderProgram->link();
-    shaderProgram->bind();
 }
 
 void FractalWindowOGL::initializeGL()

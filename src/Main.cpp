@@ -5,6 +5,9 @@
  * Lance le programme.
  */
 
+#include <iostream>
+#include <stdexcept>
+
 #include <QtGui/QApplication>        // For Qt4
 // #include <QtWidgets/QApplication> // For Qt5
 
@@ -20,8 +23,13 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    MainWindow wgtMainWin("Fractale (Claire BASKEVITCH & Pierre AYOUB)");
-    wgtMainWin.show();
-    
-    return app.exec();
+    try {
+        MainWindow wgtMainWin("Fractale (Claire BASKEVITCH & Pierre AYOUB)");
+        wgtMainWin.show();
+        return app.exec();
+    }
+    catch (std::exception const& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
 }
