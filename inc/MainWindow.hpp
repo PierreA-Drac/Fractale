@@ -115,6 +115,16 @@ class MainWindow : public QWidget
          */
         QPushButton *butManCAI;
         /**
+         * Bouton radio pour indiquer que la fractale de Mandelbrot 
+         * devra être affichée en noir et blanc.
+         */
+        QRadioButton *butManColF;
+        /**
+         * Bouton radio pour indiquer que la fractale de Mandelbrot 
+         * devra être affichée en couleur.
+         */
+        QRadioButton *butManColT;
+        /**
          * Layout contenant les widgets des paramètres de la fractale de
          * Mandelbrot.
          */
@@ -135,6 +145,17 @@ class MainWindow : public QWidget
          * Cairo.
          */
         QPushButton *butJulCAI;
+        /**
+         * Bouton radio pour indiquer que la fractale de Julia et Fatou
+         * devra être affichée en noir et blanc.
+         */
+        QRadioButton *butJulColF;
+        /**
+         * Bouton radio pour indiquer que la fractale de Julia et Fatou 
+         * devra être affichée en couleur.
+         */
+        QRadioButton *butJulColT;
+
         /**
          * Layout contenant les widgets des paramètres de la fractale de
          * Julia et Fatou.
@@ -182,19 +203,6 @@ class MainWindow : public QWidget
         QVBoxLayout *layMainWin;
         /** Bouton pour quitter l'application dans la fenêtre principale. */
         QPushButton *butQuit;
-        
-        /** Bouton radio pour indiquer que la fractale de Mandelbrot 
-         * devra être affichée en noir et blanc. */
-        QRadioButton *coulBWMan;
-        /** Bouton radio pour indiquer que la fractale de Mandelbrot 
-         * devra être affichée en couleur. */
-        QRadioButton *coulAllMan;
-        /** Bouton radio pour indiquer que la fractale de Julia et Fatou
-         * devra être affichée en noir et blanc. */
-        QRadioButton *coulBWJul;
-        /** Bouton radio pour indiquer que la fractale de Julia et Fatou 
-         * devra être affichée en couleur. */
-        QRadioButton *coulAllJul;
 
         /**
          * Tableau contenant les pointeurs vers les conteneurs des

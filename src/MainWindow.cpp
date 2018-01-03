@@ -17,11 +17,12 @@ MainWindow::MainWindow(const char *title) : QWidget()
     /* Mandelbrot (paramètres). */
     butManOGL  = new QPushButton("Afficher avec OpenGL");
     butManCAI  = new QPushButton("Afficher avec Cairo");
-    coulBWMan = new QRadioButton("Afficher en noir et blanc");
-    coulAllMan = new QRadioButton("Afficher en couleur");
+    butManColF = new QRadioButton("Afficher en noir et blanc");
+    butManColT = new QRadioButton("Afficher en couleur");
+    butManColT->setChecked(true);
     layPrmMan  = new QGridLayout();
-    layPrmMan->addWidget(coulAllMan, 0, 0);
-    layPrmMan->addWidget(coulBWMan, 0, 1);
+    layPrmMan->addWidget(butManColT, 0, 0);
+    layPrmMan->addWidget(butManColF, 0, 1);
     layPrmMan->addWidget(butManCAI, 1, 0);
     layPrmMan->addWidget(butManOGL, 1, 1);
     wgtPrmMan  = new QWidget();
@@ -30,11 +31,12 @@ MainWindow::MainWindow(const char *title) : QWidget()
     /* Julia et Fatou (paramètres). */
     butJulOGL  = new QPushButton("Afficher avec OpenGL");
     butJulCAI  = new QPushButton("Afficher avec Cairo");
-    coulBWJul = new QRadioButton("Afficher en noir et blanc");
-    coulAllJul = new QRadioButton("Afficher en couleur");
+    butJulColF = new QRadioButton("Afficher en noir et blanc");
+    butJulColT = new QRadioButton("Afficher en couleur");
+    butJulColT->setChecked(true);
     layPrmJul  = new QGridLayout();
-    layPrmJul->addWidget(coulAllJul, 0, 0);
-    layPrmJul->addWidget(coulBWJul, 0, 1);
+    layPrmJul->addWidget(butJulColT, 0, 0);
+    layPrmJul->addWidget(butJulColF, 0, 1);
     layPrmJul->addWidget(butJulCAI, 1, 0);
     layPrmJul->addWidget(butJulOGL, 1, 1);
     wgtPrmJul  = new QWidget();
@@ -146,24 +148,13 @@ void MainWindow::detachWindowFrac()
 void MainWindow::displayFrac(int fType)
 {
     FractalWindow *wgtWinFrac = nullptr;
+    bool color = ((butManColT->isChecked() && butManColT->isVisible()) ||
+            (butJulColT->isChecked() && butJulColT->isVisible())) ?
+        true : false;
     /* Si l'émetteur du signal est un bouton concernant OpenGL. */
     if (sender() == sigOGL) {
-        /* Si le bouton "afficher en couleur" a été choisi */
-        if ((coulAllMan->isChecked() && fType == FractalWindow::MANDELBROT)
-                    || (coulAllJul->isChecked() && fType == FractalWindow::JULIA))
-            wgtWinFrac = new FractalWindowOGL(
-                    static_cast<FractalWindow::type>(fType), COLOR);
-        /* Si le bouton "afficher en noir et blanc" a été choisi */
-        else if ((coulBWMan->isChecked() && fType == FractalWindow::MANDELBROT)
-                    || (coulBWJul->isChecked() && fType == FractalWindow::JULIA))
-            wgtWinFrac = new FractalWindowOGL(
-                    static_cast<FractalWindow::type>(fType), BLACK_WHITE);
-        /* Si aucune couleur n'a été choisie */
-        else {
-            QMessageBox::information(this, "Information",
-                    QString::fromUtf8("Choisissez les paramètres."));
-            return;
-        }
+        wgtWinFrac = new FractalWindowOGL(
+                static_cast<FractalWindow::type>(fType), color);
     }
     /* Si l'émetteur du signal est un bouton concernant Cairo. */
     else if (sender() == sigCAI) {

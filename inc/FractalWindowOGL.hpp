@@ -13,9 +13,6 @@
 #include <QtOpenGL/QGLWidget>
 #include "FractalWindow.hpp"
 
-#define BLACK_WHITE 0
-#define COLOR 1
-
 /**
  * @brief Fenêtre d'une fractale avec OpenGL
  */
@@ -23,24 +20,11 @@ class FractalWindowOGL : public FractalWindow
 {
     Q_OBJECT
     
-    private:
-        /** Poineur vers un shader de pixels. */
-        QGLShader* _vertexShader;
-        /** Pointeur vers un programme de shader. */
-        QGLShaderProgram *_shaderProgram;
-        /** Nombre d'itérations sur l'equation z. */
-        int _iterations;
-        /** Coordonnées du centre de la fenêtre. */
-        QPointF _centre;
-        /** Echelle du zoom. */
-        float _scale;
-        /** Booléen indiquant dans quelle couleur afficher la fractale. */
-        bool _coul;
-
     public:
         /**
          * @brief Constructeur d'une fenêtre de fractale rendu par OpenGL
          * @param fracType Type de la fractale à afficher.
+         * @param coul Affichage de la fractale en couleur ou non.
          * @param parent Pointeur vers le widget parent.
          */
         FractalWindowOGL(type fracType, bool coul, QWidget *parent = 0);
@@ -90,25 +74,6 @@ class FractalWindowOGL : public FractalWindow
          * Elle n'est appelée au plus qu'une seule fois 
          */
         void MandelbrotFractal();
-        
-        /**
-         * @brief Gestion du clavier
-         * @param keyEvent Pointeur vers un évènement Qt correspondant à une
-         * touche du clavier.
-         * 
-         * Gère les évènements relatifs au clavier de la fenêtre
-         * d'une fractale.
-         * Cette fonction est appelée à chaque fois qu'une touche du
-         * clavier est enfoncée, et surcharge la fonction définie dans
-         * "FractalWindow.hpp".
-         * ESC   : Ferme la fenêtre.
-         * F2    : Bascule entre le mode plein écran et fenêtré.
-         * +/-   : Zoom avant/arrière sur la fractale.
-         * flèches directionnelles : déplacement dans la fenêtre. 
-         * Autre : Appel la fonction "keyPressEvent" du parent ("MainWindow")
-         * de la fenêtre de la fractale.
-         */
-        void keyPressEvent(QKeyEvent *keyEvent);
 
     public slots:
         /**
@@ -119,6 +84,50 @@ class FractalWindowOGL : public FractalWindow
          * slot par le timer.
          */
         virtual void updateWin();
+
+        /**
+         * @brief Zoom dans la fenêtre
+         */
+        virtual void zoomUp();
+
+        /**
+         * @brief Dézoom dans la fenêtre
+         */
+        virtual void zoomDown();
+
+        /**
+         * @brief Déplace la caméra vers le bas.
+         */
+        virtual void moveDown();
+
+        /**
+         * @brief Déplace la caméra vers le hautj.
+         */
+        virtual void moveUp();
+
+        /**
+         * @brief Déplace la caméra vers la droite.
+         */
+        virtual void moveRight();
+
+        /**
+         * @brief Déplace la caméra vers la gauche.
+         */
+        virtual void moveLeft();
+
+    private:
+        /** Poineur vers un shader de pixels. */
+        QGLShader *vertexShader;
+        /** Pointeur vers un programme de shader. */
+        QGLShaderProgram *shaderProgram;
+        /** Nombre d'itérations sur l'equation z. */
+        int iterations;
+        /** Coordonnées du centre de la fenêtre. */
+        QPointF centre;
+        /** Échelle du zoom. */
+        float scale;
+        /** Indique s'il faut afficher la fractale en couleur. */
+        bool coul;
 };
 
 #endif /* ifndef FRACTALWINDOWOGL_H */

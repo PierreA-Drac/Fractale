@@ -72,15 +72,15 @@ class FractalWindow : public QGLWidget
          * @param keyEvent Pointeur vers un évènement Qt correspondant à une
          * touche du clavier.
          * 
-         * Gère les évènements relatifs au clavier de la fenêtre
-         * d'une fractale.
-         * Cette fonction est appelée à chaque fois qu'une touche du
-         * clavier est enfoncée, et surcharge la fonction définie dans
-         * "QWidget".
-         * ESC   : Ferme la fenêtre.
-         * F2    : Bascule entre le mode plein écran et fenêtré.
-         * Autre : Appel la fonction "keyPressEvent" du parent ("MainWindow")
-         * de la fenêtre de la fractale.
+         * Gère les évènements relatifs au clavier de la fenêtre d'une fractale.
+         * Cette fonction est appelée à chaque fois qu'une touche du clavier est
+         * enfoncée, et surcharge la fonction définie dans "QWidget".
+         * ESC     : Ferme la fenêtre.
+         * F2      : Bascule entre le mode plein écran et fenêtré.
+         * +/-     : Zoom avant/arrière sur la fractale.
+         * Flèches : Déplacement dans la fenêtre.
+         * Autre   : Appel la fonction "keyPressEvent" du parent ("MainWindow")
+         *           de la fenêtre de la fractale.
          */
         void keyPressEvent(QKeyEvent *keyEvent);
 
@@ -102,12 +102,42 @@ class FractalWindow : public QGLWidget
 
     public slots:
         /**
-         * @brief Met à jour la fenêtre.
+         * @brief Met à jour la fenêtre
          * 
          * Slot abstrait, appelé par le timer pour mettre à jour la fenêtre. Le
          * slot doit être redéfinit en fonction de la bibliothèque de rendu.
          */
         virtual void updateWin() = 0;
+
+        /**
+         * @brief Zoom dans la fenêtre
+         */
+        virtual void zoomUp() = 0;
+
+        /**
+         * @brief Dézoom dans la fenêtre
+         */
+        virtual void zoomDown() = 0;
+
+        /**
+         * @brief Déplace la caméra vers le bas.
+         */
+        virtual void moveDown() = 0;
+
+        /**
+         * @brief Déplace la caméra vers le haut.
+         */
+        virtual void moveUp() = 0;
+
+        /**
+         * @brief Déplace la caméra vers la droite.
+         */
+        virtual void moveRight() = 0;
+
+        /**
+         * @brief Déplace la caméra vers la gauche.
+         */
+        virtual void moveLeft() = 0;
 
     protected:
         /**
@@ -115,24 +145,34 @@ class FractalWindow : public QGLWidget
          * Mandelbrot : variable complexe.
          */
         int c;
+
         /** Borne du module. */
         int zMax;
+
         /** Valeur initiale des itérations. */
         static const int z0;
+
         /** Nombre d'itérations maximum. */
         static const int nMax;
+
         /** Borne minimale du plan complexe sur l'axe des abscisse. */
         static const float xMin;
+
         /** Borne maximale du plan complexe sur l'axe des abscisse. */
         static const float xMax;
+
         /** Borne minimale du plan complexe sur l'axe des ordonée. */
         static const float yMin;
+
         /** Borne maximale du plan complexe sur l'axe des ordonée. */
         static const float yMax;
+
         /** Type de la fractale à afficher. */
         type   fracType;
-        /** Bibliothèque de renduà utiliser. */
+
+        /** Bibliothèque de rendu à utiliser. */
         render fracRender;
+
         /**
          * Chaînes de caractères représentant les types de fractale
          * disponibles.
@@ -141,6 +181,7 @@ class FractalWindow : public QGLWidget
             "Mandelbrot",
             "Julia et Fatou"
         };
+
         /**
          * Chaînes de caractères représentant les bibliothèques de rendu
          * utilisables. 
