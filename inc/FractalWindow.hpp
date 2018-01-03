@@ -115,24 +115,34 @@ class FractalWindow : public QGLWidget
          * Mandelbrot : variable complexe.
          */
         int c;
+
         /** Borne du module. */
         int zMax;
+
         /** Valeur initiale des itérations. */
         static const int z0;
+
         /** Nombre d'itérations maximum. */
         static const int nMax;
+
         /** Borne minimale du plan complexe sur l'axe des abscisse. */
         static const float xMin;
+
         /** Borne maximale du plan complexe sur l'axe des abscisse. */
         static const float xMax;
+
         /** Borne minimale du plan complexe sur l'axe des ordonée. */
         static const float yMin;
+
         /** Borne maximale du plan complexe sur l'axe des ordonée. */
         static const float yMax;
+
         /** Type de la fractale à afficher. */
         type   fracType;
-        /** Bibliothèque de renduà utiliser. */
+
+        /** Bibliothèque de rendu à utiliser. */
         render fracRender;
+
         /**
          * Chaînes de caractères représentant les types de fractale
          * disponibles.
@@ -141,6 +151,7 @@ class FractalWindow : public QGLWidget
             "Mandelbrot",
             "Julia et Fatou"
         };
+
         /**
          * Chaînes de caractères représentant les bibliothèques de rendu
          * utilisables. 

@@ -5,11 +5,11 @@
  * Implémentation de la classe de la fenêtre d'une fractale.
  */
 
+#include "FractalWindow.hpp"
+
 #include <cstdio>
 
 #include "MainWindow.hpp"
-
-#include "FractalWindow.hpp"
 
 /** Taille maximum de titre de la fenêtre. */
 #define TITLE_LENGHT 60

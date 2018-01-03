@@ -1,5 +1,3 @@
-#include <QtGui/QtGui>
-#include <QtOpenGL/QGLFormat>
 #include <QtGui/QApplication>        // For Qt4
 // #include <QtWidgets/QApplication> // For Qt5
 
