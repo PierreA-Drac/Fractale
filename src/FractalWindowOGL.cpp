@@ -130,6 +130,7 @@ void FractalWindowOGL::initializeGL()
 {
     qglClearColor(Qt::black);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
     vertexShader = new QGLShader(QGLShader::Vertex, this);
     vertexShader->compileSourceCode(
             "attribute highp vec4 vertex;\n"

@@ -23,7 +23,7 @@ const float FractalWindow::yMax = 1.0;
 
 FractalWindow::FractalWindow(type t_fracType, render t_fracRender, QWidget
         *parent, int framesPerSecond) :
-    QGLWidget(parent), fracType(t_fracType), fracRender(t_fracRender)
+    QGLWidget(QGLFormat(QGL::SampleBuffers), parent), fracType(t_fracType), fracRender(t_fracRender)
 {
     /* Titre de la fenêtre. */
     char title[TITLE_LENGHT] = {0};
