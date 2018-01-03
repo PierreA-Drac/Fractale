@@ -11,7 +11,6 @@
 #include <QtGui/QWidget>
 #include <QtOpenGL/QtOpenGL>
 #include <QtOpenGL/QGLWidget>
-
 #include "FractalWindow.hpp"
 
 #define BLACK_WHITE 0
@@ -25,13 +24,17 @@ class FractalWindowOGL : public FractalWindow
     Q_OBJECT
     
     private:
+        /** Poineur vers un shader de pixels. */
         QGLShader* _vertexShader;
+        /** Pointeur vers un programme de shader. */
         QGLShaderProgram *_shaderProgram;
-
+        /** Nombre d'itérations sur l'equation z. */
         int _iterations;
-
+        /** Coordonnées du centre de la fenêtre. */
         QPointF _centre;
+        /** Echelle du zoom. */
         float _scale;
+        /** Booléen indiquant dans quelle couleur afficher la fractale. */
         bool _coul;
 
     public:
@@ -70,10 +73,41 @@ class FractalWindowOGL : public FractalWindow
          */
         virtual void paintGL();
         
+        /**
+         *@brief Ajoute le shader de l'ensemble de Fatou et Julia
+         * et la lie au contexte.
+         * 
+         * Cette fonction est appelé lors de l'initialisation de la fenêtre.
+         * Elle n'est appelée au plus qu'une seule fois 
+         */
         void JuliaFractal();
         
+        /**
+         *@brief Ajoute le shader de l'ensemble de Mandelbrot
+         * et la lie au contexte.
+         * 
+         * Cette fonction est appelé lors de l'initialisation de la fenêtre.
+         * Elle n'est appelée au plus qu'une seule fois 
+         */
         void MandelbrotFractal();
         
+        /**
+         * @brief Gestion du clavier
+         * @param keyEvent Pointeur vers un évènement Qt correspondant à une
+         * touche du clavier.
+         * 
+         * Gère les évènements relatifs au clavier de la fenêtre
+         * d'une fractale.
+         * Cette fonction est appelée à chaque fois qu'une touche du
+         * clavier est enfoncée, et surcharge la fonction définie dans
+         * "FractalWindow.hpp".
+         * ESC   : Ferme la fenêtre.
+         * F2    : Bascule entre le mode plein écran et fenêtré.
+         * +/-   : Zoom avant/arrière sur la fractale.
+         * flèches directionnelles : déplacement dans la fenêtre. 
+         * Autre : Appel la fonction "keyPressEvent" du parent ("MainWindow")
+         * de la fenêtre de la fractale.
+         */
         void keyPressEvent(QKeyEvent *keyEvent);
 
     public slots:
