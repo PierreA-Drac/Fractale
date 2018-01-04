@@ -33,8 +33,9 @@ class FractalWindowOGL : public FractalWindow
         /**
          * @brief Initialise la fenêtre
          *
-         * Cette fonction est appelée par Qt au moment d'initialiser la
-         * fenêtre. Elle n'est appelée qu'une seule fois.
+         * Initialise OpenGL et les shaders utilisés. Cette fonction est appelée
+         * par Qt au moment d'initialiser la fenêtre. Elle n'est appelée qu'une
+         * seule fois.
          */
         virtual void initializeGL();
 
@@ -102,7 +103,7 @@ class FractalWindowOGL : public FractalWindow
         /** Shaders (Vertex & Fragment). */
         QGLShaderProgram *shaderProgram;
         /** Coordonnées du centre de la fenêtre. */
-        QPointF centre;
+        QPointF center;
         /** Échelle du zoom. */
         float scale;
 };

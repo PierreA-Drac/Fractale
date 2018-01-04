@@ -1,6 +1,8 @@
-attribute highp vec4 vertex;
-attribute highp vec2 texture_in;
-varying   highp vec2 texture_out;
+#version 130
+
+attribute vec4 vertex;
+attribute vec2 texture_in;
+out       vec2 texture_out;
 
 void main()
 {

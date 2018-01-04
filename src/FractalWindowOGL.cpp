@@ -15,16 +15,18 @@
 
 FractalWindowOGL::FractalWindowOGL(type fracType, bool coul, QWidget *parent) 
     : FractalWindow(fracType, FractalWindow::OPENGL, coul, parent, 60)
-    , centre(0.f, 0.f) , scale(1.f)
+    , center(0.f, 0.f) , scale(1.f)
 {
 }
 
 void FractalWindowOGL::initializeGL()
 {
-    qglClearColor(Qt::black);
+    /* Initialisation d'OpenGL. */
+    qglClearColor(QColor(Qt::black));
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
 
+    /* Initialisation des shaders. */
     std::string fragShader;
     if (fracType == MANDELBROT)
         fragShader = "shaders/fragmentShaderMandelbrot.fsh";
@@ -50,14 +52,16 @@ void FractalWindowOGL::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    if (n <= nMax)
+        n++;
+
     shaderProgram->bind();
-    shaderProgram->setUniformValue("scale", scale);
-    shaderProgram->setUniformValue("centre", centre);
-    shaderProgram->setUniformValue("iterations", nMax);
+    shaderProgram->setUniformValue("n_max", n);
     shaderProgram->setUniformValue("b_color", coul);
-    // shaderProgram->setUniformValue("c", QPointF(1.0, 1.0));
-    shaderProgram->setUniformValue("c", QPointF(-0.577,0.478)); // Pour Julia
-    // shaderProgram->setUniformValue("c", QPointF(-0.0519,0.688)); // Pour Julia
+    shaderProgram->setUniformValue("c", c);
+    shaderProgram->setUniformValue("z_max", zMax * 2);
+    shaderProgram->setUniformValue("scale", scale);
+    shaderProgram->setUniformValue("center", center);
 
     const GLfloat quadVertices[] =
     {
@@ -104,20 +108,20 @@ void FractalWindowOGL::zoomDown()
 
 void FractalWindowOGL::moveDown()
 {
-    centre = QPointF(centre.x(), centre.y() -scale / 2);
+    center = QPointF(center.x(), center.y() - scale / 2);
 }
 
 void FractalWindowOGL::moveUp()
 {
-    centre = QPointF(centre.x(), centre.y() + scale / 2);
+    center = QPointF(center.x(), center.y() + scale / 2);
 }
 
 void FractalWindowOGL::moveRight()
 {
-    centre = QPointF(centre.x() + scale / 2, centre.y());
+    center = QPointF(center.x() + scale / 2, center.y());
 }
 
 void FractalWindowOGL::moveLeft()
 {
-    centre = QPointF(centre.x() - scale / 2, centre.y());
+    center = QPointF(center.x() - scale / 2, center.y());
 }

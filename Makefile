@@ -143,4 +143,3 @@ doc :
 
 report :
 	@make --directory="$(REPORT_PATH)" --no-print-directory
-

@@ -138,14 +138,22 @@ class FractalWindow : public QGLWidget
         virtual void moveLeft() = 0;
 
     protected:
+        /** Nombre d'itérations actuel. */
+        int n;
+
         /**
          * Julia et Fatou : constante complexe.
          * Mandelbrot : variable complexe.
+         * x = Partie réelle.
+         * y = Partie imaginaire.
+         * Utilisation d'un QVector2D car compatible directement avec les
+         * méthodes concernant OpenGL, sinon il faut accéder aux membres un à
+         * un.
          */
-        int c;
+        const QVector2D c;
 
         /** Borne du module. */
-        int zMax;
+        const float zMax;
 
         /** Valeur initiale des itérations. */
         static const int z0;
@@ -166,13 +174,13 @@ class FractalWindow : public QGLWidget
         static const float yMax;
 
         /** Indique s'il faut afficher la fractale en couleur. */
-        bool coul;
+        const bool coul;
 
         /** Type de la fractale à afficher. */
-        type   fracType;
+        const type fracType;
 
         /** Bibliothèque de rendu à utiliser. */
-        render fracRender;
+        const render fracRender;
 
         /**
          * Chaînes de caractères représentant les types de fractale

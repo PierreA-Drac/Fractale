@@ -1,26 +1,28 @@
-uniform int iterations;
-uniform bool b_color;
-uniform highp vec2 centre;
-uniform highp float scale;
+#version 130
 
-varying highp vec2 texture_out;
+uniform int   n_max;
+uniform float z_max;
+uniform bool  b_color;
+uniform vec2  center;
+uniform float scale;
+in      vec2  texture_out;
 
 void main()
 {
     vec2 z;
     vec2 c;
-    c.x = scale * (3.0 * texture_out.x - 2.0) + centre.x;
-    c.y = scale * (2.0 * texture_out.y - 1.0) + centre.y;
+    c.x = scale * (3.0 * texture_out.x - 2.0) + center.x;
+    c.y = scale * (2.0 * texture_out.y - 1.0) + center.y;
 
     z = c;
 
     int i = 0;
-    for (; i < iterations; ++i)
+    for (; i < n_max; ++i)
     {
         float x = z.x*z.x - z.y*z.y + c.x;
         float y = z.x*z.y + z.y*z.x + c.y;
 
-        if (x*x + y*y > 4.0)
+        if (x*x + y*y > z_max)
             break;
 
         z.x = x;
@@ -29,7 +31,7 @@ void main()
 
     vec4 color = vec4(0.0);
 
-    if (i < iterations - 1) {
+    if (i < n_max - 1) {
         if (b_color == false)
             color = vec4(1.0);
         else {
