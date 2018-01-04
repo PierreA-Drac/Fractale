@@ -178,13 +178,21 @@ void MainWindow::detachWindowFrac()
 void MainWindow::displayFrac(int fType)
 {
     FractalWindow *wgtWinFrac = nullptr;
+    /* Récupération des paramètres. */
     bool color = ((butManColT->isChecked() && butManColT->isVisible()) ||
             (butJulColT->isChecked() && butJulColT->isVisible())) ?
         true : false;
+    float zMax = (fieldManzMax->isVisible()) ?
+        fieldManzMax->value() : fieldJulzMax->value();
+    float cReal = (fieldJulcReal->isVisible()) ?
+        fieldJulcReal->value() : 1.0;
+    float cImg = (fieldJulcImg->isVisible()) ?
+        fieldJulcImg->value() : 1.0;
     /* Si l'émetteur du signal est un bouton concernant OpenGL. */
     if (sender() == sigOGL) {
         wgtWinFrac = new FractalWindowOGL(
-                static_cast<FractalWindow::type>(fType), color);
+                static_cast<FractalWindow::type>(fType), zMax, cReal,
+                cImg, color);
     }
     /* Si l'émetteur du signal est un bouton concernant Cairo. */
     else if (sender() == sigCAI) {

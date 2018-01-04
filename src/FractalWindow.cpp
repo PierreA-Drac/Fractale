@@ -22,16 +22,13 @@ const float FractalWindow::xMax = 1.0;
 const float FractalWindow::yMin = -1.0;
 const float FractalWindow::yMax = 1.0;
 
-FractalWindow::FractalWindow(type t_fracType, render t_fracRender, bool t_coul,
-        QWidget *parent, int framesPerSecond) :
+FractalWindow::FractalWindow(type t_fracType, render t_fracRender, float t_zMax,
+        float t_cReal, float t_cImg, bool t_coul, QWidget *parent,
+        int framesPerSecond) :
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent), n(-75),
-    c(QVector2D(-0.577, 0.478)), zMax(2), coul(t_coul),
+    c(QVector2D(t_cReal, t_cImg)), zMax(t_zMax), coul(t_coul),
     fracType(t_fracType), fracRender(t_fracRender)
 {
-    /* TEMP, il faut les rendres accessibles à l'utilisateur. */
-    // zMax
-    // c QPointF(-0.577, 0.478) QPointF(-0.0519, 0.688);
-
     /* Titre de la fenêtre. */
     char title[TITLE_LENGHT] = {0};
     snprintf(title, TITLE_LENGHT, "Fractale de %s rendu avec %s",

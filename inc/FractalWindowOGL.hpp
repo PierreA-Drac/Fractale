@@ -24,11 +24,15 @@ class FractalWindowOGL : public FractalWindow
         /**
          * @brief Constructeur d'une fenêtre de fractale rendu par OpenGL
          * @param fracType Type de la fractale à afficher.
+         * @param zMax Valeur maximale du module de la fractale.
+         * @param cReal Partie réelle de la constante "c".
+         * @param cImg Partie imaginaire de la constante "c".
          * @param coul Affichage de la fractale en couleur ou en noir et
          *             blanc. Vrai (couleur) par défaut.
          * @param parent Pointeur vers le widget parent.
          */
-        FractalWindowOGL(type fracType, bool coul = true, QWidget *parent = 0);
+        FractalWindowOGL(type fracType, float zMax, float cReal, float cImg,
+                bool coul = true, QWidget *parent = 0);
 
         /**
          * @brief Initialise la fenêtre

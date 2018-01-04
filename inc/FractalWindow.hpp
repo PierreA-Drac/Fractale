@@ -47,6 +47,9 @@ class FractalWindow : public QGLWidget
          * @brief Constructeur d'une fenêtre de fractale.
          * @param t_fracType Type de la fractale à afficher.
          * @param t_fracRender Bibliothèque de rendu à utiliser.
+         * @param t_zMax Valeur maximale du module de la fractale.
+         * @param t_cReal Partie réelle de la constante "c".
+         * @param t_cImg Partie imaginaire de la constante "c".
          * @param t_coul Affichage de la fractale en couleur ou en noir et
          *               blanc. Vrai (couleur) par défaut.
          * @param parent Widget parent. Si non spécifié, nullptr par défaut.
@@ -57,7 +60,8 @@ class FractalWindow : public QGLWidget
          * Initialise la base de la fractale : le widget, le titre, et les
          * images par seconds.
          */
-        FractalWindow(type t_fracType, render t_fracRender, bool t_coul = true,
+        FractalWindow(type t_fracType, render t_fracRender, float t_zMax,
+                float t_cReal, float t_cImg, bool t_coul = true,
                 QWidget *parent = 0, int framesPerSecond = 0);
 
         /**

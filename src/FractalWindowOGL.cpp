@@ -13,9 +13,10 @@
 #include <QtCore/QDebug>
 #include "QtCore/QString"
 
-FractalWindowOGL::FractalWindowOGL(type fracType, bool coul, QWidget *parent) 
-    : FractalWindow(fracType, FractalWindow::OPENGL, coul, parent, 60)
-    , center(0.f, 0.f) , scale(1.f)
+FractalWindowOGL::FractalWindowOGL(type fracType, float zMax, float cReal,
+        float cImg, bool coul, QWidget *parent)
+    : FractalWindow(fracType, FractalWindow::OPENGL, zMax, cReal, cImg, coul,
+            parent, 60), center(0.f, 0.f) , scale(1.f)
 {
 }
 
