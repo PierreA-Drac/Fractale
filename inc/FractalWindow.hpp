@@ -13,11 +13,6 @@
 #include <QtOpenGL/QtOpenGL>
 #include <QtOpenGL/QGLWidget>
 
-#define xmin -2.0
-#define xmax 1.0
-#define ymin -1.5
-#define ymax 1.5
-
 /**
  * @brief Fenêtre d'une fractale
  *
@@ -52,15 +47,18 @@ class FractalWindow : public QGLWidget
          * @brief Constructeur d'une fenêtre de fractale.
          * @param t_fracType Type de la fractale à afficher.
          * @param t_fracRender Bibliothèque de rendu à utiliser.
+         * @param t_coul Affichage de la fractale en couleur ou en noir et
+         *               blanc. Vrai (couleur) par défaut.
          * @param parent Widget parent. Si non spécifié, nullptr par défaut.
          * @param framesPerSecond Nombre d'image par seconde à utiliser pour
-         * afficher la fractale. Si non spécifié, 0 par défaut (image fixe).
+         *                        afficher la fractale. Si non spécifié, 0 par
+         *                        défaut (image fixe).
          *
          * Initialise la base de la fractale : le widget, le titre, et les
          * images par seconds.
          */
-        FractalWindow(type t_fracType, render t_fracRender, QWidget *parent = 0,
-                int framesPerSecond = 0);
+        FractalWindow(type t_fracType, render t_fracRender, bool t_coul = true,
+                QWidget *parent = 0, int framesPerSecond = 0);
 
         /**
          * @brief Destructeur de la fenêtre d'une fractale.
@@ -166,6 +164,9 @@ class FractalWindow : public QGLWidget
 
         /** Borne maximale du plan complexe sur l'axe des ordonée. */
         static const float yMax;
+
+        /** Indique s'il faut afficher la fractale en couleur. */
+        bool coul;
 
         /** Type de la fractale à afficher. */
         type   fracType;
