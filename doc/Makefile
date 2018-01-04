@@ -13,6 +13,19 @@ endif
 PDF_VIEWER = evince
 INTERNET_BROWSER = firefox
 
+# Commandes ...................................................................:
+
+LESS = less -RmN
+
+# Comportement ................................................................:
+
+# Si on appelle ce Makefile depuis le Makefile maître :
+ifdef MASTER
+    WARNINGS = 
+else
+    WARNINGS = | grep "warning" | $(LESS)
+endif
+
 # Cibles =======================================================================
 
 .PHONY : mrproper
@@ -30,7 +43,7 @@ compil : html/index.html latex/refman.pdf
 
 html/index.html : $(DEPS)
 	@echo "--> Création de la documentation de $(PROJECT) :"
-	doxygen Doxyfile
+	doxygen Doxyfile $(WARNINGS)
 	
 latex/refman.pdf : $(DEPS)
 	@echo "--> Compilation de la documentation en PDF de $(PROJECT)" \
@@ -41,4 +54,4 @@ latex/refman.pdf : $(DEPS)
 
 mrproper:
 	@echo "--> Suppression de la documentation de $(PROJECT) :"
-	rm -f -r html/ latex/
+	rm -f -r html/ latex/ doxygen_*.tmp

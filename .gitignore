@@ -12,6 +12,10 @@ fractale
 *.log
 *.aux
 
+# Output files
+.gdb_history
+.valgrind.out
+
 # Documentation files
 html/
 latex/
