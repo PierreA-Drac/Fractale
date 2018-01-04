@@ -15,31 +15,61 @@
 MainWindow::MainWindow(const char *title) : QWidget()
 {
     /* Mandelbrot (paramètres). */
-    butManOGL  = new QPushButton("Afficher avec OpenGL");
-    butManCAI  = new QPushButton("Afficher avec Cairo");
-    butManColF = new QRadioButton("Afficher en noir et blanc");
-    butManColT = new QRadioButton("Afficher en couleur");
+    butManOGL    = new QPushButton("Afficher avec OpenGL");
+    butManCAI    = new QPushButton("Afficher avec Cairo");
+    butManColF   = new QRadioButton("Afficher en noir et blanc");
+    butManColT   = new QRadioButton("Afficher en couleur");
     butManColT->setChecked(true);
-    layPrmMan  = new QGridLayout();
+    txtManzMax   = new QLabel("Valeur maximale du module :");
+    fieldManzMax = new QDoubleSpinBox();
+    fieldManzMax->setDecimals(2);
+    fieldManzMax->setMinimum(-100.0);
+    fieldManzMax->setValue(2.0);
+    layPrmMan    = new QGridLayout();
     layPrmMan->addWidget(butManColT, 0, 0);
     layPrmMan->addWidget(butManColF, 0, 1);
-    layPrmMan->addWidget(butManCAI, 1, 0);
-    layPrmMan->addWidget(butManOGL, 1, 1);
-    wgtPrmMan  = new QWidget();
+    layPrmMan->addWidget(txtManzMax, 1, 0);
+    layPrmMan->addWidget(fieldManzMax, 1, 1);
+    layPrmMan->addWidget(butManCAI, 2, 0);
+    layPrmMan->addWidget(butManOGL, 2, 1);
+    wgtPrmMan    = new QWidget();
     wgtPrmMan->setLayout(layPrmMan);
 
     /* Julia et Fatou (paramètres). */
-    butJulOGL  = new QPushButton("Afficher avec OpenGL");
-    butJulCAI  = new QPushButton("Afficher avec Cairo");
-    butJulColF = new QRadioButton("Afficher en noir et blanc");
-    butJulColT = new QRadioButton("Afficher en couleur");
+    butJulOGL     = new QPushButton("Afficher avec OpenGL");
+    butJulCAI     = new QPushButton("Afficher avec Cairo");
+    butJulColF    = new QRadioButton("Afficher en noir et blanc");
+    butJulColT    = new QRadioButton("Afficher en couleur");
     butJulColT->setChecked(true);
-    layPrmJul  = new QGridLayout();
+    txtJulzMax    = new QLabel("Valeur maximale du module :");
+    fieldJulzMax  = new QDoubleSpinBox();
+    fieldJulzMax->setDecimals(2);
+    fieldJulzMax->setMinimum(-100.0);
+    fieldJulzMax->setValue(2.0);
+    txtJulcReal   = new QLabel(QString::fromUtf8(
+                "Partie réelle de la constante \"c\" :"));
+    fieldJulcReal = new QDoubleSpinBox();
+    fieldJulcReal->setDecimals(4);
+    fieldJulcReal->setMinimum(-100.0);
+    fieldJulcReal->setValue(-0.577);
+    txtJulcImg    = new QLabel(QString::fromUtf8(
+                "Partie imaginaire de la constante \"c\" :"));
+    fieldJulcImg  = new QDoubleSpinBox();
+    fieldJulcImg->setDecimals(4);
+    fieldJulcImg->setMinimum(-100.0);
+    fieldJulcImg->setValue(0.478);
+    layPrmJul     = new QGridLayout();
     layPrmJul->addWidget(butJulColT, 0, 0);
     layPrmJul->addWidget(butJulColF, 0, 1);
-    layPrmJul->addWidget(butJulCAI, 1, 0);
-    layPrmJul->addWidget(butJulOGL, 1, 1);
-    wgtPrmJul  = new QWidget();
+    layPrmJul->addWidget(txtJulzMax, 1, 0);
+    layPrmJul->addWidget(fieldJulzMax, 1, 1);
+    layPrmJul->addWidget(txtJulcReal, 2, 0);
+    layPrmJul->addWidget(fieldJulcReal, 2, 1);
+    layPrmJul->addWidget(txtJulcImg, 3, 0);
+    layPrmJul->addWidget(fieldJulcImg, 3, 1);
+    layPrmJul->addWidget(butJulCAI, 4, 0);
+    layPrmJul->addWidget(butJulOGL, 4, 1);
+    wgtPrmJul     = new QWidget();
     wgtPrmJul->setLayout(layPrmJul);
 
     /* Conteneur des onglets secondaires. */

@@ -109,26 +109,43 @@ class MainWindow : public QWidget
          * OpenGL.
          */
         QPushButton *butManOGL;
+
         /**
          * Bouton pour lancer l'affichage d'une fractale de Mandelbrot avec
          * Cairo.
          */
         QPushButton *butManCAI;
+
         /**
          * Bouton radio pour indiquer que la fractale de Mandelbrot 
          * devra être affichée en noir et blanc.
          */
         QRadioButton *butManColF;
+
         /**
          * Bouton radio pour indiquer que la fractale de Mandelbrot 
          * devra être affichée en couleur.
          */
         QRadioButton *butManColT;
+
+        /**
+         * Information du champ d'entrée pour la valeur maximale du
+         * module de la fractale de Mandelbrot.
+         */
+        QLabel *txtManzMax;
+
+        /**
+         * Champ d'entrée pour la valeur maximale du module de la
+         * fractale de Mandelbrot.
+         */
+        QDoubleSpinBox *fieldManzMax;
+
         /**
          * Layout contenant les widgets des paramètres de la fractale de
          * Mandelbrot.
          */
         QGridLayout *layPrmMan;
+
         /**
          * Widget contenant le layout des paramètres de la fractale de
          * Mandelbrot.
@@ -140,16 +157,19 @@ class MainWindow : public QWidget
          * OpenGL.
          */
         QPushButton *butJulOGL;
+
         /**
          * Bouton pour lancer l'affichage d'une fractale de Julia et Fatou avec
          * Cairo.
          */
         QPushButton *butJulCAI;
+
         /**
          * Bouton radio pour indiquer que la fractale de Julia et Fatou
          * devra être affichée en noir et blanc.
          */
         QRadioButton *butJulColF;
+
         /**
          * Bouton radio pour indiquer que la fractale de Julia et Fatou 
          * devra être affichée en couleur.
@@ -157,10 +177,47 @@ class MainWindow : public QWidget
         QRadioButton *butJulColT;
 
         /**
+         * Information du champ d'entrée pour la valeur maximale du
+         * module de la fractale de Julia et Fatou.
+         */
+        QLabel *txtJulzMax;
+
+        /**
+         * Champ d'entrée pour la valeur maximale du module de la
+         * fractale de Julia et Fatou.
+         */
+        QDoubleSpinBox *fieldJulzMax;
+
+        /**
+         * Information du champ d'entrée pour la partie réelle de la
+         * constante c de la fractale de Julia et Fatou.
+         */
+        QLabel *txtJulcReal;
+
+        /**
+         * Champ d'entrée pour la partie réelle de la constante c de la
+         * fractale de Julia et Fatou.
+         */
+        QDoubleSpinBox *fieldJulcReal;
+
+        /**
+         * Information du champ d'entrée pour la partie imaginaire de la
+         * constante c de la fractale de Julia et Fatou.
+         */
+        QLabel *txtJulcImg;
+
+        /**
+         * Champ d'entrée pour la partie imaginaire de la constante c de la
+         * fractale de Julia et Fatou.
+         */
+        QDoubleSpinBox *fieldJulcImg;
+
+        /**
          * Layout contenant les widgets des paramètres de la fractale de
          * Julia et Fatou.
          */
         QGridLayout *layPrmJul;
+
         /**
          * Widget contenant le layout des paramètres de la fractale de
          * Julia et Fatou.
@@ -171,25 +228,30 @@ class MainWindow : public QWidget
          * Conteneur des onglets des fractales de Mandelbrot.
          */
         QTabWidget *tabsMan;
+
         /**
          * Layout contenant le conteneur des onglets des fractales de
          * Mandelbrot.
          */
         QVBoxLayout *layTabsMan;
+
         /**
          * Widget qui contient le layout pour l'affichage des onglets des
          * fractales de Mandelbrot.
          */
         QWidget *wgtTabsMan;
+
         /**
          * Conteneur des onglets des fractales de Julia et Fatou.
          */
         QTabWidget *tabsJul;
+
         /**
          * Layout contenant le conteneur des onglets des fractales de
          * Julia et Fatou.
          */
         QVBoxLayout *layTabsJul;
+
         /**
          * Widget qui contient le layout pour l'affichage des onglets des
          * fractales de Julia et Fatou.
@@ -201,6 +263,7 @@ class MainWindow : public QWidget
 
         /** Layout de la fenêtre principale. */
         QVBoxLayout *layMainWin;
+
         /** Bouton pour quitter l'application dans la fenêtre principale. */
         QPushButton *butQuit;
 
@@ -213,6 +276,7 @@ class MainWindow : public QWidget
 
         /** Mappeur des signaux concernant OpenGL. */
         QSignalMapper *sigOGL;
+
         /** Mappeur des signaux concernant Cairo. */
         QSignalMapper *sigCAI;
 
