@@ -15,15 +15,16 @@
 #define TITLE_LENGHT 60
 
 const int FractalWindow::z0 = 0;
-const int FractalWindow::nMax = 100;
+const int FractalWindow::nMax = 512;    /* Default : 100 */
 const float FractalWindow::xMin = -2.0;
 const float FractalWindow::xMax = 1.0;
 const float FractalWindow::yMin = -1.0;
 const float FractalWindow::yMax = 1.0;
 
-FractalWindow::FractalWindow(type t_fracType, render t_fracRender, QWidget
-        *parent, int framesPerSecond) :
-    QGLWidget(QGLFormat(QGL::SampleBuffers), parent), fracType(t_fracType), fracRender(t_fracRender)
+FractalWindow::FractalWindow(type t_fracType, render t_fracRender, bool t_coul,
+        QWidget *parent, int framesPerSecond) :
+    QGLWidget(QGLFormat(QGL::SampleBuffers), parent), coul(t_coul), fracType(t_fracType),
+    fracRender(t_fracRender)
 {
     /* Titre de la fenêtre. */
     char title[TITLE_LENGHT] = {0};

@@ -8,126 +8,15 @@
 #include "FractalWindowOGL.hpp"
 
 #include <stdexcept>
+#include <string>
 
 #include <QtCore/QDebug>
 #include "QtCore/QString"
 
 FractalWindowOGL::FractalWindowOGL(type fracType, bool coul, QWidget *parent) 
-    : FractalWindow(fracType, FractalWindow::OPENGL, parent, 60)
-    , iterations(512) , centre(0.f, 0.f) , scale(1.f) , coul(coul)
-{  
-}
-
-void FractalWindowOGL::JuliaFractal()
+    : FractalWindow(fracType, FractalWindow::OPENGL, coul, parent, 60)
+    , centre(0.f, 0.f) , scale(1.f)
 {
-    QString code = "uniform int iterations;"
-        "uniform highp vec2 c;\n"
-        "uniform highp vec2 centre;\n"
-        "uniform highp float scale;\n"
-
-        "varying highp vec2 texture_out;\n"
-
-        "void main()\n"
-        "{\n"
-            "vec2 z;\n"
-            "z.x = scale * ( 3.0 * texture_out.x - 2.0 ) + centre.x;\n"
-            "z.y = scale * ( 2.0 * texture_out.y - 1.0 ) + centre.y;\n"
-
-            " int i = 0;\n"
-            " for(; i < iterations; ++i)\n"
-            " {\n"
-                "float x = z.x*z.x - z.y*z.y + c.x;\n"
-                "float y = z.x*z.y + z.y*z.x + c.y;\n"
-
-                "if( x*x + y*y > 4.0 )\n"
-                "  break;\n"
-
-                "z.x = x;\n"
-                "z.y = y;\n"
-            "}\n"
-
-            "vec4 color = vec4(0.0);\n"
-
-            "if(i < iterations - 1)\n";
-    // En noir et blanc
-    if(coul == false)
-        code += "color = vec4(1.0);\n";
-    // En couleur
-    else
-        code += " {\n"
-                "color.x = sin(float(i) / 100.0);\n"
-                "color.y = sin(float(i) / 70.0);\n"
-                "color.z = cos(float(i) / 20.0 + 3.141 / 4.0);\n"
-            "}\n";
-
-    code += "gl_FragColor = color;\n"
-        "}";
-    shaderProgram = new QGLShaderProgram(context(), this);
-    if (!shaderProgram->addShader(vertexShader)
-            || !shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code)
-            || !shaderProgram->link()
-            || !shaderProgram->bind()) {
-        throw std::runtime_error("Shader initialization failed");
-    }
-    //~ shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
-    //~ ":/Julia.glsl");
-}
-
-void FractalWindowOGL::MandelbrotFractal()
-{
-    QString code = "uniform int iterations;"
-        "uniform highp vec2 centre;\n"
-        "uniform highp float scale;\n"
-
-        "varying highp vec2 texture_out;\n"
-
-        "void main()\n"
-        "{\n"
-            "vec2 z;\n"
-            "vec2 c;\n"
-            "c.x = scale * ( 3.0 * texture_out.x - 2.0 ) + centre.x;\n"
-            "c.y = scale * ( 2.0 * texture_out.y - 1.0 ) + centre.y;\n"
-
-            "z = c;\n"
-
-            " int i = 0;\n"
-            " for(; i < iterations; ++i)\n"
-            " {\n"
-                "float x = z.x*z.x - z.y*z.y + c.x;\n"
-                "float y = z.x*z.y + z.y*z.x + c.y;\n"
-
-                "if( x*x + y*y > 4.0 )\n"
-                "  break;\n"
-
-                "z.x = x;\n"
-                "z.y = y;\n"
-            "}\n"
-
-            "vec4 color = vec4(0.0);\n"
-
-            "if(i < iterations - 1)\n";
-    // En noir et blanc
-    if(coul == false)
-        code += "color = vec4(1.0);\n";
-    // En couleur
-    else
-        code += " {\n"
-                "color.x = sin(float(i) / 100.0);\n"
-                "color.y = sin(float(i) / 70.0);\n"
-                "color.z = cos(float(i) / 20.0 + 3.141 / 4.0);\n"
-            "}\n";
-
-    code += "gl_FragColor = color;\n"
-        "}";
-    shaderProgram = new QGLShaderProgram(context(), this);
-    if (!shaderProgram->addShader(vertexShader)
-            || !shaderProgram->addShaderFromSourceCode(QGLShader::Fragment, code)
-            || !shaderProgram->link()
-            || !shaderProgram->bind()) {
-        throw std::runtime_error("Shader initialization failed");
-    }
-    //shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
-    //              "/home/user/Bureau/Info.L3/Fractale/Mandelbrot.glsl");
 }
 
 void FractalWindowOGL::initializeGL()
@@ -135,20 +24,21 @@ void FractalWindowOGL::initializeGL()
     qglClearColor(Qt::black);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
-    vertexShader = new QGLShader(QGLShader::Vertex, this);
-    vertexShader->compileSourceCode(
-            "attribute highp vec4 vertex;\n"
-            "attribute highp vec2 texture_in;\n"
-            "varying   highp vec2 texture_out;\n"
-            "void main()\n"
-            "{\n"
-            "  gl_Position = vertex;\n"
-            "  texture_out = texture_in;\n"
-            "}\n");
-    if(fracType == MANDELBROT)
-        this->MandelbrotFractal();
-    else
-        this->JuliaFractal();
+
+    std::string fragShader;
+    if (fracType == MANDELBROT)
+        fragShader = "shaders/fragmentShaderMandelbrot.fsh";
+    else if (fracType == JULIA)
+        fragShader = "shaders/fragmentShaderJulia.fsh";
+
+    shaderProgram = new QGLShaderProgram(context(), this);
+    if (!shaderProgram->addShaderFromSourceFile(QGLShader::Vertex,
+                "shaders/vertexShader.vsh")
+            || !shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
+                fragShader.data())
+            || !shaderProgram->link()) {
+        throw std::runtime_error("Shader initialization failed");
+    }
 }
 
 void FractalWindowOGL::resizeGL(int width, int height)
@@ -160,12 +50,14 @@ void FractalWindowOGL::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    shaderProgram->bind();
     shaderProgram->setUniformValue("scale", scale);
     shaderProgram->setUniformValue("centre", centre);
-    shaderProgram->setUniformValue("iterations", iterations);
-    //~ shaderProgram->setUniformValue("c", QPointF(1.0, 1.0));
-    shaderProgram->setUniformValue("c", QPointF(-0.577,0.478)); //Pour Julia
-    //shaderProgram->setUniformValue("c", QPointF(-0.0519,0.688)); //Pour Julia
+    shaderProgram->setUniformValue("iterations", nMax);
+    shaderProgram->setUniformValue("b_color", coul);
+    // shaderProgram->setUniformValue("c", QPointF(1.0, 1.0));
+    shaderProgram->setUniformValue("c", QPointF(-0.577,0.478)); // Pour Julia
+    // shaderProgram->setUniformValue("c", QPointF(-0.0519,0.688)); // Pour Julia
 
     const GLfloat quadVertices[] =
     {
@@ -183,15 +75,16 @@ void FractalWindowOGL::paintGL()
         0.f, 1.f
     };
 
-    int vertexLocation  = shaderProgram->attributeLocation("vertex");
-    int textureLocation = shaderProgram->attributeLocation("texture_in");
-
-    shaderProgram->enableAttributeArray(vertexLocation);
-    shaderProgram->setAttributeArray(vertexLocation, quadVertices, 2);
-    shaderProgram->enableAttributeArray(textureLocation);
-    shaderProgram->setAttributeArray(textureLocation, textureCoordinates, 2);
+    shaderProgram->setAttributeArray("vertex", quadVertices, 2);
+    shaderProgram->enableAttributeArray("vertex");
+    shaderProgram->setAttributeArray("texture_in", textureCoordinates, 2);
+    shaderProgram->enableAttributeArray("texture_in");
 
     glDrawArrays(GL_QUADS, 0, 4);
+
+    shaderProgram->disableAttributeArray("vertex");
+    shaderProgram->disableAttributeArray("texture_in");
+    shaderProgram->release();
 }
 
 void FractalWindowOGL::updateWin()
