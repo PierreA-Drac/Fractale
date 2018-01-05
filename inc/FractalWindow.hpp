@@ -160,7 +160,7 @@ class FractalWindow : public QGLWidget
         const float zMax;
 
         /** Valeur initiale des itérations. */
-        static const int z0;
+        static const float z0;
 
         /** Nombre d'itérations maximum. */
         static const int nMax;

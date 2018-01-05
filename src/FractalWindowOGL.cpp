@@ -16,7 +16,7 @@
 FractalWindowOGL::FractalWindowOGL(type fracType, float zMax, float cReal,
         float cImg, bool coul, QWidget *parent)
     : FractalWindow(fracType, FractalWindow::OPENGL, zMax, cReal, cImg, coul,
-            parent, 60), center(0.f, 0.f) , scale(1.f)
+            parent, 60), center(0.f, 0.f), scale(1.5)
 {
 }
 
@@ -46,49 +46,49 @@ void FractalWindowOGL::initializeGL()
 
 void FractalWindowOGL::resizeGL(int width, int height)
 {
+    /* Fait correspondre la matrice projection avec la zone du widget dans le
+     * contexte OpenGL. Évite les distorsions et le placage des éléments aux
+     * mauvais endroits. */
     glViewport(0, 0, width, height);
 }
 
 void FractalWindowOGL::paintGL()
 {
+    /* Préparation de l'écran et du pipeline 3D. */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    shaderProgram->bind();
 
+    /* Incrémentation des itérations maximum pour l'effet de dessin sur l'écran
+     * à l'ouverture d'une fenêtre de fractale OGL. */
     if (n <= nMax)
         n++;
 
-    shaderProgram->bind();
+    /* Transfert des variables globales (uniformes) aux shaders. */
     shaderProgram->setUniformValue("n_max", n);
-    shaderProgram->setUniformValue("b_color", coul);
     shaderProgram->setUniformValue("c", c);
-    shaderProgram->setUniformValue("z_max", zMax * 2);
+    shaderProgram->setUniformValue("z_max", zMax * zMax);
+    shaderProgram->setUniformValue("z_0", z0);
+    shaderProgram->setUniformValue("b_color", coul);
     shaderProgram->setUniformValue("scale", scale);
     shaderProgram->setUniformValue("center", center);
 
-    const GLfloat quadVertices[] =
-    {
-        -1.f, -1.f,
-        1.f, -1.f,
-        1.f, 1.f,
-        -1.f, 1.f
-    };
+    /* Vertices d'un carré qui rempli l'écran. */
+    QVector<QVector2D> quadVertices;
+    quadVertices
+        << QVector2D(-1 , -1)
+        << QVector2D(1  , -1)
+        << QVector2D(1  , 1 )
+        << QVector2D(-1 , 1 );
 
-    const GLfloat textureCoordinates[] =
-    {
-        0.f, 0.f,
-        1.f, 0.f,
-        1.f, 1.f,
-        0.f, 1.f
-    };
-
-    shaderProgram->setAttributeArray("vertex", quadVertices, 2);
+    /* Transfert de l'entrée du Vertex Shader. */
+    shaderProgram->setAttributeArray("vertex", quadVertices.constData());
     shaderProgram->enableAttributeArray("vertex");
-    shaderProgram->setAttributeArray("texture_in", textureCoordinates, 2);
-    shaderProgram->enableAttributeArray("texture_in");
 
-    glDrawArrays(GL_QUADS, 0, 4);
+    /* Dessin du carré sur l'écran. */
+    glDrawArrays(GL_QUADS, 0, quadVertices.size());
 
+    /* Libération de l'entrée du shader et désactivation dans le pipeline. */
     shaderProgram->disableAttributeArray("vertex");
-    shaderProgram->disableAttributeArray("texture_in");
     shaderProgram->release();
 }
 
