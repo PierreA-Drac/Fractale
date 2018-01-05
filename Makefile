@@ -10,7 +10,7 @@ export SRC_PATH = src/
 export INC_PATH = inc/
 OBJ_PATH        = obj/
 DOC_PATH        = doc/
-EXE_PATH        = exe/
+EXE_PATH        = bin/
 REPORT_PATH     = report/
 
 export SRC_EXT  = cpp
