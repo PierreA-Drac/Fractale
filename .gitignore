@@ -15,6 +15,7 @@ fractale
 # Output files
 .gdb_history
 .valgrind.out
+moc_*
 
 # Documentation files
 html/
