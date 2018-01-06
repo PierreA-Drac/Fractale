@@ -24,16 +24,22 @@ class FractalWindowOGL : public FractalWindow
         /**
          * @brief Constructeur d'une fenêtre de fractale rendu par OpenGL
          * @param fracType Type de la fractale à afficher.
-         * @param coul Affichage de la fractale en couleur ou non.
+         * @param zMax Valeur maximale du module de la fractale.
+         * @param cReal Partie réelle de la constante "c".
+         * @param cImg Partie imaginaire de la constante "c".
+         * @param coul Affichage de la fractale en couleur ou en noir et
+         *             blanc. Vrai (couleur) par défaut.
          * @param parent Pointeur vers le widget parent.
          */
-        FractalWindowOGL(type fracType, bool coul, QWidget *parent = 0);
+        FractalWindowOGL(type fracType, float zMax, float cReal, float cImg,
+                bool coul = true, QWidget *parent = 0);
 
         /**
          * @brief Initialise la fenêtre
          *
-         * Cette fonction est appelée par Qt au moment d'initialiser la
-         * fenêtre. Elle n'est appelée qu'une seule fois.
+         * Initialise OpenGL et les shaders utilisés. Cette fonction est appelée
+         * par Qt au moment d'initialiser la fenêtre. Elle n'est appelée qu'une
+         * seule fois.
          */
         virtual void initializeGL();
 
@@ -56,24 +62,6 @@ class FractalWindowOGL : public FractalWindow
          * d'afficher/de dessiner la fenêtre.
          */
         virtual void paintGL();
-        
-        /**
-         *@brief Ajoute le shader de l'ensemble de Fatou et Julia
-         * et la lie au contexte.
-         * 
-         * Cette fonction est appelé lors de l'initialisation de la fenêtre.
-         * Elle n'est appelée au plus qu'une seule fois 
-         */
-        void JuliaFractal();
-        
-        /**
-         *@brief Ajoute le shader de l'ensemble de Mandelbrot
-         * et la lie au contexte.
-         * 
-         * Cette fonction est appelé lors de l'initialisation de la fenêtre.
-         * Elle n'est appelée au plus qu'une seule fois 
-         */
-        void MandelbrotFractal();
 
     public slots:
         /**
@@ -116,18 +104,26 @@ class FractalWindowOGL : public FractalWindow
         virtual void moveLeft();
 
     private:
-        /** Poineur vers un shader de pixels. */
-        QGLShader *vertexShader;
-        /** Pointeur vers un programme de shader. */
+        /** Shaders (Vertex & Fragment). */
         QGLShaderProgram *shaderProgram;
-        /** Nombre d'itérations sur l'equation z. */
-        int iterations;
+
         /** Coordonnées du centre de la fenêtre. */
-        QPointF centre;
+        QPointF center;
+
         /** Échelle du zoom. */
         float scale;
-        /** Indique s'il faut afficher la fractale en couleur. */
-        bool coul;
+
+        /** Matrice de projection. */
+        QMatrix4x4 pMatrix;
+
+        /** Matrice de modèle. */
+        QMatrix4x4 mMatrix;
+
+        /** Matrice de vue. */
+        QMatrix4x4 vMatrix;
+
+        /** Vertices à afficher. */
+        QVector<QVector3D> quadVertices;
 };
 
 #endif /* ifndef FRACTALWINDOWOGL_H */
