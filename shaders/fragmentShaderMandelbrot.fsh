@@ -25,11 +25,11 @@ void main()
 {
     /* Initialisation de c à z0, itération 0 et couleur noir. */
     vec2 c;
-    c.x = z_0 + quad.x * 1.5;   /* x 1.5 pour éviter une déformation. */
+    c.x = z_0 + quad.x;
     c.y = z_0 + quad.y;
     vec4 color = vec4(0.0);
-    float i = 0;                /* float car utilisé dans une division pour la
-                                   couleur. */
+    float i = 0;            /* float car utilisé dans une division pour la
+                               couleur. */
 
     /* Applique le facteur de zoom et centre la fractale (ou déplace si on à
      * déplacer le centre de l'image). */
@@ -47,7 +47,7 @@ void main()
         /* z = z^2 + c */
         float tmp = z.x;
         z.x = (z.x * z.x) - (z.y * z.y) + c.x;
-        z.y = 2 * tmp * z.y + + c.y;
+        z.y = 2 * tmp * z.y + c.y;
     }
 
     /* Si le point ne fait pas partie de la fractale. */

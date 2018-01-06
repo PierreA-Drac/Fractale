@@ -46,6 +46,17 @@ void FractalWindowOGL::initializeGL()
 
 void FractalWindowOGL::resizeGL(int width, int height)
 {
+    /* Évite la division par 0. */
+    if (height == 0)
+        height = 1;
+    /* Il faut, dans ce cas, multiplier la matrice de projection par la matrice
+     * identité pour ne pas la modifier (la multiplier avec l'ancienne matrice
+     * de projection). */
+    pMatrix.setToIdentity();
+    /* Créer la matrice de projection avec le FOV, le ratio, et les distances
+     * minimale et maximale de rendu. FOV très petit pour permettre un gros
+     * zoom. */
+    pMatrix.perspective(80, (float)width / (float)height, 0.001, 1000);
     /* Fait correspondre la matrice projection avec la zone du widget dans le
      * contexte OpenGL. Évite les distorsions et le placage des éléments aux
      * mauvais endroits. */
@@ -64,6 +75,7 @@ void FractalWindowOGL::paintGL()
         n++;
 
     /* Transfert des variables globales (uniformes) aux shaders. */
+    shaderProgram->setUniformValue("mvpMatrix", pMatrix * vMatrix * mMatrix);
     shaderProgram->setUniformValue("n_max", n);
     shaderProgram->setUniformValue("c", c);
     shaderProgram->setUniformValue("z_max", zMax * zMax);
@@ -72,13 +84,13 @@ void FractalWindowOGL::paintGL()
     shaderProgram->setUniformValue("scale", scale);
     shaderProgram->setUniformValue("center", center);
 
-    /* Vertices d'un carré qui rempli l'écran. */
-    QVector<QVector2D> quadVertices;
+    /* Vertices d'un rectangle qui rempli l'écran (même avec plusieurs
+     * ratio différents). */
     quadVertices
-        << QVector2D(-1 , -1)
-        << QVector2D(1  , -1)
-        << QVector2D(1  , 1 )
-        << QVector2D(-1 , 1 );
+        << QVector3D(-6, -2, -1)
+        << QVector3D( 6, -2, -1)
+        << QVector3D( 6,  2, -1)
+        << QVector3D(-6,  2, -1);
 
     /* Transfert de l'entrée du Vertex Shader. */
     shaderProgram->setAttributeArray("vertex", quadVertices.constData());

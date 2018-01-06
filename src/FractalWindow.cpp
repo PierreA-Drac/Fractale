@@ -15,7 +15,7 @@
 #define TITLE_LENGHT 60
 
 /** Initialisation des variables statiques. */
-const int FractalWindow::nMax = 1024;
+const int FractalWindow::nMax = 325;
 const float FractalWindow::z0 = 0;
 const float FractalWindow::xMin = -2.0;
 const float FractalWindow::xMax = 1.0;

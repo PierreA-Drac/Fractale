@@ -46,7 +46,7 @@ void main()
         /* z = z^2 + c */
         float tmp = z.x;
         z.x = (z.x * z.x) - (z.y * z.y) + c.x;
-        z.y = 2 * tmp * z.y + + c.y;
+        z.y = 2 * tmp * z.y + c.y;
     }
 
     /* Si le point ne fait pas partie de la fractale. */

@@ -1,5 +1,10 @@
 #version 130
 
+/* Variable globale. */
+
+/* Matrice model-view-projection */
+uniform mat4 mvpMatrix;
+
 /* Variable entrante. */
 
 /* Vertex à traiter. */
@@ -16,5 +21,5 @@ void main()
     quad = vertex;
     /* Calcul de la position du vertex pour la
      * rastérisation (matricialisation). */
-    gl_Position = vertex;
+    gl_Position = mvpMatrix * vertex;
 }

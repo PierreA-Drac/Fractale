@@ -110,6 +110,18 @@ class FractalWindowOGL : public FractalWindow
         QPointF center;
         /** Échelle du zoom. */
         float scale;
+
+        /* Matrice de projection. */
+        QMatrix4x4 pMatrix;
+
+        /* Matrice de modèle. */
+        QMatrix4x4 mMatrix;
+
+        /* Matrice de vue. */
+        QMatrix4x4 vMatrix;
+
+        /* Vertices à afficher. */
+        QVector<QVector3D> quadVertices;
 };
 
 #endif /* ifndef FRACTALWINDOWOGL_H */
