@@ -16,15 +16,42 @@
 
 \section{Introduction}
 
-Paragraphe.
+Ce projet a pour but la modélisation de deux ensembles de fractales : 
+l'ensemble de Mandelbrot et l'ensemble de Julia et Fatou.
+Nous allons expliquer dans ce rapport notre approche de ce projet 
+et les choix que nous avons faits.
+Une description détaillées des classes, méthodes et attributs est 
+disponible dans la documentation.
 
 \section{Fonctionnement}
 
-Paragraphe.
+Cette partie sera consacrée au fonctionnement interne du projet
+et à la manière dont nous avons résolu certains problèmes, afin de 
+répondre au cahier des charges. Le projet est organisé comme suit : 
+l'exécutable sera produit dans le dossier "exe", les sources dans le dossier "src"
+et les header dans le dossier "inc".
+Les headers contiennent les définitions des classes et la description du rôle
+de chaque fonction (documentation). Les sources contiennent le code source
+et les commentaires nécessaires à la compréhension du fonctionnement
+interne de la fonction.
 
 \subsection{Description des classes}
 
-Paragraphe.
+Les classes utilisées sont définies dans les fichiers ".hpp". Les headers 
+sont assez documentés pour connaître le rôle de tous les attributs et 
+méthodes des classes, nous ne nous y attarderons donc pas ici.
+
+
+paragraphe sur Qt.
+
+
+Concernant le développement avec OpenGL, nous avons décidé d'utiliser 
+les shaders plutôt que les fonctions proposées via le lien internet du 
+sujet. En effet, ces dernières étant dépréciées, nous avons pensez 
+qu'il était préférable d'apprendre à utiliser les fonctions actuelles 
+d'OpenGL pour, d'une part, un rendu plus rapide de la modélisation et 
+d'autre part nous familiariser au mieux avec OpenGL dans l'optique 
+qu'un jour nous pourrions l'utiliser de nouveau. 
 
 \subsection{Description des algorithmes}
 
@@ -32,7 +59,13 @@ Paragraphe.
 
 \section{Regard final}
 
-Paragraphe.
+(note pour Pierre : je sais pas s'il vaut mieux mettre cela ici ou ailleurs
+genre dans la conclusion)
+Nous sommes mitigés sur notre travail. D'une part nous sommes globalement 
+satifaits de notre travail sur Qt et OpenGL où nous avons essayé 
+d'approfondir au mieux nos connaissances sur ces deux librairies afin de 
+produire un code clair et efficace. D'autre part, par manque de temps, 
+nous n'avons pas pu réaliser le rendu graphique avec CAIRO.
 
 \subsection{Critique sur le code et améliorations possibles}
 
