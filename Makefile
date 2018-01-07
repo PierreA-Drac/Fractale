@@ -120,7 +120,7 @@ fractal: cmake_check_build_system
 
 # fast build rule for target.
 fractal/fast:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/build
+	$(MAKE) -f src/CMakeFiles/fractal.dir/build.make src/CMakeFiles/fractal.dir/build
 .PHONY : fractal/fast
 
 #=============================================================================
@@ -133,143 +133,8 @@ fractal_autogen: cmake_check_build_system
 
 # fast build rule for target.
 fractal_autogen/fast:
-	$(MAKE) -f CMakeFiles/fractal_autogen.dir/build.make CMakeFiles/fractal_autogen.dir/build
+	$(MAKE) -f src/CMakeFiles/fractal_autogen.dir/build.make src/CMakeFiles/fractal_autogen.dir/build
 .PHONY : fractal_autogen/fast
-
-fractal_autogen/mocs_compilation.o: fractal_autogen/mocs_compilation.cpp.o
-
-.PHONY : fractal_autogen/mocs_compilation.o
-
-# target to build an object file
-fractal_autogen/mocs_compilation.cpp.o:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/fractal_autogen/mocs_compilation.cpp.o
-.PHONY : fractal_autogen/mocs_compilation.cpp.o
-
-fractal_autogen/mocs_compilation.i: fractal_autogen/mocs_compilation.cpp.i
-
-.PHONY : fractal_autogen/mocs_compilation.i
-
-# target to preprocess a source file
-fractal_autogen/mocs_compilation.cpp.i:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/fractal_autogen/mocs_compilation.cpp.i
-.PHONY : fractal_autogen/mocs_compilation.cpp.i
-
-fractal_autogen/mocs_compilation.s: fractal_autogen/mocs_compilation.cpp.s
-
-.PHONY : fractal_autogen/mocs_compilation.s
-
-# target to generate assembly for a file
-fractal_autogen/mocs_compilation.cpp.s:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/fractal_autogen/mocs_compilation.cpp.s
-.PHONY : fractal_autogen/mocs_compilation.cpp.s
-
-src/FractalWindow.o: src/FractalWindow.cpp.o
-
-.PHONY : src/FractalWindow.o
-
-# target to build an object file
-src/FractalWindow.cpp.o:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/FractalWindow.cpp.o
-.PHONY : src/FractalWindow.cpp.o
-
-src/FractalWindow.i: src/FractalWindow.cpp.i
-
-.PHONY : src/FractalWindow.i
-
-# target to preprocess a source file
-src/FractalWindow.cpp.i:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/FractalWindow.cpp.i
-.PHONY : src/FractalWindow.cpp.i
-
-src/FractalWindow.s: src/FractalWindow.cpp.s
-
-.PHONY : src/FractalWindow.s
-
-# target to generate assembly for a file
-src/FractalWindow.cpp.s:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/FractalWindow.cpp.s
-.PHONY : src/FractalWindow.cpp.s
-
-src/FractalWindowOGL.o: src/FractalWindowOGL.cpp.o
-
-.PHONY : src/FractalWindowOGL.o
-
-# target to build an object file
-src/FractalWindowOGL.cpp.o:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/FractalWindowOGL.cpp.o
-.PHONY : src/FractalWindowOGL.cpp.o
-
-src/FractalWindowOGL.i: src/FractalWindowOGL.cpp.i
-
-.PHONY : src/FractalWindowOGL.i
-
-# target to preprocess a source file
-src/FractalWindowOGL.cpp.i:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/FractalWindowOGL.cpp.i
-.PHONY : src/FractalWindowOGL.cpp.i
-
-src/FractalWindowOGL.s: src/FractalWindowOGL.cpp.s
-
-.PHONY : src/FractalWindowOGL.s
-
-# target to generate assembly for a file
-src/FractalWindowOGL.cpp.s:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/FractalWindowOGL.cpp.s
-.PHONY : src/FractalWindowOGL.cpp.s
-
-src/Main.o: src/Main.cpp.o
-
-.PHONY : src/Main.o
-
-# target to build an object file
-src/Main.cpp.o:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/Main.cpp.o
-.PHONY : src/Main.cpp.o
-
-src/Main.i: src/Main.cpp.i
-
-.PHONY : src/Main.i
-
-# target to preprocess a source file
-src/Main.cpp.i:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/Main.cpp.i
-.PHONY : src/Main.cpp.i
-
-src/Main.s: src/Main.cpp.s
-
-.PHONY : src/Main.s
-
-# target to generate assembly for a file
-src/Main.cpp.s:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/Main.cpp.s
-.PHONY : src/Main.cpp.s
-
-src/MainWindow.o: src/MainWindow.cpp.o
-
-.PHONY : src/MainWindow.o
-
-# target to build an object file
-src/MainWindow.cpp.o:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/MainWindow.cpp.o
-.PHONY : src/MainWindow.cpp.o
-
-src/MainWindow.i: src/MainWindow.cpp.i
-
-.PHONY : src/MainWindow.i
-
-# target to preprocess a source file
-src/MainWindow.cpp.i:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/MainWindow.cpp.i
-.PHONY : src/MainWindow.cpp.i
-
-src/MainWindow.s: src/MainWindow.cpp.s
-
-.PHONY : src/MainWindow.s
-
-# target to generate assembly for a file
-src/MainWindow.cpp.s:
-	$(MAKE) -f CMakeFiles/fractal.dir/build.make CMakeFiles/fractal.dir/src/MainWindow.cpp.s
-.PHONY : src/MainWindow.cpp.s
 
 # Help Target
 help:
@@ -278,24 +143,9 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... fractal"
 	@echo "... edit_cache"
+	@echo "... fractal"
 	@echo "... fractal_autogen"
-	@echo "... fractal_autogen/mocs_compilation.o"
-	@echo "... fractal_autogen/mocs_compilation.i"
-	@echo "... fractal_autogen/mocs_compilation.s"
-	@echo "... src/FractalWindow.o"
-	@echo "... src/FractalWindow.i"
-	@echo "... src/FractalWindow.s"
-	@echo "... src/FractalWindowOGL.o"
-	@echo "... src/FractalWindowOGL.i"
-	@echo "... src/FractalWindowOGL.s"
-	@echo "... src/Main.o"
-	@echo "... src/Main.i"
-	@echo "... src/Main.s"
-	@echo "... src/MainWindow.o"
-	@echo "... src/MainWindow.i"
-	@echo "... src/MainWindow.s"
 .PHONY : help
 
 
