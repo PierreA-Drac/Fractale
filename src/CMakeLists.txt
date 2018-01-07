@@ -43,8 +43,6 @@ set (EXE fractal)
 # Dépendances de l'exécutable.
 add_executable (${EXE} ${SRC} ${INC})
 
-# set (EXECUTABLE_OUTPUT_PATH ../bin/${CMAKE_BUILD_TYPE})
-
 # Compilation ==================================================================
 
 # Dossiers des headers à inclure pour le préprocesseur.
@@ -56,11 +54,13 @@ link_directories (${OPENGL_gl_LIBRARY})
 # Bibliothèques liées à l'exécutable.
 target_link_libraries (${EXE} GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
 
-# Flags du mode Debug.
+# Flags
+#
+# Debug
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     target_compile_options (${EXE} PUBLIC -g3 -Wall)
 endif()
-# Flags standards.
+# Communs
 target_compile_options (${EXE} PUBLIC -fPIC -std=c++0x)
 
 # Installation =================================================================
