@@ -24,30 +24,38 @@ find_package (Qt4 REQUIRED QtCore QtGui QtOpenGL)
 
 # Sources ======================================================================
 
-# Extensions de fichier
+# Extension des fichiers sources et des headers.
 set (SRC_EXT .cpp)
 set (INC_EXT .hpp)
 
-# Listes de fichier
+# Liste des fichiers sources et des headers.
 file (GLOB_RECURSE SRC *${SRC_EXT})
 file (GLOB_RECURSE INC *${INC_EXT})
 
-# Listes de répertoire
+# Liste des dossiers contenant un header.
 HEADER_DIRECTORIES(INC_DIRS)
 
 # Binaires =====================================================================
 
-# Répertoire
-set (EXECUTABLE_OUTPUT_PATH ../bin/${CMAKE_BUILD_TYPE})
+# Nom de l'exécutable.
+set (EXE fractal)
 
-# Cible
-add_executable (fractal ${SRC} ${INC})
+# Dépendances de l'exécutable.
+add_executable (${EXE} ${SRC} ${INC})
+
+# set (EXECUTABLE_OUTPUT_PATH ../bin/${CMAKE_BUILD_TYPE})
 
 # Compilation ==================================================================
 
-# Include
+# Dossiers des headers à inclure pour le préprocesseur.
 include_directories (${INC_DIRS} ${OPENGL_INCLUDE_DIR})
 
-# Link
+# Dossiers des bibliothèques à inclure pour le linker.
 link_directories (${OPENGL_gl_LIBRARY})
-target_link_libraries (fractal GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
+
+# Bibliothèques liées à l'exécutable.
+target_link_libraries (${EXE} GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
+
+# Installation =================================================================
+
+install (PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${EXE} DESTINATION bin)
