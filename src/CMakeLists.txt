@@ -56,6 +56,13 @@ link_directories (${OPENGL_gl_LIBRARY})
 # Bibliothèques liées à l'exécutable.
 target_link_libraries (${EXE} GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
 
+# Flags du mode Debug.
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    target_compile_options (${EXE} PUBLIC -g3 -Wall)
+endif()
+# Flags standards.
+target_compile_options (${EXE} PUBLIC -fPIC -std=c++0x)
+
 # Installation =================================================================
 
 install (PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${EXE} DESTINATION bin)

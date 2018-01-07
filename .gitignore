@@ -8,6 +8,7 @@ CMake*
 # Binary files
 obj/
 bin/
+build/
 fractal
 fractale
 *.o
