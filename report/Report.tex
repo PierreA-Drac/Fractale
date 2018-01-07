@@ -42,7 +42,21 @@ sont assez documentés pour connaître le rôle de tous les attributs et
 méthodes des classes, nous ne nous y attarderons donc pas ici.
 
 
-paragraphe sur Qt.
+Nous avons choisi d'utiliser Qt plutôt que GTK pour créer les fenêtres 
+car Qt possède des classes pour implémenter OpenGL, il était donc 
+naturel que nous choisissions cette librairie plutôt que GTK qui n'offrait
+rien d'équivalent pour OpenGL ou CAIRO. (note : peut-être que ça apeut être 
+mieux formulé)
+
+
+L'interface du programme se présente sous une fenêtre principale 
+contenant deux onglets principaux, un pour chacun des ensembles. 
+L'utilisateur peut afficher plusieurs fractales en même temps, nous avons 
+jugé cette fonctionnalité intéressante pour comparer les fractales entre elles.
+Les différents Widget des onglets "paramètres" sont positionnés grâce à 
+des Layouts et la gestion des Signaux et des Slots permet l'appel des fonctions 
+liées à l'affichage des fractales en fonction des paramètres choisis par 
+l'utilisateur.  
 
 
 Concernant le développement avec OpenGL, nous avons décidé d'utiliser 
@@ -65,7 +79,13 @@ Nous sommes mitigés sur notre travail. D'une part nous sommes globalement
 satifaits de notre travail sur Qt et OpenGL où nous avons essayé 
 d'approfondir au mieux nos connaissances sur ces deux librairies afin de 
 produire un code clair et efficace. D'autre part, par manque de temps, 
-nous n'avons pas pu réaliser le rendu graphique avec CAIRO.
+nous n'avons pas pu réaliser le rendu graphique avec CAIRO. En effet, 
+développer le rendu graphique avec OpenGL nous a pris plus de temps 
+que prévu. De plus, au vu du temps qu'il nous restait, nous n'aurions
+pas eu le temps de faire de nouvelles recherches sur CAIRO et GTK et 
+implémenter toutes les fonctionnalités demandé dans le cahier des charges.
+Nous avons donc décidé de nous concentrer sur OpenGL et Qt afin de rendre 
+un code propre et efficace.
 
 \subsection{Critique sur le code et améliorations possibles}
 
