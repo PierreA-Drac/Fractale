@@ -1,8 +1,15 @@
 # Configuration files
 tags
 .gdbinit
+CMake*
+!CMakeLists.txt
+*.cmake
 
 # Binary files
+obj/
+bin/
+build/
+fractal
 fractale
 *.o
 
@@ -11,6 +18,7 @@ fractale
 *.d
 *.log
 *.aux
+*autogen
 
 # Output files
 .gdb_history
