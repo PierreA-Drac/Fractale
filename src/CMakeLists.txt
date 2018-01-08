@@ -42,6 +42,7 @@ HEADER_DIRECTORIES(INC_DIRS)
 # Binaires =====================================================================
 
 # Nom de l'exécutable.
+set (EXE fractal PARENT_SCOPE)
 set (EXE fractal)
 
 # Dépendances de l'exécutable.
@@ -95,4 +96,28 @@ add_custom_command (TARGET ${EXE}
 
 # Installation =================================================================
 
-install (PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${EXE} DESTINATION bin)
+# Paramètres la cible d'installation.
+install (PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${EXE} DESTINATION ${EXE})
+install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${SHADER_DIR} DESTINATION ${EXE})
+if (UNIX)
+    install (CODE "execute_process ( \
+    COMMAND ${CMAKE_COMMAND} -E create_symlink \
+    ${CMAKE_INSTALL_PREFIX}/${EXE}/${EXE} \
+    /usr/local/bin/${EXE})
+    message (\"-- Creating symlink: /usr/loca/bin/${EXE} -> ${CMAKE_INSTALL_PREFIX}/${EXE}/${EXE}\")"
+    )
+endif()
+
+# Crée une cible de désinstallation.
+if (UNIX)
+    set (UNIX_REMOVE_LINK
+            COMMAND ${CMAKE_COMMAND} -E echo "-- Removing: /usr/local/bin/${EXE}"
+            COMMAND ${CMAKE_COMMAND} -E remove /usr/local/bin/${EXE}
+        )
+endif()
+add_custom_target (uninstall
+    COMMAND ${CMAKE_COMMAND} -E echo "Remove ${PROJECT_NAME} project..."
+    COMMAND ${CMAKE_COMMAND} -E echo "-- Removing: ${CMAKE_INSTALL_PREFIX}/${EXE}"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_INSTALL_PREFIX}/${EXE}
+    ${UNIX_REMOVE_LINK}
+    )

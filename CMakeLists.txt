@@ -13,25 +13,33 @@ set (CMAKE_BUILD_TYPE Debug)
 # Paramètres ===================================================================
 
 # Tag generation
-find_program (TAG_GENERATOR ctags)
-if (${TAG_GENERATOR} STREQUAL "TAG_GENERATOR-NOTFOUND")
-    message ("-- Ctags not found")
-    set (TAG_GEN false)
-else ()
-    message ("-- Found Ctags: ${TAG_GENERATOR}")
-    set (TAG_GEN true)
+if (NOT TAG_GENERATOR)
+    find_program (TAG_GENERATOR ctags)
+    if (${TAG_GENERATOR} STREQUAL "TAG_GENERATOR-NOTFOUND")
+        message ("-- Could NOT find Ctags")
+        message ("-- Tags will NOT be generated")
+        set (TAG_GEN false)
+    else ()
+        message ("-- Found Ctags: ${TAG_GENERATOR}")
+        set (TAG_GEN true)
+    endif()
+endif()
+
+# Dosser d'installation
+if (UNIX AND ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local")
+    set (CMAKE_INSTALL_PREFIX /opt)
 endif()
 
 # Structure ====================================================================
 
 # Sources
-set (SRC_PATH src/)
+set (SRC_PATH src)
 add_subdirectory (${SRC_PATH})
 
 # Documentation
-set (DOC_PATH doc/)
+set (DOC_PATH doc)
 add_subdirectory (${DOC_PATH})
 
 # Rapport
-set (REPORT_PATH report/)
+set (REPORT_PATH report)
 add_subdirectory (${REPORT_PATH})

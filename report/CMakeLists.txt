@@ -4,7 +4,7 @@ find_package (LATEX COMPONENTS PDFLATEX)
 # Si Latex est trouvé, on génère le rapport, sinon, on affiche un message
 # d'erreur.
 if (NOT LATEX_FOUND)
-    message ("Latex not found, report will not be generate !")
+    message ("-- Report will NOT be generated")
 else ()
     # Variables
     set (REPORT_NAME Report)
@@ -30,4 +30,9 @@ else ()
         COMMAND ${CMAKE_COMMAND} -E echo "[ 50%] Building report"
         COMMAND ${PDFLATEX_COMPILER} ${LATEX_INTPUT} ${OUTPUT}
         )
+
+    # Installation du rapport.
+    install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${REPORT_NAME}.pdf
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/${EXE}/${REPORT_PATH}
+        OPTIONAL)
 endif()

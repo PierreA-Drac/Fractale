@@ -4,14 +4,14 @@ find_package (Doxygen)
 # Si Doxygen est trouvé, on génère la documentation, sinon, on affiche un
 # message d'erreur.
 if (NOT DOXYGEN_FOUND)
-    message ("Doxygen not found, documentation will not be generate !")
+    message ("-- Documentation will NOT be generated")
 else ()
     # Crée le fichier Doxyfile à partir de Doxyfile.in avec les variables CMake
     # remplacés par leur valeur respective.
     configure_file (Doxyfile.in Doxyfile)
 
     # Variables
-    set (DOXYGEN_INTPUT ${CMAKE_BINARY_DIR}/${DOC_PATH}Doxyfile)
+    set (DOXYGEN_INTPUT ${CMAKE_BINARY_DIR}/${DOC_PATH}/Doxyfile)
     set (DOXYGEN_OUTPUT ${APIDOC_DIR}/html/index.html)
 
     # Si compilation en mode Release, alors la documentation sera générée
@@ -35,6 +35,7 @@ else ()
         )
 
     # Installation de la documentation.
-    install (DIRECTORY ${CMAKE_BINARY_DIR}/${DOC_PATH}html
-        DESTINATION share/doc/${CMAKE_CURRENT_PROJECT_NAME})
+    install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/${EXE}/${DOC_PATH}
+        OPTIONAL)
 endif()
