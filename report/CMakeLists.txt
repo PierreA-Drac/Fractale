@@ -1,7 +1,7 @@
-# Recherche de Latex.
+# Recherche de LaTeX.
 find_package (LATEX COMPONENTS PDFLATEX)
 
-# Si Latex est trouvé, on génère le rapport, sinon, on affiche un message
+# Si LaTeX est trouvé, on génère le rapport, sinon, on affiche un message
 # d'erreur.
 if (NOT LATEX_FOUND)
     message ("-- Report will NOT be generated")
