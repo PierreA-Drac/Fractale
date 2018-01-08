@@ -15,7 +15,7 @@ endmacro ()
 # Bibliothèques ================================================================
 
 # OpenGL
-include (FindOpenGL)
+include (FindOpenGL REQUIRED)
 
 # Qt4
 set (CMAKE_AUTOMOC ON)
@@ -51,22 +51,29 @@ add_executable (${EXE} ${SRC} ${INC} ${SHADER_DIR})
 # Compilation ==================================================================
 
 # Dossiers des headers à inclure pour le préprocesseur.
-include_directories (${INC_DIRS} ${OPENGL_INCLUDE_DIR})
+include_directories (${INC_DIRS})
 
 # Dossiers des bibliothèques à inclure pour le linker.
-link_directories (${OPENGL_gl_LIBRARY})
+link_directories ()
 
 # Bibliothèques liées à l'exécutable.
-target_link_libraries (${EXE} GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
+# N.B. : Pour OpenGL et Qt, la notation Qt::* et OpenGL::* automatise
+# l'importation des headers et des bibliothèques.
+target_link_libraries (${EXE} OpenGL::GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
 
 # Flags
 #
 # Debug
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    target_compile_options (${EXE} PUBLIC -g3 -Wall)
+    target_compile_options (${EXE} PUBLIC -Wall)
+    if (UNIX)
+        target_compile_options (${EXE} PUBLIC -g3)
+    endif()
 endif()
 # Communs
-target_compile_options (${EXE} PUBLIC -fPIC -std=c++0x)
+if (UNIX)
+    target_compile_options (${EXE} PUBLIC -fPIC -std=c++0x)
+endif()
 
 # Commandes ====================================================================
 
