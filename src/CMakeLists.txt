@@ -28,9 +28,13 @@ find_package (Qt4 REQUIRED QtCore QtGui QtOpenGL)
 set (SRC_EXT .cpp)
 set (INC_EXT .hpp)
 
+# Dossiers
+set (SHADER_DIR Shaders)
+
 # Liste des fichiers sources et des headers.
 file (GLOB_RECURSE SRC *${SRC_EXT})
 file (GLOB_RECURSE INC *${INC_EXT})
+file (GLOB_RECURSE SHADER ${SHADER_DIR}/*)
 
 # Liste des dossiers contenant un header.
 HEADER_DIRECTORIES(INC_DIRS)
@@ -41,7 +45,7 @@ HEADER_DIRECTORIES(INC_DIRS)
 set (EXE fractal)
 
 # Dépendances de l'exécutable.
-add_executable (${EXE} ${SRC} ${INC})
+add_executable (${EXE} ${SRC} ${INC} ${SHADER_DIR})
 
 # Compilation ==================================================================
 
@@ -62,6 +66,22 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 endif()
 # Communs
 target_compile_options (${EXE} PUBLIC -fPIC -std=c++0x)
+
+# Commandes ====================================================================
+
+# Copie les shaders avec l'exécutable.
+add_custom_command (OUTPUT ${SHADER_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/${SHADER_DIR}/
+        ${CMAKE_CURRENT_BINARY_DIR}/${SHADER_DIR}/
+    DEPENDS ${SHADER}
+    )
+
+# End message
+add_custom_command (TARGET ${EXE}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "[100%] Compilation done in ${CMAKE_BUILD_TYPE} mode"
+    )
 
 # Installation =================================================================
 

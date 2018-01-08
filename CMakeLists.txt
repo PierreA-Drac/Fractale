@@ -5,10 +5,10 @@ cmake_minimum_required (VERSION 3.0)
 
 # Nom du projet et description.
 project (Fractal)
-set(PROJ_DESC "Fractal project for UVSQ")
+set (PROJ_DESC "Fractal project for UVSQ")
 
 # Mode de compilation.
-set(CMAKE_BUILD_TYPE Debug)
+set (CMAKE_BUILD_TYPE Debug)
 
 # Structure ====================================================================
 

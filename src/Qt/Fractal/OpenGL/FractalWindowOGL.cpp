@@ -28,15 +28,19 @@ void FractalWindowOGL::initializeGL()
     glEnable(GL_MULTISAMPLE);
 
     /* Initialisation des shaders. */
-    std::string fragShader;
+    std::string fragShader =
+        QCoreApplication::applicationDirPath().toStdString();
+    std::string vertShader =
+        QCoreApplication::applicationDirPath().toStdString().append(
+                "/Shaders/vertexShader.vsh");
     if (fracType == MANDELBROT)
-        fragShader = "shaders/fragmentShaderMandelbrot.fsh";
+        fragShader.append("/Shaders/fragmentShaderMandelbrot.fsh");
     else if (fracType == JULIA)
-        fragShader = "shaders/fragmentShaderJulia.fsh";
+        fragShader.append("/Shaders/fragmentShaderJulia.fsh");
 
     shaderProgram = new QGLShaderProgram(context(), this);
     if (!shaderProgram->addShaderFromSourceFile(QGLShader::Vertex,
-                "shaders/vertexShader.vsh")
+                vertShader.data())
             || !shaderProgram->addShaderFromSourceFile(QGLShader::Fragment,
                 fragShader.data())
             || !shaderProgram->link()) {
