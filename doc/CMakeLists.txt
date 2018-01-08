@@ -20,9 +20,9 @@ else ()
     if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
         set (MODE ALL)
         if (WIN32)
-            set (OUTPUT "> nul")
+            set (OUTPUT > nul)
         elseif (UNIX)
-            set (OUTPUT "> /dev/null")
+            set (OUTPUT > /dev/null)
         endif()
     elseif (${CMAKE_BUILD_TYPE} STREQUAL "Debug" AND UNIX)
         set (OUTPUT | grep \"warning\" | less -RmN)
@@ -30,9 +30,8 @@ else ()
 
     # Cible de génération de la documentation.
     add_custom_target (doc ${MODE}
-        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Docuentation... "
+        COMMAND ${CMAKE_COMMAND} -E echo "[ 50%] Building API documentation"
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INTPUT} ${OUTPUT}
-        COMMAND ${CMAKE_COMMAND} -E echo "Done."
         )
 
     # Installation de la documentation.
