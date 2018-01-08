@@ -12,6 +12,16 @@ set (CMAKE_BUILD_TYPE Debug)
 
 # Structure ====================================================================
 
+# Tag generation
+find_program (TAG_GENERATOR ctags)
+if (${TAG_GENERATOR} STREQUAL "TAG_GENERATOR-NOTFOUND")
+    message ("-- Ctags not found")
+    set (TAG_GEN false)
+else ()
+    message ("-- Found Ctags: ${TAG_GENERATOR}")
+    set (TAG_GEN true)
+endif()
+
 # Sources
 set (SRC_PATH src/)
 add_subdirectory (${SRC_PATH})

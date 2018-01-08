@@ -77,6 +77,16 @@ add_custom_command (OUTPUT ${SHADER_DIR}
     DEPENDS ${SHADER}
     )
 
+# Génération des tags.
+if (${TAG_GEN} STREQUAL true)
+    target_sources (${EXE} PUBLIC tags)
+    add_custom_command (OUTPUT tags
+        COMMAND ${TAG_GENERATOR} ${SRC} ${INC}
+        COMMAND ${CMAKE_COMMAND} -E copy tags ${CMAKE_SOURCE_DIR}
+        DEPENDS ${SRC} ${INC}
+        )
+endif()
+
 # End message
 add_custom_command (TARGET ${EXE}
     POST_BUILD
