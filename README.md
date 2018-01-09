@@ -4,7 +4,7 @@ Ce programme permet de générer des fractales de Mandelbrot et de Julia et Fato
 selon plusieurs paramètres. Il laisse aussi le choix entre deux bibliothèques
 de rendu : Cairo et OpenGL.
 
-# Dépendances
+## Dépendances
 
 * Moteur de production :
   1. CMake (>= 3.0) (Debian-like : $ sudo apt-get install cmake)
@@ -24,9 +24,9 @@ de rendu : Cairo et OpenGL.
 * Rapport :
   1. LaTeX (Debian-like : $ sudo apt-get install tex-common texlive-full)
 
-# Configuration du répertoire
+## Configuration du répertoire
 
-N.B.: Les paramètres entres corchets [] sont optionnels.
+N.B. : Les paramètres entres corchets [] sont optionnels.
 
 * UNIX :
   1. $ mkdir build
@@ -38,7 +38,7 @@ N.B.: Les paramètres entres corchets [] sont optionnels.
   2. $ cd build
   3. $ cmake .. -G ["Visual Studio 15 2017 [Win64]"]
 
-# Réinitialisation du répertoire
+## Réinitialisation du répertoire
 
 * UNIX :
   1. $ cd ..
@@ -48,7 +48,7 @@ N.B.: Les paramètres entres corchets [] sont optionnels.
   1. $ cd ..
   2. $ rmdir /S build
 
-# Compilation
+## Compilation
 
 * UNIX :
   1. $ make
@@ -57,37 +57,37 @@ N.B.: Les paramètres entres corchets [] sont optionnels.
 * Windows :
   1. Utilisation de l'IDE choisis pour compiler la cible "fractal".
 
-# Installation
+## Installation
 
 * UNIX (par défaut dans "/opt/fractal") :
   1. $ sudo make install
   2. $ fractal
 
-# Désinstallation
+## Désinstallation
 
 * UNIX :
   1. $ sudo make uninstall
 
-# Documentation
+## Documentation
 
 * UNIX :
   1. $ make doc
   2. $ ./doc/html/index.html
 
-# Rapport
+## Rapport
 
 * UNIX :
   1. $ make report
   2. $ ./report/Report.pdf
 
-# Raccourcis clavier du logiciel
+## Raccourcis clavier du logiciel
 
 * Échap : Quitter
 * F1 : Bascule l'applcation en plein écran
 * F2 : Bascule la fractale en plein écran
 * F3 : Détache la fenêtre de la fractale
 
-# Notes
+## Notes
 
 La compatatiblité avec Windows n'a pas été complètement réalisé. En effet, le
 projet peut compiler mais un crash survient au moment de lancer l'affichage de
