@@ -92,3 +92,5 @@ N.B. : Les paramètres entres corchets [] sont optionnels.
 La compatatiblité avec Windows n'a pas été complètement réalisé. En effet, le
 projet peut compiler mais un crash survient au moment de lancer l'affichage de
 la fractale ave le bouton de l'interface, pour une raison inconnue.
+
+Les fichiers de configuration sont stockés dans des dossiers cachés !
