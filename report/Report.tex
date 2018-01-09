@@ -4,6 +4,12 @@
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage[top=1.8cm, bottom=1.8cm, left=1.8cm, right=1.8cm]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    breaklinks=true,
+    urlcolor=red,
+}
 \parskip=5pt
 
 \title{Rapport du projet de Fractale}
@@ -16,87 +22,320 @@
 
 \section{Introduction}
 
-Ce projet a pour but la modélisation de deux ensembles de fractales : 
-l'ensemble de Mandelbrot et l'ensemble de Julia et Fatou.
-Nous allons expliquer dans ce rapport notre approche de ce projet 
-et les choix que nous avons faits.
-Une description détaillées des classes, méthodes et attributs est 
-disponible dans la documentation.
+Ce projet a pour but la modélisation de deux ensembles de fractales : l'ensemble
+de Mandelbrot et l'ensemble de Julia et Fatou. Nous allons expliquer dans ce
+rapport notre approche de ce projet et les choix que nous avons faits. Ce
+document est voulu relativement abstrait du code, cependant, une description
+détaillée des classes, méthodes et attributs est disponible. Pour cela, il
+suffit de se rendre dans la documentation qui peut être générée avec Doxygen et
+\LaTeX à partir des headers des classes.
 
 \section{Fonctionnement}
 
-Cette partie sera consacrée au fonctionnement interne du projet
-et à la manière dont nous avons résolu certains problèmes, afin de 
-répondre au cahier des charges. Le projet est organisé comme suit : 
-l'exécutable sera produit dans le dossier "exe", les sources dans le dossier "src"
-et les header dans le dossier "inc".
-Les headers contiennent les définitions des classes et la description du rôle
-de chaque fonction (documentation). Les sources contiennent le code source
-et les commentaires nécessaires à la compréhension du fonctionnement
-interne de la fonction.
+Cette partie sera consacrée au fonctionnement du projet et à la manière dont
+nous avons résolu certains problèmes, afin de répondre au cahier des charges.
 
-\subsection{Description des classes}
+\subsection{Choix architecturaux}
 
-Les classes utilisées sont définies dans les fichiers ".hpp". Les headers 
-sont assez documentés pour connaître le rôle de tous les attributs et 
-méthodes des classes, nous ne nous y attarderons donc pas ici.
+Après lecture et analyse du sujet, quatre choix majeurs s'offraient à nous :
+GTK+ et Qt pour l'interface graphique, OpenGL et Cairo pour le rendu des
+fractales.
 
+De fil en aiguille, nos lectures nous ont fait conclure sur
+l'utilisation de Qt pour l'interface graphique, en lieu et place de GTK+ :
+\begin{itemize}
+    \item Étant plus récent, Qt nous semblait plus actif en terme de
+        développement et de documentation sur internet.
+    \item Ce framework nous avait aussi l'air plus facilement portable entre les
+        différents systèmes d'exploitation que GTK+.
+    \item Qt, nativement développé en C++ et pensé pour l'orienté objet, nous
+        paraissait plus simple à utiliser et adapté à un développement orienté
+        objet.
+    \item Enfin, Qt ne possède pas que des facultés d'interface graphique, car
+        il permet de gérer des protocoles réseaux, d'interagir avec des bases de
+        données, et autre. Pour cela, il nous paraissait intéressant de nous
+        former avec Qt.
+\end{itemize}
 
-Nous avons choisi d'utiliser Qt plutôt que GTK pour créer les fenêtres 
-car Qt possède des classes pour implémenter OpenGL, il était donc 
-naturel que nous choisissions cette librairie plutôt que GTK qui n'offrait
-rien d'équivalent pour OpenGL ou CAIRO. (note : peut-être que ça apeut être 
-mieux formulé)
+\vspace{10pt}
+Concernant la bibliothèque de rendu à utiliser pour afficher nos fractales, nous
+voulions faire une application qui proposerait le choix entre les deux.
+Nous avons decidé de commencer à utiliser OpenGL car cette API nous plaisait
+pour plusieurs raisons :
+\begin{itemize}
+    \item Curiosité de comprendre les bases du fonctionnement d'un jeu en 3D.
+    \item API bas niveau, proche de la machine, offrant la possibilité de
+        programmer directement pour le GPU (processeur graphique).
+    \item Beaucoup d'extensions, ainsi que des possibilités d'utiliser OpenGL ES
+        pour les systèmes embarqués, et surtout OpenCL pour le GPGPU qui
+        pourrait nous servir plus tard.
+\end{itemize}
 
+\subsection{Qt}
 
-L'interface du programme se présente sous une fenêtre principale 
-contenant deux onglets principaux, un pour chacun des ensembles. 
-L'utilisateur peut afficher plusieurs fractales en même temps, nous avons 
-jugé cette fonctionnalité intéressante pour comparer les fractales entre elles.
-Les différents Widget des onglets "paramètres" sont positionnés grâce à 
-des Layouts et la gestion des Signaux et des Slots permet l'appel des fonctions 
-liées à l'affichage des fractales en fonction des paramètres choisis par 
-l'utilisateur.  
+L'interface du programme se présente sous une fenêtre principale contenant deux
+onglets principaux, un pour chacun des ensembles. L'ensemble du code à été
+réalise à la main sans outils supplémentaires, tel que QtDesigner pour ne citer
+que lui, de manière à posséder une maîtrise total sur notre travail.
+L'utilisateur peut afficher plusieurs fractales en même temps, nous avons jugé
+cette fonctionnalité intéressante pour comparer les fractales entre elles. Les
+différents widgets des de notre fenêtre sont positionnés grâce à des layouts, ce
+qui permet d'avoir un code très flexible quant au rajout d'éléments, ou de leur
+suppression. La gestion des signaux et des slots permet l'appel des fonctions
+liées à l'affichage des fractales en fonction des paramètres choisis par
+l'utilisateur.
 
+L'utilisation de Qt s'est montré assez laborieuse au début, notamment au moment
+de la mise en route du projet. En effet, il existe un grand nombre de sous
+modules différents (Core, Widget, OpenGL, etc.) et un système de génération de
+code intermédiaire (MOC) à mettre en place à la compilation. Une fois ce système
+mis en place, Qt s'est avéré assez plaisant à utiliser, avec une documentation
+bien rédigé.
 
-Concernant le développement avec OpenGL, nous avons décidé d'utiliser 
-les shaders plutôt que les fonctions proposées via le lien internet du 
-sujet. En effet, ces dernières étant dépréciées, nous avons pensez 
-qu'il était préférable d'apprendre à utiliser les fonctions actuelles 
-d'OpenGL pour, d'une part, un rendu plus rapide de la modélisation et 
-d'autre part nous familiariser au mieux avec OpenGL dans l'optique 
-qu'un jour nous pourrions l'utiliser de nouveau. 
+Nous avons essayer d'organiser les classes de la manière la plus modulable
+possible, en isolant les parties suivantes : la fenêtre principale, une
+abstraction d'une fenêtre affichant une fractale, et une spécialisation de cette
+classe pour OpenGL et Cairo. L'abstraction d'une fenêtre affichant une fractale
+contient l'ensemble des propriétés concernant une fractale, ainsi que toutes les
+fonctions générales à implémenter (zoom, déplacement, etc). Le design de cette
+classe abstraite à été fastidieux à mettre en place car nous voulions utiliser
+l'héritage multiple, mais la façon dont l'héritage est conçu dans Qt ne nous
+permettais pas de le faire dans notre cas précis, même avec l'héritage virtuel.
+Nous avons donc du repenser notre classe pour pallier à ce problème.
 
-\subsection{Description des algorithmes}
+Nous nous arrêterons ici pour Qt, cette partie pourrait être plus longue et
+détaillée, mais au vue de ce qu'il y a à dire sur OpenGL, nous préférons lui
+garder une plus grande place dans ce rapport.
 
-Paragraphe.
+\subsection{OpenGL}
+
+Sans surprise, OpenGL à été plus compliqué à aborder que Qt. Au fil de nos
+lectures, il nous fallait comprendre plusieurs notions pour l'utiliser. Tout
+d'abord, il nous fallait savoir qu'OpenGL était une API, standardisée par
+Khronos, mais ne concernait pas une implémentation particulière. En effet, les
+implémentation d'OpenGL sont propriétaires et conçu par les constructeurs de GPU
+(Intel, AMD, Nvidia). Il existe aussi des implémentations libres et open source,
+tel que Mesa. Ensuite, il existe aujourd'hui deux écoles concernant OpenGL :
+l'OpenGL ancien (version $\leq$ 2), et l'OpenGL dit moderne (version $\geq$ 3).
+L'OpenGL ancien serait plus simple à aborder pour des débutants, moins complexe
+et automatisant beaucoup certaines tâches, cependant, ce n'est plus une approche
+viable aujourd'hui pour un développement sérieux. L'OpenGL moderne est, quant à
+lui, plus compliqué à apprendre pour des novices car il fait rentré en jeu plus
+de notion dès le début, et automatise moins de tâches. Cependant, cet OpenGL
+permet un contrôle élevé sur le pipeline 3D et les shaders, avec un accès plus
+direct au matériel (encore plus poussé par Vulkan et DirectX 12).
+
+Nous avons donc fait le pari d'apprendre l'OpenGL moderne pour nous familiariser
+au mieux à OpenGL, dans l'optique qu'un jour nous pourrions l'utiliser de
+nouveau. Notre rendu utilise donc les shaders plutôt que les fonctions proposées
+par le lien internet du sujet, ces dernières étant dépréciées du fait qu'elles
+font parties l'OpenGL ancien. 
+
+Mais revenons rapidement sur le fonctionnement primaire d'OpenGL, pour bien
+comprendre la suite du rapport. OpenGL permet de crée deux types de monde, un
+monde en 2D ou un monde en 3D. Dans tous les cas, les objets sont vectoriels,
+cela signifie que l'on caractérise les sommets des objets par des points dans un
+monde virtuel plutôt que des pixels sur l'écran. Ce sera à l'étape de la
+rastérisation, ou encore matricialisation, que l'on passera d'une système de
+coordonnées virtuel à des pixels sur l'écran. Les mathématiques et les matrices
+occupes une très grande place dans OpenGL. En effet, chaque opération sur les
+objets correspond en réalité à une opération entre des matrices ou des vecteurs.
+Il existe 3 matrices principalement utilisées dans un monde en 3D, que nous
+allons présenter brièvement. La première est la matrice de modèle, qui permet de
+passer des coordonnées d'un objet dans son propre référentiel à des coordonnées
+correspondant au monde virtuel en 3D dans lequel nous évoluons. La seconde est
+la matrice de vue, qui nous sert à passer des coordonnées d'un objet dans un
+monde en 3D aux coordonnées d'un objet vue par une caméra placé un certain
+point. Cette matrice permet en effet de simuler l'utilisation d'une caméra qui
+se déplacerait sur les trois axes d'une scène. Enfin, la matrice de projection
+permet de passer des coordonnées des objets vues par la caméra aux coordonnées
+des objets à afficher sur un écran en 2D. Ces matrices étant complémentaires, il
+n'est pas rare de croisé une matrice "Model-View-Projection" (MVP), qui est une
+matrice résultant de la multiplication de ces trois matrices.
+
+Dans notre application, toutes ces étapes sont gérés par notre programme en C++,
+c'est-à-dire par notre CPU. C'est ici que les shaders, qui sont des programmes
+s'exécutant sur le GPU, interviennent. Les shaders sont écris en GLSL, le
+langage de shader lié à OpenGL. En effet, les GPU n'ayant pas les mêmes jeu
+d'instruction que les CPU classique ont des langages dédiés différents des
+langages de programmation classique. Le pipeline 3D correspond à l'ensemble des
+étapes s'exécutant sur le GPU, et les shaders viennent s'y inscrire à plusieurs
+étapes. Il existe une multitude d'étape dans le pipeline 3D, mais nous en
+retiendrons 3 principales : le traitement par le shader de vertex, la
+rastérisation (nous en avons parlé plus haut), et le traitement par le shader de
+fragment. Le shader de vertex prend en entrée un vertex et ses coordonnées dans
+l'espace, applique des transformations dessus, et envoie le vecteur résultant au
+processus de rastérisation. Une fois fait, le résultat de la rastérisation est
+envoyé au shader de fragment, qui traite des pixels ou des lots de pixel (défini
+par OpenGL) à afficher sur l'écran. Ce traitement correspondant notamment à
+l'application d'une couleur ou d'une texture sur le ou les pixels.
+
+Maintenant que nous avons clarifier le rôle des matrices et des shaders dans
+OpenGL, nous allons pouvoir parler de notre implémentation. Cette dernière
+consiste à définir un objet en deux dimensions, d'une forme d'un rectangle, qui
+est censé remplir tout l'écran quoi qu'il arrive (peut importe le rapport défini
+par la longueur divisé par la hauteur de la zone d'affichage). Cet objet est
+défini dans son propre référentiel, mais comme il doit au final être placé au
+centre du monde, il n'y à pas besoin d'utiliser de matrice de modèle (elle sera
+égale à une matrice identité). Nous passons ensuite directement cet objet et
+tout les paramètres concernant la fractale à nos shaders. Le premier shader, le
+shader de vertex, ne fait que multiplier chaque sommets (vertex) par la matrice
+MVP, pour les projeter ensuite correctement à l'écran. Nous avons implémentés
+les calculs concernant les itérations dans le shader de fragment, étant donné
+qu'il y à un très grand nombre de calcul à faire pour chaque pixel et que le GPU
+est hautement parallélisé, nous pensons que leurs place se trouvait dans ce
+shader. Le shader de fragment exécute donc toutes les itérations de l'équation
+à effectuer sur une unité de traitement du GPU, et détermine en fonction du
+résultat de ces itérations la couleur du fragment (pour rappel, un pixel ou un
+groupe de pixels). C'est au niveau de ce shader que l'on applique aussi le
+facteur de zoom, ainsi que le déplacement dans l'image, mais nous y reviendrons.
+Enfin, concernant les équations à implémenter, nous avons effectué une
+décomposition des nombres complexes en deux réels stocker dans une structure de
+point (x et y). Une fois décomposé ainsi, il suffisait de faire les
+développements (identités remarquables) puis les réductions et factorisations
+nécessaires sur nos calculs de nombre complexe pour savoir comment
+l'implémenter. 
+
+Nous allons maintenant pouvoir parler plus en détail du choix d'implémentation
+du zoom et du déplacement dans la fractale. Nous en avons testé deux :
+\begin{itemize}
+    \item La première, consiste à transmettre au shader de fragment un facteur
+        de zoom et un facteur de déplacement dans l'image. Ce shader s'occupe
+        alors d'appliquer le facteur de zoom sur chaque fragment, ce qui aura
+        pour effet d'augmenter ou diminuer leur taille dans notre objet sans
+        modifier la taille de l'objet. De même, il applique le facteur de
+        déplacement en translatant les fragments de manière à en faire sortir de
+        la zone d'affichage de l'objet. Appliquer un zoom puis un facteur de
+        déplacement revient donc à rogner l'afficher de notre objet, pour
+        n'afficher que le centre que nous voulons afficher et ainsi avoir un
+        zoom au sein même d'un objet dans l'espace en 3D.
+    \item La seconde consiste à toujours garder notre objet intact (pas de
+        rognage par agrandissement des fragments) et à zoomer par
+        l'intermédiaire d'une caméra dans le monde en 3D (pour zoomer sur un
+        objet en 2D). Cette caméra, implémentée avec une matrice de vue, permet
+        un zoom et un déplacement pour l'utilisateur en faisant varier deux
+        paramètres : la distance entre la caméra et l'objet, et le FOV (angle de
+        champ, à la manière de la longueur focale d'un objectif d'appareil
+        photographique).
+\end{itemize}
+Finalement, nous avons préféré garder la première méthode. En effet, une fois
+les deux implémentées, la première permettait d'avoir une meilleur précision
+d'affichage. Avec la deuxième méthode, des déformations apparaissait au niveau
+des fragments lorsque l'on arrivait à 90\% du zoom, dû à des erreurs d'arrondis.
+Cependant, elle avait pour avantage d'être légèrement plus rapide, mais nous
+avons préféré privilégié la qualité graphique.
+
+\subsection{Cairo}
+
+Notre projet ne permet pas d'afficher des fractales avec Cairo. En effet, Qt et
+OpenGL nous auront pris plus de temps que ce que nous imaginions. Au moment de
+nous lancer dans Cairo, nous avons préféré peaufiner notre application
+(meilleur abstraction des classes Qt, optimisation du code OpenGL, etc...)
+plutôt que commencer une fonctionnalité qui n'aurait pas été terminé. Cependant,
+voilà comment nous aurions pu faire : il aurait fallu crée une classe héritant
+de FractalWindow nommée FractalWindowCairo. Tout comme FractalWindowOGL, il
+aurait fallu mettre en place OpenGL avec le strict minimum. Mais au lieu
+d'afficher notre fractale rendu par les primitives d'OpenGL, il aurait fallu
+rendre une image en utilisant Cairo, stocker cette image en mémoire, puis
+l'afficher avec OpenGL en utilisant la fonction << glTexImage2D >>. En effet, Qt
+permet d'afficher un espace de rendu pour OpenGL, mais pas pour Cairo. La
+solution était donc de charger le rendu de Cairo dans le contexte de rendu
+OpenGL, lui-même à l'intérieur d'un widget Qt.
+
+\subsection{Moteur de production}
+
+Au commencement du projet, nous avions mis en place le build avec GNU make.
+Étants habitués de cet outil qui nous convenait jusqu'à présent, nous n'avons
+pas voulu nous encombrer par l'apprentissage d'un nouveau logiciel. Cependant,
+GNU make sans complément (comme les GNU autotools) n'est pas très adapté pour
+des projet utilisant de grosses bibliothèques, avec une multitude de versions et
+d'emplacement possible sur le disque. C'est pour cela que la mise en route avec
+Qt avait été un peu laborieuse, comme expliqué dans le paragraphe dédié plus
+haut. Comme il était spécifié dans le sujet que nous devions crée un mécanisme
+d'installation, nous avons décidé au milieu du projet d'apprendre à d'utiliser
+CMake. Nous n'allons pas nous éterniser là-dessus ici, mais CMake propose de
+générer des fichiers de build indépendant de la plateforme (Makefile pour UNIX,
+Visual Studio pour Windows, etc.). De plus, il permet de rechercher
+automatiquement sur le disque la présence de certains logiciel ou bibliothèques.
+Cela permet donc d'avoir une compilation avec moins de risque de dépendances non
+trouvées, et multi-plateforme. Les commandes à utilisées sont spécifiées dans le
+<< README.md >> présent à la racine du projet. De plus, nos anciens Makefile
+crées manuellement sont conservés dans un dossier << config\_old >>, mais ne
+sont plus utilisés.
 
 \section{Regard final}
 
-(note pour Pierre : je sais pas s'il vaut mieux mettre cela ici ou ailleurs
-genre dans la conclusion)
-Nous sommes mitigés sur notre travail. D'une part nous sommes globalement 
-satifaits de notre travail sur Qt et OpenGL où nous avons essayé 
-d'approfondir au mieux nos connaissances sur ces deux librairies afin de 
-produire un code clair et efficace. D'autre part, par manque de temps, 
-nous n'avons pas pu réaliser le rendu graphique avec CAIRO. En effet, 
-développer le rendu graphique avec OpenGL nous a pris plus de temps 
-que prévu. De plus, au vu du temps qu'il nous restait, nous n'aurions
-pas eu le temps de faire de nouvelles recherches sur CAIRO et GTK et 
-implémenter toutes les fonctionnalités demandé dans le cahier des charges.
-Nous avons donc décidé de nous concentrer sur OpenGL et Qt afin de rendre 
-un code propre et efficace.
+Cette partie sera consacrée à notre ressenti après le projet, ce que l'on en
+pense et en conclus.
 
 \subsection{Critique sur le code et améliorations possibles}
 
-Paragraphe.
-
-\subsection{Questions suite au projet}
-
-Paragraphe.
+Comme un code n'est jamais parfait et qu'il y à toujours quelques chose à
+améliorer, le notre n'échappe pas à la règle. Voici plusieurs piste
+d'amélioration.
+\begin{itemize}
+    \item \href{https://fr.wikipedia.org/wiki/God_object}{God Object} : nous
+        nous demandons si notre classe MainWindow ne tombe pas dans cet
+        anti-pattern. En effet, tout est relié à cette classe et passe par elle.
+        De plus, nous n'avons rien d'autre dans notre << main >> que
+        l'instanciation de cette classe. Cela ne pose pas de soucis pour
+        l'implémentation du projet, mais ce serais intéressant de savoir si
+        notre cas correspond à cette mauvaise pratique, pour ne pas retomber
+        dans ce piège de l'orienté objet.
+    \item Exception : notre projet ne présent que très peu de gestion d'erreur,
+        ce qui est fort regrettable. Malheureusement, il nous aurais fallu plus
+        de temps pour améliorer le design de notre application à ce niveau là.
+    \item Mémoire : notre gestion de la mémoire est un peu aléatoire. En effet,
+        nous procédons à beaucoup d'allocation dynamique pour deux raisons : Qt
+        travaille avec des pointeurs, et cela nous permet de mieux contrôler la
+        durée de vie de nos objets (en théorie). Cependant, d'après nos lecture
+        (\href{https://doc.qt.io/}{documentation officiel de Qt} ou forums de
+        programmation tel que \href{https://stackoverflow.com/}{Stack
+        Overflow}), il nous est assuré que Qt s'occupe lui-même de libérer la
+        mémoire des objets héritants de QWidget. Cela lui est possible en
+        gardant constamment une hiérarchie en mémoire des widgets instanciés
+        grâce à leurs liens de parenté spécifiés lors de l'instanciation du
+        widget ou par l'agencement des layouts. Cependant, nous avons observer
+        des comportements étranges au niveau de la mémoire relatif à notre
+        application. Malheureusement, nous n'avons pas été capable d'observer
+        précisément ce qu'il se passait avec Valgrind car Qt et OpenGL
+        produisent beaucoup d'erreurs de base, qui sont des faux positifs par
+        rapport a notre programme car ces erreurs ne dépendent pas de nous. Sans
+        temps supplémentaire pour analyser cela en profondeur, nous avons du
+        laisser cela en l'état.
+\end{itemize}
 
 \section{Conclusion}
 
-Paragraphe.
+Nous sommes un peu mitigés sur notre travail. D'une part, nous sommes
+globalement satisfaits de notre projet sur Qt et OpenGL, où nous avons essayé
+d'approfondir au mieux nos connaissances afin de produire un code clair et
+efficace. D'autre part, par manque de temps, nous n'avons pas pu réaliser le
+rendu graphique avec Cairo, ce qui peut être ressentit comme un échec malgré la
+volonté d'aller plus loin.
+
+Ce projet nous aura tout de même permis d'avoir une première vraie expérience du
+C++, qui manquait à notre bagage de développeurs. Nous nous sommes rendu compte
+que c'est un langage tellement vaste que nous n'auront jamais fini d'en
+apprendre ! Nous auront pu approfondir nos connaissances sur l'héritage,
+l'héritage virtuel, les fonctions virtuels, la liaison tardive, et d'autre
+notion du C++ que nous avons vu en cours.
+
+De plus, l'apprentissage de Qt et OpenGL aura aussi été très bénéfique pour
+nous. D'un côté, nous avons un framework ultra-complet qui nous permet de
+développer rapidement des applications multi-platerforme avec tout un lot de
+fonctionnalités. De l'autre côté, nous avons les connaissances de bases du
+développement d'un jeu vidéo ou d'un logiciel en 3D, et éventuellement des bases
+qui pourrait nous permettre aussi d'aborder plus tard le GPGPU et le calcul
+scientifique avec OpenCL (puisque nous sommes tout les deux intéressé entre
+autre par le master en calcul haute performance et simulation). Nous sommes
+persuadés que nous auront à réutiliser tout ça plus tard, donc nous le voyons
+comme un apprentissage important. 
+
+Enfin, nous avons pu pratiquer de manière optimisée l'utilisation de GDB, avoir
+un moteur de production multi-plateforme hautement personnalisable (CMake),
+approfondir nos connaissances sur bon nombre de fonctionnalités du formidable
+logiciel de contrôle de version Git. De surcroît, nous avons revu les bases du
+langage LaTeX. Merci pour ce projet.
 
 \end{document}
