@@ -7,22 +7,22 @@ de rendu : Cairo et OpenGL.
 # Dépendances
 
 * Moteur de production :
-  1. CMake (>= 3.0)
-  2. Make (UNIX)
+  1. CMake (>= 3.0) (Debian-like : $ sudo apt-get install cmake)
+  2. Make (UNIX) (Debian-like : $ sudo apt-get install make)
 
 * Compilation :
-  1. GCC (UNIX)
+  1. GCC (UNIX) (Debian-like : $ sudo apt-get install gcc)
   2. MSVC (Windows)
 
 * Bibliothèques :
-  1. OpenGL (>= 3.1)
-  2. Qt4 (<= 4.8 && >= 4.0)
+  1. OpenGL (>= 3.1) (Debian-like : $ sudo apt-get install libgl1)
+  2. Qt4 (<= 4.8 && >= 4.0) (Debian-like : $ sudo apt-get install libqt4-dev)
 
 * Documentation :
-  1. Doxygen
+  1. Doxygen (Debian-like : $ sudo apt-get install doxygen)
 
 * Rapport :
-  1. LaTeX
+  1. LaTeX (Debian-like : $ sudo apt-get install tex-common texlive-full)
 
 # Configuration du répertoire
 
