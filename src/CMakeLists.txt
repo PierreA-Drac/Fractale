@@ -15,7 +15,7 @@ endmacro ()
 # Bibliothèques ================================================================
 
 # OpenGL
-include (FindOpenGL REQUIRED)
+find_package (OpenGL REQUIRED)
 
 # Qt4
 set (CMAKE_AUTOMOC ON)
@@ -59,7 +59,12 @@ link_directories ()
 # Bibliothèques liées à l'exécutable.
 # N.B. : Pour OpenGL et Qt, la notation Qt::* et OpenGL::* automatise
 # l'importation des headers et des bibliothèques.
-target_link_libraries (${EXE} OpenGL::GL Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
+target_link_libraries (${EXE} Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
+if (TARGET OpenGL::GL)
+    target_link_libraries (${EXE} OpenGL::GL)
+else ()
+    target_link_libraries (${EXE} GL)
+endif()
 
 # Flags
 #
