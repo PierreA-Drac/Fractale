@@ -1,11 +1,21 @@
 # Recherche de Doxygen.
-find_package (Doxygen)
+find_package (Doxygen OPTIONAL_COMPONENTS dot)
 
 # Si Doxygen est trouvé, on génère la documentation, sinon, on affiche un
 # message d'erreur.
 if (NOT DOXYGEN_FOUND)
     message ("-- Documentation will NOT be generated")
 else ()
+    # Test si le composant dot est présent pour la génération des graphiques.
+    # Défini cette variable pour le fichier Doxyfile.in.
+    if (NOT TARGET Doxygen::dot)
+        message ("-- Could NOT find dot for Doxygen")
+        message ("-- Diagrams for documentation will NOT be generated")
+        set (DOXYGEN_HAVE_DOT NO)
+    else ()
+        set (DOXYGEN_HAVE_DOT YES)
+    endif()
+
     # Crée le fichier Doxyfile à partir de Doxyfile.in avec les variables CMake
     # remplacés par leur valeur respective.
     configure_file (Doxyfile.in Doxyfile)

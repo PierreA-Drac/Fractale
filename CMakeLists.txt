@@ -1,7 +1,7 @@
 # Projet =======================================================================
 
 # Version de CMake.
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.3)
 
 # Nom du projet et description.
 project (Fractal)
